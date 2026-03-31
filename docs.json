@@ -64,6 +64,16 @@
               "api-reference/endpoint/delete",
               "api-reference/endpoint/webhook"
             ]
+          },
+          {
+            "group": "Accounts",
+            "pages": [
+              "api-reference/accounts/list",
+              "api-reference/accounts/create",
+              "api-reference/accounts/get",
+              "api-reference/accounts/update",
+              "api-reference/accounts/delete"
+            ]
           }
         ]
       }

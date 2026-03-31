@@ -1,0 +1,98 @@
+---
+title: "Update Account"
+api: "PUT /accounts/:id"
+description: "Update an existing account"
+---
+
+# Update Account
+
+Update an existing account's information.
+
+## Endpoint
+
+```
+PUT /accounts/:id
+```
+
+## Path parameters
+
+<ParamField path="id" type="integer" required>
+  The unique identifier of the account to update
+</ParamField>
+
+## Request body
+
+<ParamField body="name" type="string" required>
+  Updated account name
+</ParamField>
+
+<ParamField body="email" type="string" required>
+  Updated email address
+</ParamField>
+
+<ParamField body="type" type="string">
+  Updated account type (optional)
+</ParamField>
+
+## Request example
+
+```bash
+curl -X PUT http://localhost:8000/accounts/1 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Acme Corporation",
+    "email": "accounts@acme.com",
+    "type": "enterprise"
+  }'
+```
+
+## Response
+
+<ResponseField name="id" type="integer">
+  Account's identifier (unchanged)
+</ResponseField>
+
+<ResponseField name="name" type="string">
+  Updated account name
+</ResponseField>
+
+<ResponseField name="email" type="string">
+  Updated email address
+</ResponseField>
+
+### Success response (200)
+
+```json
+{
+  "id": 1,
+  "name": "Acme Corporation",
+  "email": "accounts@acme.com",
+  "type": "enterprise"
+}
+```
+
+### Error response (404)
+
+If the account doesn't exist:
+
+```json
+{
+  "error": "not found"
+}
+```
+
+## Rules
+
+- The account ID cannot be changed
+- All fields must be provided in the request body
+- The entire account record is replaced with the new data
+
+## Use cases
+
+- Update account contact information
+- Change account type or plan
+- Correct account details
+
+<Warning>
+When updating, you must provide all fields. Missing fields will not be preserved from the previous record.
+</Warning>

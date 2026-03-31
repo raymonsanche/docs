@@ -1,0 +1,78 @@
+---
+title: "List Accounts"
+api: "GET /accounts"
+description: "Retrieve all accounts"
+---
+
+# List Accounts
+
+Retrieve all accounts from the system.
+
+## Endpoint
+
+```
+GET /accounts
+```
+
+## Parameters
+
+This endpoint does not accept any parameters.
+
+## Request example
+
+```bash
+curl http://localhost:8000/accounts
+```
+
+## Response
+
+Returns an array of all accounts in the system.
+
+<ResponseField name="id" type="integer">
+  Unique identifier for the account (auto-generated)
+</ResponseField>
+
+<ResponseField name="name" type="string">
+  Account holder's name
+</ResponseField>
+
+<ResponseField name="email" type="string">
+  Account email address
+</ResponseField>
+
+### Success response (200)
+
+```json
+[
+  {
+    "id": 1,
+    "name": "Acme Corp",
+    "email": "billing@acme.com",
+    "type": "business"
+  },
+  {
+    "id": 2,
+    "name": "Jane Smith",
+    "email": "jane@example.com",
+    "type": "personal"
+  }
+]
+```
+
+### Empty list response
+
+If no accounts exist, returns an empty array:
+
+```json
+[]
+```
+
+## Use cases
+
+- Display all accounts in your application
+- Export account data
+- Generate account reports
+
+<Tip>
+If you have many accounts and want to filter them, retrieve all accounts and filter on the client side.
+</Tip>
