@@ -140,9 +140,6 @@
                 "SMARTPOS"
               ]
             }
-          },
-          {
-            "$ref": "./onboard-merchant.json#/components/parameters/Authorization"
           }
         ],
         "responses": {
@@ -264,9 +261,6 @@
             "description": "Unauthorized",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "../../../models/default-401-error.json"
-                },
                 "examples": {
                   "Example 1": {
                     "value": {
@@ -287,9 +281,6 @@
             "description": "Internal Server Error",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "../../../models/default-500-error.json"
-                },
                 "examples": {
                   "Example 1": {
                     "value": {
