@@ -82,7 +82,7 @@
           },
           {
             "group": "Teste",
-            "openapi": "api-reference/openapi.json"
+            "openapi": "api-reference/search-terminals/openapi.json"
           }
         ]
       }

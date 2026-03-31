@@ -1,0 +1,519 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Search Terminals",
+    "version": "1.0",
+    "description": "Welcome to the REST API for retrieving data from capture terminals, a tool specialized in providing detailed information about payment terminals linked to merchant. Developed with a focus on efficiency and ease of use, our API allows quick access to essential data related to transaction capture terminals, including unique identifier, linked merchant, model, manufacturer, serial number, logical number, and status.\n\nDesigned to meet the specific needs of merchant operators, our API offers an intuitive and powerful solution for retrieving and managing crucial information about payment terminals in your network. Whether it's tracking the location and status of each terminal, performing preventive maintenance, or simply monitoring device inventory, our API provides easy and reliable access to data relevant to capture terminals.\n\nWith carefully crafted endpoints and comprehensive documentation, our REST API is designed to simplify the integration process and offer a seamless development experience. Take advantage of the flexibility and scalability of our solution to seamlessly integrate it with your existing systems and optimize terminal management in your merchant.\n\n> #### Note\n> This API represents the Terminals screen of the web portal.\n\n<h3> Webhooks </h3>\n\nIf this is your first time, visit the documentation showing how to use webhooks on this [page](02-ecommerce-general-info.md).\n\n<!-- theme : info-->\n> **Note**\n>\n> This webhook is available for insertion and status change notification of a Terminal when integrated with the authorizer.\n\nThe registration of these postbacks must be requested through Help Center informing which is the URL for receiving JSON messages.\n\n<h4> Event </h4>\n\nAn event corresponds to a certain set of actions that can occur during the API request. When the Webhook configuration is complete, the configured events trigger a notification in JSON format every time they occur.\n\nThe events in this webhook are created by updating the *onboardingStatus*. This status represents the situation that this terminal is in regarding the ability to carry out transactions. Consider the **SYNCHRONIZED** status as the end of merchant onboarding.\n\nFor direct integrations into the Gateway, consider the *logicalNumber* field as TerminalId in the **DE41**.\n\n<!--\ntype: tab\ntitle: Example\n-->\n```json\n{\n\t\"authorizer\": {\n\t\t\"slug\": \"7587E797DC5A46CFB26A4A34AB18E46B\",\n\t\t\"corporateName\": \"Dock|Postilion\"\n\t},\n\t\"terminal\": {\n\t\t\"slugTerminal\": \"4C70B0080A35418381A3848390C679F7\",\n\t\t\"active\": true,\n\t\t\"logicalNumber\": \"00000001\",\n\t\t\"type\": \"P\",\n\t\t\"status\": \"ACTIVE\",\n\t\t\"serialNumber\": \"6P763903\",\n\t\t\"model\": \"S920203GWB-C\",\n\t\t\"manufacturer\": \"PAX\"\n\t},\n\t\"merchant\": {\n\t\t\"slugMerchant\": \"7F82CE28D5064F7A99E4A5B6CA5C782F\",\n\t\t\"documentId\": \"00000000000000\",\n\t\t\"corporateName\": \"Merchant Example LTDA\",\n\t\t\"slugCustomer\": \"20C455115B9443D3B9686C9F7AB9A266\"\n\t},\n\t\"authorizerTerminalId\": \"GT0B9979\",\n\t\"onboardingStatus\": \"SYNCHRONIZED\"\n}\n```\n<!-- type: tab-end -->"
+  },
+  "servers": [
+    {
+      "url": "https://terminal.acquiring.hml.dock.tech",
+      "description": "Sandbox"
+    },
+    {
+      "url": "https://terminal.acquiring.dock.tech",
+      "description": "Production"
+    }
+  ],
+  "paths": {
+    "/v1/terminals": {
+      "parameters": [],
+      "get": {
+        "operationId": "get-terminals",
+        "summary": "Retrieve terminals",
+        "description": "Use this endpoint to retrieve a list of terminals or specific terminals based on the provided parameters. This endpoint provides flexibility to fetch information about all available terminals or to filter results according to specific criteria, allowing for a customized approach in retrieving the desired data.\n\n> #### Note\n> Terminals can be created automatically in the merchant onboarding flow or after the initialization process.",
+        "parameters": [
+          {
+            "name": "dtInsert__goe",
+            "in": "query",
+            "description": "Search for terminals registered on dates greater than the one entered.",
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "examples": [
+                "2023-02-01"
+              ]
+            }
+          },
+          {
+            "name": "dtInsert__loe",
+            "in": "query",
+            "description": "Search for terminals registered on dates shorter than the one entered.",
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "examples": [
+                "2023-03-01"
+              ]
+            }
+          },
+          {
+            "name": "dtInsert",
+            "in": "query",
+            "description": "Search for terminals registered on the date entered.",
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "examples": [
+                "2023-02-14"
+              ]
+            }
+          },
+          {
+            "name": "logicalNumber",
+            "in": "query",
+            "description": "Search for terminals that have the logical number entered.",
+            "schema": {
+              "type": "string",
+              "examples": [
+                "00000042"
+              ],
+              "maxLength": 8
+            }
+          },
+          {
+            "name": "serialNumber",
+            "in": "query",
+            "description": "Search for terminals that have the serial number entered.",
+            "schema": {
+              "type": "string",
+              "examples": [
+                "6N490009"
+              ],
+              "maxLength": 64
+            }
+          },
+          {
+            "name": "slugMerchant",
+            "in": "query",
+            "description": "Unique merchant identifier.",
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "examples": [
+                "D45AC977D308483D8AC2F684488D605F"
+              ],
+              "maxLength": 32
+            }
+          },
+          {
+            "name": "model",
+            "in": "query",
+            "description": "Search for terminals that match the model entered.",
+            "schema": {
+              "type": "string",
+              "examples": [
+                "S920203GWB-C"
+              ],
+              "maxLength": 50
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "description": "Search for terminals that have the status entered.",
+            "schema": {
+              "type": "string",
+              "examples": [
+                "ACTIVE"
+              ],
+              "enum": [
+                "ACTIVE",
+                "INACTIVE",
+                "DEACTIVATED"
+              ]
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Search for terminals according to type.",
+            "schema": {
+              "type": "string",
+              "examples": [
+                "POS"
+              ],
+              "enum": [
+                "POS",
+                "VIRTUAL",
+                "TEF",
+                "SMARTPOS"
+              ]
+            }
+          },
+          {
+            "$ref": "./onboard-merchant.json#/components/parameters/Authorization"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/terminal-response"
+                },
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "slug": "C7C6C3C3EAED4F6DB9B0C8EDCBBDB35C",
+                      "active": true,
+                      "dtInsert": "2023-02-14T22:05:24.000+0000",
+                      "dtUpdate": "2023-02-14T22:05:24.000+0000",
+                      "logicalNumber": "00000044",
+                      "type": "P",
+                      "status": "ACTIVE",
+                      "serialNumber": "6N490009",
+                      "model": "S920203GWB-C",
+                      "manufacturer": "PAX",
+                      "pinpadSerialNumber": "6N490009",
+                      "pinpadFirmware": "2.4.184",
+                      "slugMerchant": "D45AC977D308483D8AC2F684488D605F",
+                      "slugCustomer": "5A35F4C1E62742A1977B6BBFA65E8FEB",
+                      "pverfm": "S920P",
+                      "goUpdate": true,
+                      "inactivationDate": "2023-10-05T14:29:04.000+0000",
+                      "uniqueNumberForMerchant": 1
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request\n\n\n| ERROR CODE        | ERROR MESSAGE        | ERROR DATA        |\n|-------------------|----------------------|----------------------|\n| MSG_FILTER_NOT_ALLOWED|         Filter not allowed |         typer |\n| MSG_INVALID_FILTER_FORMAT | Invalid filter format |         TEFI |",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "msg": {
+                            "description": "Error message. See the error table.",
+                            "type": "string",
+                            "examples": [
+                              "Filter not allowed"
+                            ],
+                            "maxLength": 200
+                          },
+                          "code": {
+                            "description": "Error code. See the error table.",
+                            "type": "string",
+                            "examples": [
+                              "MSG_FILTER_NOT_ALLOWED"
+                            ],
+                            "maxLength": 200
+                          },
+                          "data": {
+                            "description": "Error data. Indication of which data is incorrect.",
+                            "type": "string",
+                            "examples": [
+                              "typer"
+                            ],
+                            "maxLength": 200
+                          }
+                        }
+                      }
+                    },
+                    "token": {
+                      "description": "Unique error identifier.",
+                      "type": "string",
+                      "format": "uuid",
+                      "examples": [
+                        "B24DDB4D3ACA4C68A363B023B3F489AD"
+                      ],
+                      "maxLength": 32
+                    }
+                  },
+                  "x-examples": {
+                    "Example 1": {
+                      "errors": [
+                        {
+                          "msg": "Filter not allowed",
+                          "code": "MSG_FILTER_NOT_ALLOWED",
+                          "data": "typer"
+                        }
+                      ],
+                      "token": "B24DDB4D3ACA4C68A363B023B3F489AD"
+                    }
+                  }
+                },
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "errors": [
+                        {
+                          "msg": "Filter not allowed",
+                          "code": "MSG_FILTER_NOT_ALLOWED",
+                          "data": "typer"
+                        }
+                      ],
+                      "token": "B24DDB4D3ACA4C68A363B023B3F489AD"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "../../../models/default-401-error.json"
+                },
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "errors": [
+                        {
+                          "msg": "Authorization token not valid",
+                          "code": "MSG_AUTHORIZATION_TOKEN_NOT_VALID"
+                        }
+                      ],
+                      "token": "BC691D67583448F68DC438B3EA8A26F2"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "../../../models/default-500-error.json"
+                },
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "errors": [
+                        {
+                          "msg": "General error",
+                          "code": "MSG_GENERAL_ERROR"
+                        }
+                      ],
+                      "token": "D87ABA4977274030BAC92814B9E16CE0"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": []
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "terminal-response": {
+        "description": "Terminal response model.",
+        "type": "object",
+        "properties": {
+          "slug": {
+            "description": "Unique terminal identifier.",
+            "type": "string",
+            "format": "uuid",
+            "examples": [
+              "C7C6C3C3EAED4F6DB9B0C8EDCBBDB35C"
+            ],
+            "maxLength": 32
+          },
+          "active": {
+            "description": "Identification of whether the object is active. It's not the terminal status.",
+            "type": "boolean"
+          },
+          "dtInsert": {
+            "description": "Date the terminal was created.",
+            "type": "string",
+            "format": "date-time",
+            "examples": [
+              "2023-02-14T22:05:24.000+0000"
+            ]
+          },
+          "dtUpdate": {
+            "description": "Date of last terminal update.",
+            "type": "string",
+            "format": "date-time",
+            "examples": [
+              "2023-02-14T22:05:24.000+0000"
+            ]
+          },
+          "logicalNumber": {
+            "description": "Terminal logical number automatically generated at creation time.",
+            "type": "string",
+            "examples": [
+              "00000044"
+            ],
+            "maxLength": 8
+          },
+          "type": {
+            "description": "Terminal type identifier. *The identifiers represent: P = POS, T = TEF, S = SmartPos (Tap on Phone) and V = Virtual.*",
+            "type": "string",
+            "examples": [
+              "P"
+            ],
+            "enum": [
+              "P",
+              "V",
+              "S",
+              "T"
+            ]
+          },
+          "status": {
+            "description": "Description of the current status of the terminal.",
+            "type": "string",
+            "examples": [
+              "ACTIVE"
+            ],
+            "enum": [
+              "ACTIVE",
+              "INACTIVE",
+              "DEACTIVATED"
+            ]
+          },
+          "serialNumber": {
+            "description": "Terminal serial number. In some scenarios, this number is automatically generated by the merchant onboarding flow (Tap on Phone and TEF for example).",
+            "type": "string",
+            "examples": [
+              "6N490009"
+            ],
+            "maxLength": 64
+          },
+          "model": {
+            "description": "Description of the terminal model. In some scenarios, this data is automatically generated by the merchant onboarding flow.",
+            "type": "string",
+            "examples": [
+              "S920203GWB-C"
+            ],
+            "maxLength": 50
+          },
+          "manufacturer": {
+            "description": "Description of the terminal model. In some scenarios, this data is automatically generated by the merchant onboarding flow.",
+            "type": "string",
+            "examples": [
+              "PAX"
+            ],
+            "maxLength": 50
+          },
+          "pinpadSerialNumber": {
+            "description": "PINPad serial number. This data will only be present in POS terminals.",
+            "type": "string",
+            "examples": [
+              "6N490009"
+            ],
+            "maxLength": 100
+          },
+          "pinpadFirmware": {
+            "description": "PINPad firmware. This data will only be present in POS terminals.",
+            "type": "string",
+            "examples": [
+              "2.4.184"
+            ],
+            "maxLength": 20
+          },
+          "slugMerchant": {
+            "description": "Unique identifier of the merchant to which the terminal is linked.",
+            "type": "string",
+            "format": "uuid",
+            "examples": [
+              "D45AC977D308483D8AC2F684488D605F"
+            ],
+            "maxLength": 32
+          },
+          "slugCustomer": {
+            "description": "Unique customer identifier (ISO) that the terminal is linked to.",
+            "type": "string",
+            "format": "uuid",
+            "examples": [
+              "5A35F4C1E62742A1977B6BBFA65E8FEB"
+            ],
+            "maxLength": 32
+          },
+          "pverfm": {
+            "description": "Code associated with the package for updating the application. Only for POS type terminals.",
+            "type": "string",
+            "examples": [
+              "S920P"
+            ],
+            "maxLength": 10
+          },
+          "goUpdate": {
+            "description": "Identifier if the terminal has an application update request.",
+            "type": "boolean"
+          },
+          "inactivationDate": {
+            "description": "If the terminal is inactive, this field returns the date of inactivity.",
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time",
+            "examples": [
+              "2023-10-05T14:29:04.000+0000"
+            ]
+          },
+          "uniqueNumberForMerchant": {
+            "description": "Terminal registration order for the merchant. If the terminal was the third to be registered for the merchant, this field will be returned 3.",
+            "type": "integer",
+            "format": "int64",
+            "examples": [
+              1
+            ],
+            "maximum": 10,
+            "minimum": 1
+          }
+        },
+        "title": "terminal-reponse",
+        "x-examples": {
+          "Example 1": {
+            "slug": "C7C6C3C3EAED4F6DB9B0C8EDCBBDB35C",
+            "active": true,
+            "dtInsert": "2023-02-14T22:05:24.000+0000",
+            "dtUpdate": "2024-05-20T16:56:58.000+0000",
+            "logicalNumber": "00000044",
+            "type": "P",
+            "status": "ACTIVE",
+            "serialNumber": "6N490009",
+            "model": "S920203GWB-C",
+            "manufacturer": "PAX                 ",
+            "pinpadSerialNumber": "6N490009            ",
+            "pinpadFirmware": "2.4.184             ",
+            "slugMerchant": "D45AC977D308483D8AC2F684488D605F",
+            "slugCustomer": "5A35F4C1E62742A1977B6BBFA65E8FEB",
+            "pverfm": "S920P",
+            "goUpdate": false,
+            "inactivationDate": "2023-10-05T14:29:04.000+0000",
+            "uniqueNumberForMerchant": 1
+          }
+        },
+        "x-stoplight": {
+          "id": "46gx5keyjphh2"
+        }
+      }
+    },
+    "securitySchemes": {
+      "Authorization": {
+        "name": "Authorization",
+        "type": "apiKey",
+        "in": "header",
+        "description": "The integration token will be provided by Dock to the customer. To access the integration token, request our team."
+      }
+    }
+  },
+  "security": [
+    {
+      "Authorization": []
+    }
+  ],
+  "x-stoplight": {
+    "id": "sx4uj1nfin0b9"
+  }
+}
