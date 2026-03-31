@@ -1,0 +1,141 @@
+---
+title: "Error handling"
+description: "Understand and handle API errors effectively"
+---
+
+The Simple API provides clear error messages to help you debug issues quickly.
+
+## Error response format
+
+All errors are returned as JSON with an `error` field:
+
+```json
+{
+  "error": "not found"
+}
+```
+
+## Error types
+
+### 404 not found
+
+Returned when you try to access a resource that doesn't exist.
+
+**Cause:** The resource ID doesn't exist or was already deleted.
+
+**Example:**
+
+```bash
+curl http://localhost:8000/clients/999
+```
+
+Response:
+
+```json
+{
+  "error": "not found"
+}
+```
+
+**Solution:** Verify the resource ID exists by listing all resources:
+
+```bash
+curl http://localhost:8000/clients
+```
+
+### Invalid endpoint
+
+Returned when you request an endpoint that doesn't exist.
+
+**Cause:** Typo in the URL or unsupported endpoint.
+
+**Example:**
+
+```bash
+curl http://localhost:8000/orders
+```
+
+Response:
+
+```json
+{
+  "error": "not found"
+}
+```
+
+**Solution:** Use only the supported endpoints: `/clients`, `/products`, `/categories`, `/services`, `/accounts`.
+
+### Invalid JSON
+
+Returned when the request body contains malformed JSON.
+
+**Cause:** Syntax error in the JSON payload.
+
+**Example:**
+
+```bash
+curl -X POST http://localhost:8000/clients \
+  -H "Content-Type: application/json" \
+  -d '{"name": "John"'
+```
+
+**Solution:** Validate your JSON syntax before sending the request.
+
+## HTTP status codes
+
+| Status | Meaning | When it occurs |
+| --- | --- | --- |
+| 200 | OK | GET or PUT request succeeded |
+| 201 | Created | POST request succeeded and resource was created |
+| 404 | Not Found | Resource doesn't exist or endpoint is invalid |
+
+## Common issues and solutions
+
+### Missing Content-Type header
+
+**Problem:** POST/PUT requests fail or behave unexpectedly.
+
+**Solution:** Always include the header:
+
+```bash
+curl -X POST http://localhost:8000/clients \
+  -H "Content-Type: application/json" \
+  -d '{"name": "John"}'
+```
+
+### Port not accessible
+
+**Problem:** Connection refused when connecting to localhost:8000.
+
+**Solution:**
+1. Verify the server is running: `python3 main.py`
+2. Verify the port is correct
+3. Check if another application is using port 8000
+
+### Wrong HTTP method
+
+**Problem:** Operation doesn't work as expected.
+
+**Solution:** Use the correct HTTP method:
+- GET to retrieve data
+- POST to create data
+- PUT to update data
+- DELETE to remove data
+
+## Debugging tips
+
+1. **Use verbose mode with curl:**
+
+```bash
+curl -v http://localhost:8000/clients
+```
+
+This shows request headers, response headers, and status codes.
+
+2. **Check the server output** for logging information.
+
+3. **Use an API client** like Postman or Insomnia for easier testing.
+
+4. **Validate your JSON** using an online JSON validator.
+
+5. **Test endpoints one by one** to isolate issues.

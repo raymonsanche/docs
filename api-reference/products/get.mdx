@@ -1,0 +1,55 @@
+---
+title: "Get Product"
+api: "GET /products/:id"
+description: "Retrieve a specific product by ID"
+---
+
+# Get Product
+
+Retrieve a specific product by its ID.
+
+## Endpoint
+
+```
+GET /products/:id
+```
+
+## Path parameters
+
+<ParamField path="id" type="integer" required>
+  The unique identifier of the product
+</ParamField>
+
+## Request example
+
+```bash
+curl http://localhost:8000/products/1
+```
+
+## Response
+
+### Success response (200)
+
+```json
+{
+  "id": 1,
+  "name": "Laptop",
+  "price": 999.99,
+  "stock": 50,
+  "description": "High-performance laptop"
+}
+```
+
+### Error response (404)
+
+```json
+{
+  "error": "not found"
+}
+```
+
+## Use cases
+
+- Get product details
+- Check stock availability
+- Retrieve product information for display

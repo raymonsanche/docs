@@ -1,0 +1,66 @@
+---
+title: "Update Category"
+api: "PUT /categories/:id"
+description: "Update an existing category"
+---
+
+# Update Category
+
+Update a category's information.
+
+## Endpoint
+
+```
+PUT /categories/:id
+```
+
+## Path parameters
+
+<ParamField path="id" type="integer" required>
+  The unique identifier of the category to update
+</ParamField>
+
+## Request body
+
+<ParamField body="name" type="string" required>
+  Updated category name
+</ParamField>
+
+<ParamField body="description" type="string">
+  Updated description
+</ParamField>
+
+## Request example
+
+```bash
+curl -X PUT http://localhost:8000/categories/1 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Computing",
+    "description": "Computers and computing devices"
+  }'
+```
+
+## Response
+
+### Success response (200)
+
+```json
+{
+  "id": 1,
+  "name": "Computing",
+  "description": "Computers and computing devices"
+}
+```
+
+### Error response (404)
+
+```json
+{
+  "error": "not found"
+}
+```
+
+<Warning>
+When updating, you must provide all fields. Missing fields will not be preserved from the previous record.
+</Warning>

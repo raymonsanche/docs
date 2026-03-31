@@ -1,7 +1,7 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "Mint Starter Kit",
+  "name": "Simple API",
   "colors": {
     "primary": "#16A34A",
     "light": "#07C983",
@@ -32,31 +32,15 @@
             "pages": [
               "index",
               "quickstart",
-              "development"
+              "installation"
             ]
           },
           {
-            "group": "Customization",
+            "group": "Guides",
             "pages": [
-              "essentials/settings",
-              "essentials/navigation"
-            ]
-          },
-          {
-            "group": "Writing content",
-            "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/reusable-snippets"
-            ]
-          },
-          {
-            "group": "AI tools",
-            "pages": [
-              "ai-tools/cursor",
-              "ai-tools/claude-code",
-              "ai-tools/windsurf"
+              "guides/basic-usage",
+              "guides/error-handling",
+              "guides/examples"
             ]
           }
         ]
@@ -65,9 +49,49 @@
         "tab": "API reference",
         "groups": [
           {
-            "group": "API documentation",
+            "group": "Overview",
             "pages": [
-              "api-reference/introduction"
+              "api-reference/overview"
+            ]
+          },
+          {
+            "group": "Clients",
+            "pages": [
+              "api-reference/clients/list",
+              "api-reference/clients/create",
+              "api-reference/clients/get",
+              "api-reference/clients/update",
+              "api-reference/clients/delete"
+            ]
+          },
+          {
+            "group": "Products",
+            "pages": [
+              "api-reference/products/list",
+              "api-reference/products/create",
+              "api-reference/products/get",
+              "api-reference/products/update",
+              "api-reference/products/delete"
+            ]
+          },
+          {
+            "group": "Categories",
+            "pages": [
+              "api-reference/categories/list",
+              "api-reference/categories/create",
+              "api-reference/categories/get",
+              "api-reference/categories/update",
+              "api-reference/categories/delete"
+            ]
+          },
+          {
+            "group": "Services",
+            "pages": [
+              "api-reference/services/list",
+              "api-reference/services/create",
+              "api-reference/services/get",
+              "api-reference/services/update",
+              "api-reference/services/delete"
             ]
           },
           {
@@ -79,10 +103,6 @@
               "api-reference/accounts/update",
               "api-reference/accounts/delete"
             ]
-          },
-          {
-            "group": "Teste",
-            "openapi": "api-reference/search-terminals/openapi.json"
           }
         ]
       }

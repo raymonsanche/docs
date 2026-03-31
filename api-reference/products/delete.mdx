@@ -1,0 +1,49 @@
+---
+title: "Delete Product"
+api: "DELETE /products/:id"
+description: "Delete a product"
+---
+
+# Delete Product
+
+Delete a specific product from inventory.
+
+## Endpoint
+
+```
+DELETE /products/:id
+```
+
+## Path parameters
+
+<ParamField path="id" type="integer" required>
+  The unique identifier of the product to delete
+</ParamField>
+
+## Request example
+
+```bash
+curl -X DELETE http://localhost:8000/products/1
+```
+
+## Response
+
+### Success response (200)
+
+```json
+{
+  "deleted": true
+}
+```
+
+### Error response (404)
+
+```json
+{
+  "error": "not found"
+}
+```
+
+<Warning>
+Deleting a product is permanent and cannot be undone.
+</Warning>

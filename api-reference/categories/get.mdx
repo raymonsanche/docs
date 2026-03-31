@@ -1,0 +1,47 @@
+---
+title: "Get Category"
+api: "GET /categories/:id"
+description: "Retrieve a specific category"
+---
+
+# Get Category
+
+Retrieve a specific category by ID.
+
+## Endpoint
+
+```
+GET /categories/:id
+```
+
+## Path parameters
+
+<ParamField path="id" type="integer" required>
+  The category identifier
+</ParamField>
+
+## Request example
+
+```bash
+curl http://localhost:8000/categories/1
+```
+
+## Response
+
+### Success response (200)
+
+```json
+{
+  "id": 1,
+  "name": "Electronics",
+  "description": "Electronic devices and accessories"
+}
+```
+
+### Error response (404)
+
+```json
+{
+  "error": "not found"
+}
+```

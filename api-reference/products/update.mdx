@@ -1,0 +1,78 @@
+---
+title: "Update Product"
+api: "PUT /products/:id"
+description: "Update an existing product"
+---
+
+# Update Product
+
+Update an existing product's information.
+
+## Endpoint
+
+```
+PUT /products/:id
+```
+
+## Path parameters
+
+<ParamField path="id" type="integer" required>
+  The unique identifier of the product to update
+</ParamField>
+
+## Request body
+
+<ParamField body="name" type="string" required>
+  Updated product name
+</ParamField>
+
+<ParamField body="price" type="number">
+  Updated price
+</ParamField>
+
+<ParamField body="stock" type="integer">
+  Updated stock quantity
+</ParamField>
+
+<ParamField body="description" type="string">
+  Updated description
+</ParamField>
+
+## Request example
+
+```bash
+curl -X PUT http://localhost:8000/products/1 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Gaming Laptop",
+    "price": 1299.99,
+    "stock": 45,
+    "description": "High-performance gaming laptop"
+  }'
+```
+
+## Response
+
+### Success response (200)
+
+```json
+{
+  "id": 1,
+  "name": "Gaming Laptop",
+  "price": 1299.99,
+  "stock": 45,
+  "description": "High-performance gaming laptop"
+}
+```
+
+### Error response (404)
+
+```json
+{
+  "error": "not found"
+}
+```
+
+<Warning>
+When updating, you must provide all fields. Missing fields will not be preserved from the previous record.
+</Warning>

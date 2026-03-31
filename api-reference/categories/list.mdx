@@ -1,0 +1,66 @@
+---
+title: "List Categories"
+api: "GET /categories"
+description: "Retrieve all categories"
+---
+
+# List Categories
+
+Retrieve all product categories.
+
+## Endpoint
+
+```
+GET /categories
+```
+
+## Parameters
+
+This endpoint does not accept any parameters.
+
+## Request example
+
+```bash
+curl http://localhost:8000/categories
+```
+
+## Response
+
+Returns an array of all categories.
+
+<ResponseField name="id" type="integer">
+  Unique identifier for the category (auto-generated)
+</ResponseField>
+
+<ResponseField name="name" type="string">
+  Category name
+</ResponseField>
+
+<ResponseField name="description" type="string">
+  Category description
+</ResponseField>
+
+### Success response (200)
+
+```json
+[
+  {
+    "id": 1,
+    "name": "Electronics",
+    "description": "Electronic devices"
+  },
+  {
+    "id": 2,
+    "name": "Accessories",
+    "description": "Device accessories"
+  }
+]
+```
+
+### Empty list response
+
+If no categories exist, returns an empty array:
+
+```json
+[]
+```

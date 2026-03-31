@@ -1,0 +1,76 @@
+---
+title: "List Clients"
+api: "GET /clients"
+description: "Retrieve all clients"
+---
+
+# List Clients
+
+Retrieve all clients from the system.
+
+## Endpoint
+
+```
+GET /clients
+```
+
+## Parameters
+
+This endpoint does not accept any parameters.
+
+## Request example
+
+```bash
+curl http://localhost:8000/clients
+```
+
+## Response
+
+Returns an array of all clients in the system.
+
+<ResponseField name="id" type="integer">
+  Unique identifier for the client (auto-generated)
+</ResponseField>
+
+<ResponseField name="name" type="string">
+  Client's full name
+</ResponseField>
+
+<ResponseField name="email" type="string">
+  Client's email address
+</ResponseField>
+
+### Success response (200)
+
+```json
+[
+  {
+    "id": 1,
+    "name": "John Doe",
+    "email": "john@example.com"
+  },
+  {
+    "id": 2,
+    "name": "Jane Smith",
+    "email": "jane@example.com"
+  }
+]
+```
+
+### Empty list response
+
+If no clients exist, returns an empty array:
+
+```json
+[]
+```
+
+## Use cases
+
+- Display a list of all clients in your application
+- Export all client data
+- Generate reports
+
+<Tip>
+If you have many clients and want to filter them, retrieve all clients and filter on the client side.
+</Tip>

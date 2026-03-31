@@ -1,0 +1,52 @@
+---
+title: "Create Category"
+api: "POST /categories"
+description: "Create a new category"
+---
+
+# Create Category
+
+Create a new product category.
+
+## Endpoint
+
+```
+POST /categories
+```
+
+## Request body
+
+<ParamField body="name" type="string" required>
+  Category name
+</ParamField>
+
+<ParamField body="description" type="string">
+  Category description
+</ParamField>
+
+## Request example
+
+```bash
+curl -X POST http://localhost:8000/categories \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Electronics",
+    "description": "Electronic devices and accessories"
+  }'
+```
+
+## Response
+
+### Success response (201)
+
+```json
+{
+  "id": 1,
+  "name": "Electronics",
+  "description": "Electronic devices and accessories"
+}
+```
+
+<Note>
+The ID field is automatically assigned by the server. Do not include it in your request.
+</Note>

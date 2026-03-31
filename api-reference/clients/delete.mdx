@@ -1,0 +1,72 @@
+---
+title: "Delete Client"
+api: "DELETE /clients/:id"
+description: "Delete a client"
+---
+
+# Delete Client
+
+Delete a specific client from the system.
+
+## Endpoint
+
+```
+DELETE /clients/:id
+```
+
+## Path parameters
+
+<ParamField path="id" type="integer" required>
+  The unique identifier of the client to delete
+</ParamField>
+
+## Request example
+
+```bash
+curl -X DELETE http://localhost:8000/clients/1
+```
+
+## Response
+
+<ResponseField name="deleted" type="boolean">
+  Confirmation that the deletion was successful
+</ResponseField>
+
+### Success response (200)
+
+```json
+{
+  "deleted": true
+}
+```
+
+### Error response (404)
+
+If the client doesn't exist:
+
+```json
+{
+  "error": "not found"
+}
+```
+
+## Behavior
+
+- Permanently removes the client from the system
+- This operation cannot be undone
+- If the client doesn't exist, a 404 error is returned
+
+## Use cases
+
+- Remove inactive clients
+- Clean up duplicate client records
+- Delete test or temporary client data
+
+<Warning>
+Deleting a client is permanent and cannot be undone. Consider archiving instead if you need to preserve historical data.
+</Warning>
+
+## Related operations
+
+- [List Clients](/api-reference/clients/list) - View all clients
+- [Get Client](/api-reference/clients/get) - Verify client exists before deleting

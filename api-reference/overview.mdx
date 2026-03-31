@@ -1,0 +1,98 @@
+---
+title: "API reference overview"
+description: "Complete reference for all Simple API endpoints"
+---
+
+The Simple API provides five resource types, each with full CRUD (Create, Read, Update, Delete) operations.
+
+## Available resources
+
+### Clients
+
+Manage customer and client information.
+
+- [List clients](/api-reference/clients/list)
+- [Create client](/api-reference/clients/create)
+- [Get client](/api-reference/clients/get)
+- [Update client](/api-reference/clients/update)
+- [Delete client](/api-reference/clients/delete)
+
+### Products
+
+Manage product inventory.
+
+- [List products](/api-reference/products/list)
+- [Create product](/api-reference/products/create)
+- [Get product](/api-reference/products/get)
+- [Update product](/api-reference/products/update)
+- [Delete product](/api-reference/products/delete)
+
+### Categories
+
+Organize and manage product categories.
+
+- [List categories](/api-reference/categories/list)
+- [Create category](/api-reference/categories/create)
+- [Get category](/api-reference/categories/get)
+- [Update category](/api-reference/categories/update)
+- [Delete category](/api-reference/categories/delete)
+
+### Services
+
+Define and manage available services.
+
+- [List services](/api-reference/services/list)
+- [Create service](/api-reference/services/create)
+- [Get service](/api-reference/services/get)
+- [Update service](/api-reference/services/update)
+- [Delete service](/api-reference/services/delete)
+
+### Accounts
+
+Manage user and business accounts.
+
+- [List accounts](/api-reference/accounts/list)
+- [Create account](/api-reference/accounts/create)
+- [Get account](/api-reference/accounts/get)
+- [Update account](/api-reference/accounts/update)
+- [Delete account](/api-reference/accounts/delete)
+
+## Base URL
+
+```
+http://localhost:8000
+```
+
+## Authentication
+
+The Simple API does not require authentication. All endpoints are publicly accessible.
+
+## Response format
+
+All responses use JSON format. Successful responses contain the requested data, while errors are formatted as:
+
+```json
+{
+  "error": "not found"
+}
+```
+
+## Status codes
+
+| Code | Description |
+| --- | --- |
+| 200 | OK - Request succeeded |
+| 201 | Created - Resource was created successfully |
+| 404 | Not Found - Resource or endpoint doesn't exist |
+
+## Rate limiting
+
+No rate limiting is applied to the Simple API.
+
+## Pagination
+
+The Simple API does not support pagination. List endpoints return all available resources.
+
+<Tip>
+All endpoints follow the same pattern. Once you understand one resource type, you can apply the same operations to all others.
+</Tip>

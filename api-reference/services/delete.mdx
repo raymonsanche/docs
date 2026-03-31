@@ -1,0 +1,49 @@
+---
+title: "Delete Service"
+api: "DELETE /services/:id"
+description: "Delete a service"
+---
+
+# Delete Service
+
+Delete a service from the system.
+
+## Endpoint
+
+```
+DELETE /services/:id
+```
+
+## Path parameters
+
+<ParamField path="id" type="integer" required>
+  The unique identifier of the service to delete
+</ParamField>
+
+## Request example
+
+```bash
+curl -X DELETE http://localhost:8000/services/1
+```
+
+## Response
+
+### Success response (200)
+
+```json
+{
+  "deleted": true
+}
+```
+
+### Error response (404)
+
+```json
+{
+  "error": "not found"
+}
+```
+
+<Warning>
+Deleting a service is permanent and cannot be undone.
+</Warning>
