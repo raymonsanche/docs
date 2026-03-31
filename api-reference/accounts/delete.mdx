@@ -1,0 +1,72 @@
+---
+title: "Delete Account"
+api: "DELETE /accounts/:id"
+description: "Delete an account"
+---
+
+# Delete Account
+
+Delete a specific account from the system.
+
+## Endpoint
+
+```
+DELETE /accounts/:id
+```
+
+## Path parameters
+
+<ParamField path="id" type="integer" required>
+  The unique identifier of the account to delete
+</ParamField>
+
+## Request example
+
+```bash
+curl -X DELETE http://localhost:8000/accounts/1
+```
+
+## Response
+
+<ResponseField name="deleted" type="boolean">
+  Confirmation that the deletion was successful
+</ResponseField>
+
+### Success response (200)
+
+```json
+{
+  "deleted": true
+}
+```
+
+### Error response (404)
+
+If the account doesn't exist:
+
+```json
+{
+  "error": "not found"
+}
+```
+
+## Behavior
+
+- Permanently removes the account from the system
+- This operation cannot be undone
+- If the account doesn't exist, a 404 error is returned
+
+## Use cases
+
+- Remove inactive accounts
+- Clean up duplicate account records
+- Delete test or temporary accounts
+
+<Warning>
+Deleting an account is permanent and cannot be undone. Consider archiving instead if you need to preserve historical data.
+</Warning>
+
+## Related operations
+
+- [List Accounts](/api-reference/accounts/list) - View all accounts
+- [Get Account](/api-reference/accounts/get) - Verify account exists before deleting

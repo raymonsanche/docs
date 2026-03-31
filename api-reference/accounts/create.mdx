@@ -1,0 +1,82 @@
+---
+title: "Create Account"
+api: "POST /accounts"
+description: "Create a new account"
+---
+
+# Create Account
+
+Create a new account in the system.
+
+## Endpoint
+
+```
+POST /accounts
+```
+
+## Request body
+
+<ParamField body="name" type="string" required>
+  Account holder's name
+</ParamField>
+
+<ParamField body="email" type="string" required>
+  Account email address
+</ParamField>
+
+<ParamField body="type" type="string">
+  Account type (optional), such as "personal" or "business"
+</ParamField>
+
+## Request example
+
+```bash
+curl -X POST http://localhost:8000/accounts \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Acme Corp",
+    "email": "billing@acme.com",
+    "type": "business"
+  }'
+```
+
+## Response
+
+<ResponseField name="id" type="integer">
+  Unique identifier for the newly created account (auto-generated)
+</ResponseField>
+
+<ResponseField name="name" type="string">
+  Account holder's name
+</ResponseField>
+
+<ResponseField name="email" type="string">
+  Account email address
+</ResponseField>
+
+### Success response (201)
+
+```json
+{
+  "id": 1,
+  "name": "Acme Corp",
+  "email": "billing@acme.com",
+  "type": "business"
+}
+```
+
+## Rules
+
+- Account ID is auto-generated starting from 1
+- Name and email fields are required
+- All provided fields are stored and returned
+
+## Use cases
+
+- Register a new user account
+- Set up a business account
+- Create accounts for billing or service management
+
+<Note>
+The ID field is automatically assigned by the server. Do not include it in your request.
+</Note>

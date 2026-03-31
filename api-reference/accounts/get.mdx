@@ -1,0 +1,73 @@
+---
+title: "Get Account"
+api: "GET /accounts/:id"
+description: "Retrieve a specific account by ID"
+---
+
+# Get Account
+
+Retrieve a specific account by its ID.
+
+## Endpoint
+
+```
+GET /accounts/:id
+```
+
+## Path parameters
+
+<ParamField path="id" type="integer" required>
+  The unique identifier of the account
+</ParamField>
+
+## Request example
+
+```bash
+curl http://localhost:8000/accounts/1
+```
+
+## Response
+
+<ResponseField name="id" type="integer">
+  Unique identifier for the account
+</ResponseField>
+
+<ResponseField name="name" type="string">
+  Account holder's name
+</ResponseField>
+
+<ResponseField name="email" type="string">
+  Account email address
+</ResponseField>
+
+### Success response (200)
+
+```json
+{
+  "id": 1,
+  "name": "Acme Corp",
+  "email": "billing@acme.com",
+  "type": "business"
+}
+```
+
+### Error response (404)
+
+If the account doesn't exist:
+
+```json
+{
+  "error": "not found"
+}
+```
+
+## Use cases
+
+- Retrieve account details for display
+- Verify an account exists
+- Get account information before updating
+- Fetch account data for reports
+
+<Tip>
+Check the HTTP status code. A 404 response means the account ID doesn't exist.
+</Tip>
