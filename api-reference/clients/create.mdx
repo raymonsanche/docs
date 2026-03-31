@@ -1,0 +1,88 @@
+---
+title: "Create Client"
+api: "POST /clients"
+description: "Create a new client"
+---
+
+# Create Client
+
+Create a new client in the system.
+
+## Endpoint
+
+```
+POST /clients
+```
+
+## Request body
+
+<ParamField body="name" type="string" required>
+  Client's full name
+</ParamField>
+
+<ParamField body="email" type="string" required>
+  Client's email address
+</ParamField>
+
+<ParamField body="phone" type="string">
+  Client's phone number (optional)
+</ParamField>
+
+<ParamField body="address" type="string">
+  Client's address (optional)
+</ParamField>
+
+## Request example
+
+```bash
+curl -X POST http://localhost:8000/clients \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "John Doe",
+    "email": "john@example.com",
+    "phone": "+1-555-0123",
+    "address": "123 Main St"
+  }'
+```
+
+## Response
+
+<ResponseField name="id" type="integer">
+  Unique identifier for the newly created client (auto-generated)
+</ResponseField>
+
+<ResponseField name="name" type="string">
+  Client's full name
+</ResponseField>
+
+<ResponseField name="email" type="string">
+  Client's email address
+</ResponseField>
+
+### Success response (201)
+
+```json
+{
+  "id": 1,
+  "name": "John Doe",
+  "email": "john@example.com",
+  "phone": "+1-555-0123",
+  "address": "123 Main St"
+}
+```
+
+## Rules
+
+- Client ID is auto-generated starting from 1
+- Name and email fields are required
+- All provided fields are stored and returned
+
+## Use cases
+
+- Register a new customer
+- Onboard a new client
+- Add client contact information
+
+<Note>
+The ID field is automatically assigned by the server. Do not include it in your request.
+</Note>

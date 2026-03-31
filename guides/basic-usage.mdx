@@ -1,0 +1,140 @@
+---
+title: "Basic usage"
+description: "Learn how to use the Simple API effectively"
+---
+
+This guide covers fundamental concepts and patterns for working with the Simple API.
+
+## REST fundamentals
+
+The Simple API follows standard REST conventions:
+
+| HTTP Method | Operation | Example |
+| --- | --- | --- |
+| GET | Retrieve data | `GET /clients` |
+| POST | Create new resource | `POST /clients` |
+| PUT | Update existing resource | `PUT /clients/1` |
+| DELETE | Delete resource | `DELETE /clients/1` |
+
+## Request format
+
+All requests should include the `Content-Type` header for POST and PUT operations:
+
+```bash
+curl -X POST http://localhost:8000/clients \
+  -H "Content-Type: application/json" \
+  -d '{"name": "John", "email": "john@example.com"}'
+```
+
+## Response format
+
+All responses are JSON objects or arrays:
+
+<Tabs>
+  <Tab title="Success response">
+    ```json
+    {
+      "id": 1,
+      "name": "John Doe",
+      "email": "john@example.com"
+    }
+    ```
+  </Tab>
+  <Tab title="List response">
+    ```json
+    [
+      {"id": 1, "name": "John Doe", "email": "john@example.com"},
+      {"id": 2, "name": "Jane Smith", "email": "jane@example.com"}
+    ]
+    ```
+  </Tab>
+  <Tab title="Error response">
+    ```json
+    {
+      "error": "not found"
+    }
+    ```
+  </Tab>
+</Tabs>
+
+## Status codes
+
+The API uses standard HTTP status codes:
+
+| Code | Meaning | Example |
+| --- | --- | --- |
+| 200 | Success (GET, PUT) | Retrieved or updated successfully |
+| 201 | Created (POST) | Resource created successfully |
+| 404 | Not Found | Resource doesn't exist |
+
+## Common operations
+
+### Creating resources
+
+Send a POST request with the resource data:
+
+```bash
+curl -X POST http://localhost:8000/products \
+  -H "Content-Type: application/json" \
+  -d '{"name": "Laptop", "price": 999}'
+```
+
+### Listing resources
+
+Send a GET request to the collection endpoint:
+
+```bash
+curl http://localhost:8000/products
+```
+
+### Retrieving single resources
+
+Send a GET request with the resource ID:
+
+```bash
+curl http://localhost:8000/products/1
+```
+
+### Updating resources
+
+Send a PUT request with the updated data:
+
+```bash
+curl -X PUT http://localhost:8000/products/1 \
+  -H "Content-Type: application/json" \
+  -d '{"name": "Gaming Laptop", "price": 1299}'
+```
+
+### Deleting resources
+
+Send a DELETE request:
+
+```bash
+curl -X DELETE http://localhost:8000/products/1
+```
+
+## Working with multiple resources
+
+The API manages five types of resources. Each follows the same CRUD pattern:
+
+- `/clients` - Customer records
+- `/products` - Product inventory
+- `/categories` - Product categories
+- `/services` - Service offerings
+- `/accounts` - User and business accounts
+
+<Note>
+Resource IDs are auto-generated as numeric integers starting from 1.
+</Note>
+
+## Data persistence
+
+Data is stored in memory during the server's runtime. When you restart the server, all data is reset. For production use, consider adding database persistence.
+
+## Best practices
+
+1. **Always include Content-Type header** for requests with a body
+2. **Check status codes** to handle errors appropriately
+3. **Use meaningful field names** when creating resources
+4. **Validate responses** before using the data
+5. **Handle 404 errors** gracefully when accessing specific resources

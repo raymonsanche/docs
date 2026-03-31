@@ -1,0 +1,48 @@
+---
+title: "Get Service"
+api: "GET /services/:id"
+description: "Retrieve a specific service"
+---
+
+# Get Service
+
+Retrieve a specific service by ID.
+
+## Endpoint
+
+```
+GET /services/:id
+```
+
+## Path parameters
+
+<ParamField path="id" type="integer" required>
+  The service identifier
+</ParamField>
+
+## Request example
+
+```bash
+curl http://localhost:8000/services/1
+```
+
+## Response
+
+### Success response (200)
+
+```json
+{
+  "id": 1,
+  "name": "Technical Support",
+  "price": 99.99,
+  "description": "24/7 technical support"
+}
+```
+
+### Error response (404)
+
+```json
+{
+  "error": "not found"
+}
+```

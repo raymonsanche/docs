@@ -1,0 +1,104 @@
+---
+title: "Update Client"
+api: "PUT /clients/:id"
+description: "Update an existing client"
+---
+
+# Update Client
+
+Update an existing client's information.
+
+## Endpoint
+
+```
+PUT /clients/:id
+```
+
+## Path parameters
+
+<ParamField path="id" type="integer" required>
+  The unique identifier of the client to update
+</ParamField>
+
+## Request body
+
+<ParamField body="name" type="string" required>
+  Updated client name
+</ParamField>
+
+<ParamField body="email" type="string" required>
+  Updated email address
+</ParamField>
+
+<ParamField body="phone" type="string">
+  Updated phone number (optional)
+</ParamField>
+
+<ParamField body="address" type="string">
+  Updated address (optional)
+</ParamField>
+
+## Request example
+
+```bash
+curl -X PUT http://localhost:8000/clients/1 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Jane Doe",
+    "email": "jane@example.com",
+    "phone": "+1-555-9876",
+    "address": "456 Oak Ave"
+  }'
+```
+
+## Response
+
+<ResponseField name="id" type="integer">
+  Client's identifier (unchanged)
+</ResponseField>
+
+<ResponseField name="name" type="string">
+  Updated client name
+</ResponseField>
+
+<ResponseField name="email" type="string">
+  Updated email address
+</ResponseField>
+
+### Success response (200)
+
+```json
+{
+  "id": 1,
+  "name": "Jane Doe",
+  "email": "jane@example.com",
+  "phone": "+1-555-9876",
+  "address": "456 Oak Ave"
+}
+```
+
+### Error response (404)
+
+If the client doesn't exist:
+
+```json
+{
+  "error": "not found"
+}
+```
+
+## Rules
+
+- The client ID cannot be changed
+- All fields must be provided in the request body
+- The entire client record is replaced with the new data
+
+## Use cases
+
+- Update client contact information
+- Correct client details
+- Change email or phone number
+
+<Warning>
+When updating, you must provide all fields. Missing fields will not be preserved from the previous record.
+</Warning>

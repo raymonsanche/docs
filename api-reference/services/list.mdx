@@ -1,0 +1,66 @@
+---
+title: "List Services"
+api: "GET /services"
+description: "Retrieve all services"
+---
+
+# List Services
+
+Retrieve all available services.
+
+## Endpoint
+
+```
+GET /services
+```
+
+## Parameters
+
+This endpoint does not accept any parameters.
+
+## Request example
+
+```bash
+curl http://localhost:8000/services
+```
+
+## Response
+
+Returns an array of all services.
+
+<ResponseField name="id" type="integer">
+  Unique identifier for the service (auto-generated)
+</ResponseField>
+
+<ResponseField name="name" type="string">
+  Service name
+</ResponseField>
+
+<ResponseField name="price" type="number">
+  Service price
+</ResponseField>
+
+### Success response (200)
+
+```json
+[
+  {
+    "id": 1,
+    "name": "Technical Support",
+    "price": 99.99
+  },
+  {
+    "id": 2,
+    "name": "Installation",
+    "price": 199.99
+  }
+]
+```
+
+### Empty list response
+
+If no services exist, returns an empty array:
+
+```json
+[]
+```

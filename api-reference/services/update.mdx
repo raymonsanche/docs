@@ -1,0 +1,72 @@
+---
+title: "Update Service"
+api: "PUT /services/:id"
+description: "Update an existing service"
+---
+
+# Update Service
+
+Update a service's information.
+
+## Endpoint
+
+```
+PUT /services/:id
+```
+
+## Path parameters
+
+<ParamField path="id" type="integer" required>
+  The unique identifier of the service to update
+</ParamField>
+
+## Request body
+
+<ParamField body="name" type="string" required>
+  Updated service name
+</ParamField>
+
+<ParamField body="price" type="number">
+  Updated price
+</ParamField>
+
+<ParamField body="description" type="string">
+  Updated description
+</ParamField>
+
+## Request example
+
+```bash
+curl -X PUT http://localhost:8000/services/1 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Premium Support",
+    "price": 199.99,
+    "description": "24/7 premium technical support"
+  }'
+```
+
+## Response
+
+### Success response (200)
+
+```json
+{
+  "id": 1,
+  "name": "Premium Support",
+  "price": 199.99,
+  "description": "24/7 premium technical support"
+}
+```
+
+### Error response (404)
+
+```json
+{
+  "error": "not found"
+}
+```
+
+<Warning>
+When updating, you must provide all fields. Missing fields will not be preserved from the previous record.
+</Warning>

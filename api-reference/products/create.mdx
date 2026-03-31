@@ -1,0 +1,70 @@
+---
+title: "Create Product"
+api: "POST /products"
+description: "Create a new product"
+---
+
+# Create Product
+
+Create a new product in the inventory.
+
+## Endpoint
+
+```
+POST /products
+```
+
+## Request body
+
+<ParamField body="name" type="string" required>
+  Product name
+</ParamField>
+
+<ParamField body="price" type="number">
+  Product price
+</ParamField>
+
+<ParamField body="stock" type="integer">
+  Quantity in stock
+</ParamField>
+
+<ParamField body="description" type="string">
+  Product description (optional)
+</ParamField>
+
+## Request example
+
+```bash
+curl -X POST http://localhost:8000/products \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Laptop",
+    "price": 999.99,
+    "stock": 50,
+    "description": "High-performance laptop"
+  }'
+```
+
+## Response
+
+### Success response (201)
+
+```json
+{
+  "id": 1,
+  "name": "Laptop",
+  "price": 999.99,
+  "stock": 50,
+  "description": "High-performance laptop"
+}
+```
+
+## Rules
+
+- Product ID is auto-generated
+- Name is required
+- All provided fields are stored
+
+<Note>
+The ID field is automatically assigned by the server. Do not include it in your request.
+</Note>

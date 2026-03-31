@@ -1,0 +1,105 @@
+---
+title: "Installation"
+description: "Set up Simple API on your system"
+---
+
+Simple API requires Python 3.6 or higher and only uses Python's standard library.
+
+## System requirements
+
+- **Python:** 3.6 or higher
+- **OS:** Linux, macOS, or Windows
+- **Memory:** Minimal (< 50 MB)
+- **Disk space:** < 1 MB for the application
+
+## Installation steps
+
+<Steps>
+<Step title="Clone or download">
+
+Clone the repository or download the files:
+
+```bash
+git clone <repository-url>
+cd simple-api
+```
+
+</Step>
+<Step title="Verify Python installation">
+
+Check that Python is installed:
+
+```bash
+python3 --version
+```
+
+You should see output like `Python 3.9.0` or higher.
+
+</Step>
+<Step title="Run the server">
+
+Start the API server:
+
+```bash
+python3 main.py
+```
+
+You should see:
+
+```
+Server running on http://localhost:8000
+Routes: /clients, /products, /categories, /services, /accounts
+```
+
+</Step>
+<Step title="Verify the API is running">
+
+In a new terminal, test the API:
+
+```bash
+curl http://localhost:8000/clients
+```
+
+If you get an empty JSON array `[]`, the API is running correctly.
+
+</Step>
+</Steps>
+
+## Configuration
+
+### Server address and port
+
+By default, the API runs on `localhost:8000`. To change this, edit the server configuration:
+
+```python
+if __name__ == "__main__":
+    server = HTTPServer(("localhost", 8000), Handler)
+    # Change to ("0.0.0.0", 8080) to run on port 8080
+    server.serve_forever()
+```
+
+### Stopping the server
+
+Press `Ctrl+C` in your terminal to stop the server.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Port already in use">
+    If you see `Address already in use`, port 8000 is occupied. Either stop the application using port 8000 or change the port in your configuration.
+  </Accordion>
+  <Accordion title="Python not found">
+    If you see `command not found: python3`, install Python or use `python` instead of `python3`.
+  </Accordion>
+  <Accordion title="Permission denied">
+    On Unix-like systems, make the file executable:
+
+    ```bash
+    chmod +x main.py
+    ```
+  </Accordion>
+</AccordionGroup>
+
+<Tip>
+No external dependencies to install. Simple API uses only Python's standard library.
+</Tip>

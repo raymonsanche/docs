@@ -1,0 +1,243 @@
+---
+title: "Examples"
+description: "Real-world examples using the Simple API"
+---
+
+Practical examples showing how to use the Simple API in common scenarios.
+
+## Complete workflow example
+
+This example demonstrates a complete workflow: creating categories, products, services, and clients.
+
+### Step 1: Create a category
+
+```bash
+curl -X POST http://localhost:8000/categories \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Electronics",
+    "description": "Electronic devices and accessories"
+  }'
+```
+
+Response:
+
+```json
+{
+  "id": 1,
+  "name": "Electronics",
+  "description": "Electronic devices and accessories"
+}
+```
+
+### Step 2: Create a product in that category
+
+```bash
+curl -X POST http://localhost:8000/products \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Laptop",
+    "category_id": 1,
+    "price": 999.99,
+    "stock": 50
+  }'
+```
+
+### Step 3: Create a service
+
+```bash
+curl -X POST http://localhost:8000/services \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Technical Support",
+    "description": "24/7 technical support for all products",
+    "price": 99.99
+  }'
+```
+
+### Step 4: Create a client
+
+```bash
+curl -X POST http://localhost:8000/clients \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "ABC Corporation",
+    "email": "contact@abccorp.com",
+    "phone": "+1-555-0123",
+    "address": "123 Business St"
+  }'
+```
+
+### Step 5: Retrieve all data
+
+```bash
+curl http://localhost:8000/clients
+curl http://localhost:8000/products
+curl http://localhost:8000/categories
+curl http://localhost:8000/services
+```
+
+## Batch operations example
+
+Update a product after retrieving the list:
+
+```bash
+# Get all products first
+curl http://localhost:8000/products
+
+# Update a specific product
+curl -X PUT http://localhost:8000/products/1 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Gaming Laptop",
+    "category_id": 1,
+    "price": 1299.99,
+    "stock": 45
+  }'
+```
+
+## Error handling example
+
+Handle a missing resource gracefully:
+
+```bash
+curl http://localhost:8000/clients/9999
+```
+
+Response (404):
+
+```json
+{
+  "error": "not found"
+}
+```
+
+In Python:
+
+```python
+import requests
+
+response = requests.get('http://localhost:8000/clients/9999')
+
+if response.status_code == 404:
+    print("Client not found")
+elif response.status_code == 200:
+    client = response.json()
+    print(f"Found client: {client['name']}")
+```
+
+## Python client example
+
+A simple Python function to interact with the API:
+
+```python
+import requests
+
+BASE_URL = "http://localhost:8000"
+
+def create_client(name, email):
+    """Create a new client."""
+    response = requests.post(
+        f"{BASE_URL}/clients",
+        headers={"Content-Type": "application/json"},
+        json={"name": name, "email": email}
+    )
+    return response.json()
+
+def get_all_clients():
+    """Retrieve all clients."""
+    response = requests.get(f"{BASE_URL}/clients")
+    return response.json()
+
+def get_client(client_id):
+    """Retrieve a specific client."""
+    response = requests.get(f"{BASE_URL}/clients/{client_id}")
+    if response.status_code == 404:
+        return None
+    return response.json()
+
+def update_client(client_id, name, email):
+    """Update a client."""
+    response = requests.put(
+        f"{BASE_URL}/clients/{client_id}",
+        headers={"Content-Type": "application/json"},
+        json={"name": name, "email": email}
+    )
+    return response.json()
+
+def delete_client(client_id):
+    """Delete a client."""
+    response = requests.delete(f"{BASE_URL}/clients/{client_id}")
+    return response.json()
+
+# Usage
+if __name__ == "__main__":
+    new_client = create_client("John Doe", "john@example.com")
+    print(f"Created client: {new_client}")
+
+    all_clients = get_all_clients()
+    print(f"All clients: {all_clients}")
+
+    updated = update_client(new_client["id"], "Jane Doe", "jane@example.com")
+    print(f"Updated client: {updated}")
+
+    deleted = delete_client(new_client["id"])
+    print(f"Delete result: {deleted}")
+```
+
+## JavaScript/Node.js example
+
+A simple JavaScript helper for API calls:
+
+```javascript
+const BASE_URL = 'http://localhost:8000';
+
+async function createProduct(name, price) {
+  const response = await fetch(`${BASE_URL}/products`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, price })
+  });
+  return response.json();
+}
+
+async function getAllProducts() {
+  const response = await fetch(`${BASE_URL}/products`);
+  return response.json();
+}
+
+async function getProduct(productId) {
+  const response = await fetch(`${BASE_URL}/products/${productId}`);
+  if (response.status === 404) return null;
+  return response.json();
+}
+
+async function updateProduct(productId, updates) {
+  const response = await fetch(`${BASE_URL}/products/${productId}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(updates)
+  });
+  return response.json();
+}
+
+async function deleteProduct(productId) {
+  const response = await fetch(`${BASE_URL}/products/${productId}`, {
+    method: 'DELETE'
+  });
+  return response.json();
+}
+
+// Usage
+(async () => {
+  const product = await createProduct('Keyboard', 79.99);
+  console.log('Created:', product);
+
+  const all = await getAllProducts();
+  console.log('All products:', all);
+})();
+```
+
+<Tip>
+These examples can be adapted for any of the five resources: clients, products, categories, services, and accounts.
+</Tip>

@@ -1,0 +1,58 @@
+---
+title: "Create Service"
+api: "POST /services"
+description: "Create a new service"
+---
+
+# Create Service
+
+Create a new service offering.
+
+## Endpoint
+
+```
+POST /services
+```
+
+## Request body
+
+<ParamField body="name" type="string" required>
+  Service name
+</ParamField>
+
+<ParamField body="price" type="number">
+  Service price
+</ParamField>
+
+<ParamField body="description" type="string">
+  Service description
+</ParamField>
+
+## Request example
+
+```bash
+curl -X POST http://localhost:8000/services \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Technical Support",
+    "price": 99.99,
+    "description": "24/7 technical support"
+  }'
+```
+
+## Response
+
+### Success response (201)
+
+```json
+{
+  "id": 1,
+  "name": "Technical Support",
+  "price": 99.99,
+  "description": "24/7 technical support"
+}
+```
+
+<Note>
+The ID field is automatically assigned by the server. Do not include it in your request.
+</Note>

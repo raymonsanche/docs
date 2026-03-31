@@ -1,0 +1,49 @@
+---
+title: "Delete Category"
+api: "DELETE /categories/:id"
+description: "Delete a category"
+---
+
+# Delete Category
+
+Delete a category from the system.
+
+## Endpoint
+
+```
+DELETE /categories/:id
+```
+
+## Path parameters
+
+<ParamField path="id" type="integer" required>
+  The unique identifier of the category to delete
+</ParamField>
+
+## Request example
+
+```bash
+curl -X DELETE http://localhost:8000/categories/1
+```
+
+## Response
+
+### Success response (200)
+
+```json
+{
+  "deleted": true
+}
+```
+
+### Error response (404)
+
+```json
+{
+  "error": "not found"
+}
+```
+
+<Warning>
+Deleting a category is permanent and cannot be undone.
+</Warning>

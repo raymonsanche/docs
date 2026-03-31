@@ -1,0 +1,74 @@
+---
+title: "List Products"
+api: "GET /products"
+description: "Retrieve all products"
+---
+
+# List Products
+
+Retrieve all products from inventory.
+
+## Endpoint
+
+```
+GET /products
+```
+
+## Parameters
+
+This endpoint does not accept any parameters.
+
+## Request example
+
+```bash
+curl http://localhost:8000/products
+```
+
+## Response
+
+Returns an array of all products.
+
+<ResponseField name="id" type="integer">
+  Unique identifier for the product (auto-generated)
+</ResponseField>
+
+<ResponseField name="name" type="string">
+  Product name
+</ResponseField>
+
+<ResponseField name="price" type="number">
+  Product price
+</ResponseField>
+
+### Success response (200)
+
+```json
+[
+  {
+    "id": 1,
+    "name": "Laptop",
+    "price": 999.99,
+    "stock": 50
+  },
+  {
+    "id": 2,
+    "name": "Mouse",
+    "price": 29.99,
+    "stock": 200
+  }
+]
+```
+
+### Empty list response
+
+If no products exist, returns an empty array:
+
+```json
+[]
+```
+
+## Use cases
+
+- Display product catalog
+- Get inventory overview
+- Export product data
