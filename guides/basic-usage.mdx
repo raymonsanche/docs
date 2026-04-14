@@ -115,13 +115,27 @@ curl -X DELETE http://localhost:8000/products/1
 
 ## Working with multiple resources
 
-The API manages five types of resources. Each follows the same CRUD pattern:
+The API manages several types of resources. Basic resources follow the same CRUD pattern:
 
 - `/clients` - Customer records
 - `/products` - Product inventory
 - `/categories` - Product categories
 - `/services` - Service offerings
 - `/accounts` - User and business accounts
+
+The notification pipeline resources provide event-driven delivery capabilities:
+
+- `/events` - Event type definitions
+- `/webhooks` - Webhook endpoint subscriptions
+- `/delivery-settings` - Queue routing configuration
+- `/mutators` - Payload transformations
+- `/rulesets` - Event classification rules
+- `/kafka-topics` - Kafka topic configuration
+- `/event-mocks` - Test payloads
+- `/reprocess` - Retry failed deliveries (see [event reprocessing guide](/guides/reprocessing))
+- `/client-feature-flags` - Per-client feature toggles
+
+Issuers can manage their own webhooks and reprocess events through the [issuer API](/guides/issuer-api).
 
 <Note>
 Resource IDs are auto-generated as numeric integers starting from 1.

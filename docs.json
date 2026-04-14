@@ -39,6 +39,8 @@
             "group": "Guides",
             "pages": [
               "guides/basic-usage",
+              "guides/reprocessing",
+              "guides/issuer-api",
               "guides/error-handling",
               "guides/examples"
             ]
