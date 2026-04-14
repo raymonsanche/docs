@@ -1,0 +1,79 @@
+---
+title: "Send test notification"
+api: "POST /external/trigger"
+description: "Send a test notification to verify your webhook configuration"
+---
+
+Send a test notification with a custom payload to verify your webhook is receiving events correctly. This endpoint is only available in development and staging environments.
+
+## Endpoint
+
+```
+POST /external/trigger
+```
+
+## Request body
+
+<ParamField body="event_name" type="string" required>
+  Name of the event to trigger
+</ParamField>
+
+<ParamField body="event_type" type="string">
+  Type classification for the event
+</ParamField>
+
+<ParamField body="payload" type="object" required>
+  JSON payload to deliver with the test notification
+</ParamField>
+
+## Request example
+
+```bash
+curl -X POST /external/trigger \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <your-token>" \
+  -d '{
+    "event_name": "payment.created",
+    "event_type": "payment",
+    "payload": {
+      "transaction_id": "txn-test-001",
+      "amount": 100.00,
+      "status": "approved"
+    }
+  }'
+```
+
+## Response
+
+### Success response (200)
+
+```json
+{
+  "message": "test notification triggered successfully",
+  "trace_id": "abc123-trace-id-001"
+}
+```
+
+The `trace_id` can be used to track the notification delivery or reprocess it if needed.
+
+### Forbidden response (403)
+
+If you call this endpoint in a production environment:
+
+```json
+{
+  "message": "Forbidden"
+}
+```
+
+## Rules
+
+- Only available in development and staging environments
+- The `event_name` must reference an existing event
+- You must have at least one webhook configured for the specified event
+
+## Use cases
+
+- Verify your webhook endpoint is receiving and processing notifications correctly
+- Test payload handling and parsing in your integration
+- Debug webhook delivery issues in a safe environment

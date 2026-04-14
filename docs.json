@@ -148,8 +148,40 @@
             "group": "Reprocess",
             "pages": [
               "api-reference/reprocess/list-rejected-events",
+              "api-reference/reprocess/by-id",
+              "api-reference/reprocess/by-interval",
               "api-reference/reprocess/by-notification-status",
               "api-reference/reprocess/by-notification-status-redirect"
+            ]
+          },
+          {
+            "group": "Issuer API",
+            "pages": [
+              "api-reference/issuer/overview",
+              "api-reference/issuer/save-aes-key",
+              "api-reference/issuer/get-public-key",
+              "api-reference/issuer/list-events",
+              "api-reference/issuer/get-event",
+              "api-reference/issuer/send-test-notification",
+              "api-reference/issuer/send-mock-notification",
+              "api-reference/issuer/list-rejected-events",
+              {
+                "group": "Issuer webhooks",
+                "pages": [
+                  "api-reference/issuer/webhooks/list",
+                  "api-reference/issuer/webhooks/create",
+                  "api-reference/issuer/webhooks/get",
+                  "api-reference/issuer/webhooks/update",
+                  "api-reference/issuer/webhooks/delete"
+                ]
+              },
+              {
+                "group": "Issuer reprocess",
+                "pages": [
+                  "api-reference/issuer/reprocess/by-interval",
+                  "api-reference/issuer/reprocess/by-notification-status"
+                ]
+              }
             ]
           },
           {

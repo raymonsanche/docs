@@ -1,0 +1,78 @@
+---
+title: "Reprocess by time interval"
+api: "POST /external/reprocess/by-interval"
+description: "Reprocess your events within a specific time range"
+---
+
+Trigger reprocessing of your events within a specified time range. The reprocessing is automatically scoped to your issuer account.
+
+## Endpoint
+
+```
+POST /external/reprocess/by-interval
+```
+
+## Request body
+
+<ParamField body="event_name_list" type="array" required>
+  Array of event names to reprocess (for example, `["payment.created"]`)
+</ParamField>
+
+<ParamField body="start_date" type="string" required>
+  Start of the time range in ISO 8601 format (for example, `2026-01-15T00:00:00Z`)
+</ParamField>
+
+<ParamField body="end_date" type="string" required>
+  End of the time range in ISO 8601 format (for example, `2026-01-16T00:00:00Z`)
+</ParamField>
+
+## Request example
+
+```bash
+curl -X POST /external/reprocess/by-interval \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <your-token>" \
+  -d '{
+    "event_name_list": ["payment.created"],
+    "start_date": "2026-01-15T00:00:00Z",
+    "end_date": "2026-01-16T00:00:00Z"
+  }'
+```
+
+## Response
+
+### Success response (201)
+
+```json
+{
+  "message": "retry created successfully"
+}
+```
+
+### Error response (400)
+
+If required fields are missing or invalid:
+
+```json
+{
+  "error": "bad request"
+}
+```
+
+## Rules
+
+- All three fields (`event_name_list`, `start_date`, `end_date`) are required
+- `start_date` and `end_date` must be valid date-time strings
+- `event_name_list` must contain at least one event name
+- `end_date` must be after `start_date`
+- You do not need to specify a client identifier — it is inferred from your authentication token
+
+## Use cases
+
+- Reprocess events after fixing a webhook endpoint issue
+- Retry delivery for events that occurred during a service disruption
+- Recover from temporary failures without contacting support
+
+<Warning>
+Reprocessing large time intervals can generate significant load. Use narrow time ranges and specific event names when possible.
+</Warning>

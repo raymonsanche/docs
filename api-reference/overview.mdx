@@ -99,9 +99,11 @@ Create sample event payloads for testing notification delivery to your webhooks.
 
 ### Reprocess
 
-List and retry rejected notification events, with optional webhook redirection.
+List and retry rejected notification events, with options for trace ID lookup, time intervals, status filtering, and webhook redirection.
 
 - [List rejected events](/api-reference/reprocess/list-rejected-events)
+- [Reprocess by trace IDs](/api-reference/reprocess/by-id)
+- [Reprocess by time interval](/api-reference/reprocess/by-interval)
 - [Reprocess by notification status](/api-reference/reprocess/by-notification-status)
 - [Reprocess and redirect to new webhook](/api-reference/reprocess/by-notification-status-redirect)
 
@@ -144,6 +146,12 @@ Manage user and business accounts.
 - [Get account](/api-reference/accounts/get)
 - [Update account](/api-reference/accounts/update)
 - [Delete account](/api-reference/accounts/delete)
+
+### Issuer API
+
+A self-service API for issuers to manage their own webhooks, browse events, test notifications, and reprocess rejected deliveries. All endpoints are scoped to the authenticated issuer.
+
+- [Issuer API overview](/api-reference/issuer/overview)
 
 ## Base URL
 

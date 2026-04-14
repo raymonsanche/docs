@@ -1,0 +1,86 @@
+---
+title: "List rejected events"
+api: "GET /external/rejected-events"
+description: "List rejected notification events for your account"
+---
+
+Retrieve a list of rejected notification events for your issuer account. Results are grouped by event name and include per-webhook notification status counts.
+
+## Endpoint
+
+```
+GET /external/rejected-events
+```
+
+## Request example
+
+```bash
+curl /external/rejected-events \
+  -H "Authorization: Bearer <your-token>"
+```
+
+## Response
+
+Returns an array of rejected event groups.
+
+<ResponseField name="event_name" type="string">
+  The name of the event type
+</ResponseField>
+
+<ResponseField name="notifications" type="array">
+  List of notification entries for this event type
+
+  <Expandable title="Notification object">
+    <ResponseField name="webhook_id" type="string">
+      UUID of the webhook that received the notification
+    </ResponseField>
+
+    <ResponseField name="url" type="string">
+      The webhook URL
+    </ResponseField>
+
+    <ResponseField name="status" type="string">
+      The notification delivery status (for example, `rejected`, `failed`)
+    </ResponseField>
+
+    <ResponseField name="count" type="integer">
+      Number of events with this status for this webhook
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+### Success response (200)
+
+```json
+[
+  {
+    "event_name": "payment.created",
+    "notifications": [
+      {
+        "webhook_id": "d4e5f6a7-b8c9-0123-4567-890abcdef012",
+        "url": "https://example.com/webhook",
+        "status": "rejected",
+        "count": 15
+      }
+    ]
+  }
+]
+```
+
+### Empty response (200)
+
+If you have no rejected events:
+
+```json
+[]
+```
+
+## Use cases
+
+- Review which events failed to deliver before triggering a reprocess
+- Identify problematic webhooks with high rejection counts
+- Monitor notification delivery health for your account
+
+<Note>
+Unlike the admin API, you do not need to specify a `legacy_id` — it is inferred from your authentication token.
+</Note>

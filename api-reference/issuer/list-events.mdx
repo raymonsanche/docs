@@ -1,0 +1,81 @@
+---
+title: "List events"
+api: "GET /external/events"
+description: "Browse available event types"
+---
+
+Retrieve a list of available event types that you can subscribe to with webhooks. Optionally filter by event name.
+
+## Endpoint
+
+```
+GET /external/events
+```
+
+## Query parameters
+
+<ParamField query="event_name" type="string">
+  Filter by event name
+</ParamField>
+
+## Request example
+
+```bash
+curl "/external/events?event_name=payment.created" \
+  -H "Authorization: Bearer <your-token>"
+```
+
+## Response
+
+Returns an array of event objects.
+
+<ResponseField name="id" type="string">
+  Unique identifier (UUID) for the event
+</ResponseField>
+
+<ResponseField name="name" type="string">
+  Event name
+</ResponseField>
+
+<ResponseField name="unique_fields" type="array">
+  Array of unique field definitions used for deduplication
+</ResponseField>
+
+<ResponseField name="created_at" type="string">
+  Timestamp when the event was created
+</ResponseField>
+
+<ResponseField name="updated_at" type="string">
+  Timestamp when the event was last updated
+</ResponseField>
+
+### Success response (200)
+
+```json
+[
+  {
+    "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "name": "payment.created",
+    "unique_fields": [
+      {
+        "field_path": "$.payload.transaction_id"
+      }
+    ],
+    "created_at": "2026-01-15T10:30:00Z",
+    "updated_at": "2026-01-15T10:30:00Z"
+  }
+]
+```
+
+### Empty response (200)
+
+If no events match the query:
+
+```json
+[]
+```
+
+## Use cases
+
+- Browse available events before creating webhook subscriptions
+- Verify an event exists before referencing it in a webhook configuration
