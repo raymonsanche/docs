@@ -1,0 +1,60 @@
+---
+title: "Delete event"
+api: "DELETE /events/{id}"
+description: "Delete an event definition"
+---
+
+Delete an event definition by its unique identifier.
+
+## Endpoint
+
+```
+DELETE /events/{id}
+```
+
+## Path parameters
+
+<ParamField path="id" type="string" required>
+  The UUID of the event to delete
+</ParamField>
+
+## Request example
+
+```bash
+curl -X DELETE /events/a1b2c3d4-e5f6-7890-abcd-ef1234567890
+```
+
+## Response
+
+### Success response (204)
+
+No content is returned on successful deletion.
+
+### Error response (404)
+
+If the event does not exist:
+
+```json
+{
+  "error": "not found"
+}
+```
+
+### Error response (409)
+
+If the event is still referenced by webhooks, delivery settings, or other resources:
+
+```json
+{
+  "error": "conflict"
+}
+```
+
+## Rules
+
+- You cannot delete an event that is still referenced by webhooks, delivery settings, rulesets, or other dependent resources
+- Delete dependent resources first before removing the event
+
+<Warning>
+Deleting an event is permanent. Make sure no webhooks or delivery settings reference this event before deleting it.
+</Warning>

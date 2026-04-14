@@ -1,0 +1,68 @@
+---
+title: "Update event mock"
+api: "PUT /event-mocks/{id}"
+description: "Update an existing event mock"
+---
+
+Update an existing event mock definition with a new payload.
+
+## Endpoint
+
+```
+PUT /event-mocks/{id}
+```
+
+## Path parameters
+
+<ParamField path="id" type="string" required>
+  The UUID of the event mock to update
+</ParamField>
+
+## Request body
+
+<ParamField body="event_name" type="string" required>
+  Event name (must match the existing event mock's event name)
+</ParamField>
+
+<ParamField body="payload" type="object" required>
+  Updated sample event payload. Must be a non-empty JSON object.
+</ParamField>
+
+## Request example
+
+```bash
+curl -X PUT /event-mocks/a7b8c9d0-e1f2-3456-7890-abcdef123456 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "event_name": "payment.created",
+    "payload": {
+      "transaction_id": "txn_789012",
+      "amount": 2500,
+      "currency": "BRL",
+      "status": "completed",
+      "card_brand": "visa"
+    }
+  }'
+```
+
+## Response
+
+### Success response (200)
+
+```json
+{
+  "message": "eventMock has been updated."
+}
+```
+
+### Error response (404)
+
+```json
+{
+  "error": "not found"
+}
+```
+
+## Rules
+
+- The `payload` must be a non-empty JSON object (not `{}`)

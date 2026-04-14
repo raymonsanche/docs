@@ -1,0 +1,39 @@
+---
+title: "Delete event mock"
+api: "DELETE /event-mocks/{id}"
+description: "Delete an event mock definition"
+---
+
+Delete an event mock definition by its unique identifier.
+
+## Endpoint
+
+```
+DELETE /event-mocks/{id}
+```
+
+## Path parameters
+
+<ParamField path="id" type="string" required>
+  The UUID of the event mock to delete
+</ParamField>
+
+## Request example
+
+```bash
+curl -X DELETE /event-mocks/a7b8c9d0-e1f2-3456-7890-abcdef123456
+```
+
+## Response
+
+### Success response (204)
+
+No content is returned on successful deletion.
+
+### Error response (404)
+
+```json
+{
+  "error": "not found"
+}
+```

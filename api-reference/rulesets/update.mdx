@@ -1,0 +1,83 @@
+---
+title: "Update ruleset"
+api: "PUT /rulesets/{id}"
+description: "Update an existing ruleset"
+---
+
+Update an existing ruleset configuration. You can modify the event name, alias, and rules, but the source and event type cannot be changed.
+
+## Endpoint
+
+```
+PUT /rulesets/{id}
+```
+
+## Path parameters
+
+<ParamField path="id" type="string" required>
+  The UUID of the ruleset to update
+</ParamField>
+
+## Request body
+
+<ParamField body="source" type="string" required>
+  Event source (cannot be changed from the original value)
+</ParamField>
+
+<ParamField body="event_type" type="string" required>
+  Event type (cannot be changed from the original value)
+</ParamField>
+
+<ParamField body="event_type_alias" type="string">
+  Updated alias for the event type
+</ParamField>
+
+<ParamField body="event_name" type="string" required>
+  Updated target event name
+</ParamField>
+
+<ParamField body="rules" type="array" required>
+  Updated array of rule objects
+</ParamField>
+
+## Request example
+
+```bash
+curl -X PUT /rulesets/c3d4e5f6-a7b8-9012-cdef-123456789012 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "source": "payment-gateway",
+    "event_type": "transaction",
+    "event_name": "payment.created",
+    "rules": [
+      {
+        "json_path": "$.payload.status",
+        "match_value": "completed",
+        "exclude": false
+      }
+    ]
+  }'
+```
+
+## Response
+
+### Success response (200)
+
+```json
+{
+  "message": "Ruleset has been updated."
+}
+```
+
+### Error response (404)
+
+```json
+{
+  "error": "not found"
+}
+```
+
+## Rules
+
+- The `source` and `event_type` fields cannot be changed after creation
+- All `json_path` expressions in rules must be valid JSONPath

@@ -1,0 +1,39 @@
+---
+title: "Delete Kafka topic"
+api: "DELETE /kafka-topics/{id}"
+description: "Delete a Kafka topic configuration"
+---
+
+Delete a Kafka topic configuration by its unique identifier.
+
+## Endpoint
+
+```
+DELETE /kafka-topics/{id}
+```
+
+## Path parameters
+
+<ParamField path="id" type="string" required>
+  The UUID of the Kafka topic to delete
+</ParamField>
+
+## Request example
+
+```bash
+curl -X DELETE /kafka-topics/e5f6a7b8-c9d0-1234-5678-90abcdef1234
+```
+
+## Response
+
+### Success response (204)
+
+No content is returned on successful deletion.
+
+### Error response (404)
+
+```json
+{
+  "error": "not found"
+}
+```

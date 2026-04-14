@@ -1,0 +1,122 @@
+---
+title: "Create webhook"
+api: "POST /webhooks"
+description: "Create a new webhook subscription"
+---
+
+Create a new webhook to receive event notifications at a specified URL.
+
+## Endpoint
+
+```
+POST /webhooks
+```
+
+## Request body
+
+<ParamField body="url" type="string" required>
+  Destination URL where notifications are delivered. Must be a valid URL.
+</ParamField>
+
+<ParamField body="event_name" type="string" required>
+  Name of the event to subscribe to. Must reference an existing event.
+</ParamField>
+
+<ParamField body="client_id" type="string">
+  Client identifier. Either `client_id` or `legacy_id` is required to associate the webhook with a client.
+</ParamField>
+
+<ParamField body="legacy_id" type="integer">
+  Legacy client identifier. Either `client_id` or `legacy_id` is required.
+</ParamField>
+
+<ParamField body="headers" type="object">
+  Custom HTTP headers to include with each notification request. Values must be strings.
+</ParamField>
+
+<ParamField body="auth_type" type="string">
+  Authentication type for the webhook endpoint (for example, `bearer`, `basic`).
+</ParamField>
+
+<ParamField body="filter" type="object">
+  Optional filter to limit which events trigger this webhook.
+
+  <Expandable title="Filter properties">
+    <ParamField body="filter.field" type="string" required>
+      JSONPath expression for the field to filter on (for example, `$.payload.status`)
+    </ParamField>
+
+    <ParamField body="filter.type" type="string" required>
+      Filter comparison type (for example, `equals`)
+    </ParamField>
+
+    <ParamField body="filter.value" type="string" required>
+      Value to match. Must be a single value, not a list.
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+## Request example
+
+```bash
+curl -X POST /webhooks \
+  -H "Content-Type: application/json" \
+  -d '{
+    "url": "https://example.com/webhook",
+    "event_name": "payment.created",
+    "client_id": "abc123",
+    "legacy_id": 12345,
+    "headers": {
+      "Authorization": "Bearer my-secret-token"
+    },
+    "auth_type": "bearer",
+    "filter": {
+      "field": "$.payload.status",
+      "type": "equals",
+      "value": "approved"
+    }
+  }'
+```
+
+## Response
+
+### Success response (201)
+
+```json
+{
+  "id": "d4e5f6a7-b8c9-0123-4567-890abcdef012",
+  "event_name": "payment.created",
+  "url": "https://example.com/webhook",
+  "client_id": "abc123",
+  "legacy_id": 12345,
+  "headers": {
+    "Authorization": "(length: 23)"
+  },
+  "auth_type": "bearer",
+  "filter": {
+    "field": "$.payload.status",
+    "type": "equals",
+    "value": "approved"
+  },
+  "created_at": "2026-01-15T10:30:00Z",
+  "updated_at": "2026-01-15T10:30:00Z"
+}
+```
+
+## Rules
+
+- The `url` must be a valid URL
+- The `event_name` must reference an existing event
+- Either `client_id` or `legacy_id` must reference an existing client
+- Filter `field` values are lowercased and must be valid JSONPath expressions
+- Header values are masked in responses for security
+
+## Use cases
+
+- Subscribe to payment events for a specific client
+- Set up filtered notifications to only receive events matching certain criteria
+- Configure authenticated webhook endpoints with custom headers
+
+<Tip>
+Use the `filter` field to reduce noise by only receiving events that match specific criteria, such as a particular status or transaction type.
+</Tip>

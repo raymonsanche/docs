@@ -1,0 +1,43 @@
+---
+title: "Delete mutator"
+api: "DELETE /mutators/{id}"
+description: "Delete a mutator configuration"
+---
+
+Delete a mutator configuration by its unique identifier. Events will no longer be transformed by this mutator before delivery.
+
+## Endpoint
+
+```
+DELETE /mutators/{id}
+```
+
+## Path parameters
+
+<ParamField path="id" type="string" required>
+  The UUID of the mutator to delete
+</ParamField>
+
+## Request example
+
+```bash
+curl -X DELETE /mutators/b2c3d4e5-f6a7-8901-bcde-f12345678901
+```
+
+## Response
+
+### Success response (204)
+
+No content is returned on successful deletion.
+
+### Error response (404)
+
+```json
+{
+  "error": "not found"
+}
+```
+
+<Warning>
+Deleting a mutator takes effect immediately. Event payloads will no longer be transformed by this mutator before delivery.
+</Warning>

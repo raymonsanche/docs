@@ -1,0 +1,118 @@
+---
+title: "Create ruleset"
+api: "POST /rulesets"
+description: "Create a new event routing ruleset"
+---
+
+Create a new ruleset that defines how incoming events from a source are routed and matched to event definitions. Rules use JSONPath expressions to evaluate event payloads.
+
+## Endpoint
+
+```
+POST /rulesets
+```
+
+## Request body
+
+<ParamField body="source" type="string" required>
+  Event source identifier (for example, `payment-gateway`)
+</ParamField>
+
+<ParamField body="event_type" type="string" required>
+  Event type from the source system
+</ParamField>
+
+<ParamField body="event_type_alias" type="string">
+  Optional alias for the event type
+</ParamField>
+
+<ParamField body="event_name" type="string" required>
+  Target event name to map matching events to
+</ParamField>
+
+<ParamField body="rules" type="array" required>
+  Array of rule objects defining matching conditions. Each rule is evaluated against the incoming event payload.
+
+  <Expandable title="Rule properties">
+    <ParamField body="rules[].json_path" type="string" required>
+      JSONPath expression identifying the field to evaluate
+    </ParamField>
+
+    <ParamField body="rules[].match_value" type="any" required>
+      Value to compare against the field
+    </ParamField>
+
+    <ParamField body="rules[].exclude" type="boolean" required>
+      Set to `true` to exclude matching events, or `false` to include them
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+## Request example
+
+```bash
+curl -X POST /rulesets \
+  -H "Content-Type: application/json" \
+  -d '{
+    "source": "payment-gateway",
+    "event_type": "transaction",
+    "event_type_alias": "payment_transaction",
+    "event_name": "payment.created",
+    "rules": [
+      {
+        "json_path": "$.payload.status",
+        "match_value": "completed",
+        "exclude": false
+      },
+      {
+        "json_path": "$.payload.test_mode",
+        "match_value": true,
+        "exclude": true
+      }
+    ]
+  }'
+```
+
+## Response
+
+### Success response (201)
+
+```json
+{
+  "id": "c3d4e5f6-a7b8-9012-cdef-123456789012",
+  "source": "payment-gateway",
+  "event_type": "transaction",
+  "event_type_alias": "payment_transaction",
+  "event_name": "payment.created",
+  "rules": [
+    {
+      "json_path": "$.payload.status",
+      "match_value": "completed",
+      "exclude": false
+    },
+    {
+      "json_path": "$.payload.test_mode",
+      "match_value": true,
+      "exclude": true
+    }
+  ],
+  "created_at": "2026-01-15T10:30:00Z",
+  "updated_at": "2026-01-15T10:30:00Z"
+}
+```
+
+## Rules
+
+- The `json_path` in each rule must be a valid, compilable JSONPath expression
+- All rules in a ruleset are evaluated together against incoming events
+- Use `exclude: true` to filter out events that match certain conditions (for example, test transactions)
+
+## Use cases
+
+- Route events from an external source to the correct event definition
+- Filter out test or development events from production delivery
+- Map multiple source event types to a single event name
+
+<Tip>
+Combine inclusion and exclusion rules to precisely control which events reach your webhooks. For example, include only completed transactions while excluding test-mode events.
+</Tip>

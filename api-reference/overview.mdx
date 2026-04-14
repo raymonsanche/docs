@@ -3,9 +3,29 @@ title: "API reference overview"
 description: "Complete reference for all Simple API endpoints"
 ---
 
-The Simple API provides resources for managing clients, products, categories, services, and accounts, along with client feature flags and event reprocessing.
+The Simple API provides resources for managing event-driven notification delivery. You can configure events, webhooks, delivery settings, mutators, rulesets, and more to build a flexible notification pipeline.
 
 ## Available resources
+
+### Events
+
+Define event types that your system can produce and deliver. Events are the foundation of the notification pipeline — you must register an event before configuring webhooks or delivery settings for it.
+
+- [List events](/api-reference/events/list)
+- [Create event](/api-reference/events/create)
+- [Get event](/api-reference/events/get)
+- [Update event](/api-reference/events/update)
+- [Delete event](/api-reference/events/delete)
+
+### Webhooks
+
+Configure HTTP endpoints to receive event notifications. Each webhook subscribes to a specific event for a specific client, with optional filtering and custom headers.
+
+- [List webhooks](/api-reference/webhooks/list)
+- [Create webhook](/api-reference/webhooks/create)
+- [Get webhook](/api-reference/webhooks/get)
+- [Update webhook](/api-reference/webhooks/update)
+- [Delete webhook](/api-reference/webhooks/delete)
 
 ### Clients
 
@@ -26,6 +46,56 @@ Toggle per-client capabilities such as event reprocessing by status and payload 
 - [Get client feature flags](/api-reference/client-feature-flags/get)
 - [Update client feature flags](/api-reference/client-feature-flags/update)
 - [Delete client feature flags](/api-reference/client-feature-flags/delete)
+
+### Delivery settings
+
+Configure how events are routed to message queues for specific clients. Each delivery setting maps an event to a queue with routing information.
+
+- [List delivery settings](/api-reference/delivery-settings/list)
+- [Create delivery settings](/api-reference/delivery-settings/create)
+- [Get delivery settings](/api-reference/delivery-settings/get)
+- [Update delivery settings](/api-reference/delivery-settings/update)
+- [Delete delivery settings](/api-reference/delivery-settings/delete)
+
+### Mutators
+
+Define transformations applied to event payloads before delivery. Use mutators to mask sensitive data, enrich payloads, or restructure fields.
+
+- [List mutators](/api-reference/mutators/list)
+- [Create mutator](/api-reference/mutators/create)
+- [Get mutator](/api-reference/mutators/get)
+- [Update mutator](/api-reference/mutators/update)
+- [Delete mutator](/api-reference/mutators/delete)
+
+### Rulesets
+
+Configure routing rules that determine how incoming events from external sources are classified and matched to event definitions.
+
+- [List rulesets](/api-reference/rulesets/list)
+- [Create ruleset](/api-reference/rulesets/create)
+- [Get ruleset](/api-reference/rulesets/get)
+- [Update ruleset](/api-reference/rulesets/update)
+- [Delete ruleset](/api-reference/rulesets/delete)
+
+### Kafka topics
+
+Register Kafka topic configurations for event consumption.
+
+- [List Kafka topics](/api-reference/kafka-topics/list)
+- [Create Kafka topic](/api-reference/kafka-topics/create)
+- [Get Kafka topic](/api-reference/kafka-topics/get)
+- [Update Kafka topic](/api-reference/kafka-topics/update)
+- [Delete Kafka topic](/api-reference/kafka-topics/delete)
+
+### Event mocks
+
+Create sample event payloads for testing notification delivery to your webhooks.
+
+- [List event mocks](/api-reference/event-mocks/list)
+- [Create event mock](/api-reference/event-mocks/create)
+- [Get event mock](/api-reference/event-mocks/get)
+- [Update event mock](/api-reference/event-mocks/update)
+- [Delete event mock](/api-reference/event-mocks/delete)
 
 ### Reprocess
 
@@ -104,6 +174,7 @@ All responses use JSON format. Successful responses contain the requested data, 
 | 204 | No Content - Resource was deleted successfully |
 | 400 | Bad Request - Missing or invalid parameters |
 | 404 | Not Found - Resource or endpoint doesn't exist |
+| 409 | Conflict - Resource already exists or is still referenced |
 
 ## Rate limiting
 

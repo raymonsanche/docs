@@ -1,0 +1,68 @@
+---
+title: "List Kafka topics"
+api: "GET /kafka-topics"
+description: "Retrieve all Kafka topic configurations"
+---
+
+Retrieve all Kafka topic configurations, optionally filtered by ID.
+
+## Endpoint
+
+```
+GET /kafka-topics
+```
+
+## Query parameters
+
+<ParamField query="id" type="string">
+  Filter by Kafka topic ID (UUID)
+</ParamField>
+
+## Request example
+
+```bash
+curl "/kafka-topics"
+```
+
+## Response
+
+Returns an array of Kafka topic objects.
+
+<ResponseField name="id" type="string">
+  Unique identifier (UUID)
+</ResponseField>
+
+<ResponseField name="topic_name" type="string">
+  Kafka topic name
+</ResponseField>
+
+<ResponseField name="app_name" type="string">
+  Associated application name
+</ResponseField>
+
+<ResponseField name="created_at" type="string">
+  Creation timestamp
+</ResponseField>
+
+<ResponseField name="updated_at" type="string">
+  Last update timestamp
+</ResponseField>
+
+### Success response (200)
+
+```json
+[
+  {
+    "id": "e5f6a7b8-c9d0-1234-5678-90abcdef1234",
+    "topic_name": "payment-events",
+    "app_name": "payment-service",
+    "created_at": "2026-01-15T10:30:00Z",
+    "updated_at": "2026-01-15T10:30:00Z"
+  }
+]
+```
+
+## Use cases
+
+- List all registered Kafka topics
+- Verify which topics are configured for a specific application

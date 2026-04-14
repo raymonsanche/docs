@@ -1,0 +1,57 @@
+---
+title: "Create Kafka topic"
+api: "POST /kafka-topics"
+description: "Register a new Kafka topic configuration"
+---
+
+Register a new Kafka topic configuration for event consumption.
+
+## Endpoint
+
+```
+POST /kafka-topics
+```
+
+## Request body
+
+<ParamField body="topic_name" type="string" required>
+  Kafka topic name. Must be unique.
+</ParamField>
+
+<ParamField body="app_name" type="string" required>
+  Application name associated with this topic
+</ParamField>
+
+## Request example
+
+```bash
+curl -X POST /kafka-topics \
+  -H "Content-Type: application/json" \
+  -d '{
+    "topic_name": "payment-events",
+    "app_name": "payment-service"
+  }'
+```
+
+## Response
+
+### Success response (201)
+
+```json
+{
+  "id": "e5f6a7b8-c9d0-1234-5678-90abcdef1234",
+  "topic_name": "payment-events",
+  "app_name": "payment-service",
+  "created_at": "2026-01-15T10:30:00Z",
+  "updated_at": "2026-01-15T10:30:00Z"
+}
+```
+
+## Rules
+
+- The `topic_name` must be non-empty and unique across all Kafka topic configurations
+
+## Use cases
+
+- Register a new Kafka topic for event consumption
+- Configure event ingestion from a new application

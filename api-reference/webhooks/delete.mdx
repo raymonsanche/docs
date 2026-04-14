@@ -1,0 +1,43 @@
+---
+title: "Delete webhook"
+api: "DELETE /webhooks/{id}"
+description: "Delete a webhook subscription"
+---
+
+Delete a webhook subscription by its unique identifier. The webhook stops receiving event notifications immediately.
+
+## Endpoint
+
+```
+DELETE /webhooks/{id}
+```
+
+## Path parameters
+
+<ParamField path="id" type="string" required>
+  The UUID of the webhook to delete
+</ParamField>
+
+## Request example
+
+```bash
+curl -X DELETE /webhooks/d4e5f6a7-b8c9-0123-4567-890abcdef012
+```
+
+## Response
+
+### Success response (204)
+
+No content is returned on successful deletion.
+
+### Error response (404)
+
+```json
+{
+  "error": "not found"
+}
+```
+
+<Warning>
+Deleting a webhook is permanent. The endpoint will immediately stop receiving notifications for the subscribed event.
+</Warning>

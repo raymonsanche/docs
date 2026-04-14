@@ -55,6 +55,26 @@
             ]
           },
           {
+            "group": "Events",
+            "pages": [
+              "api-reference/events/list",
+              "api-reference/events/create",
+              "api-reference/events/get",
+              "api-reference/events/update",
+              "api-reference/events/delete"
+            ]
+          },
+          {
+            "group": "Webhooks",
+            "pages": [
+              "api-reference/webhooks/list",
+              "api-reference/webhooks/create",
+              "api-reference/webhooks/get",
+              "api-reference/webhooks/update",
+              "api-reference/webhooks/delete"
+            ]
+          },
+          {
             "group": "Clients",
             "pages": [
               "api-reference/clients/list",
@@ -72,6 +92,56 @@
               "api-reference/client-feature-flags/get",
               "api-reference/client-feature-flags/update",
               "api-reference/client-feature-flags/delete"
+            ]
+          },
+          {
+            "group": "Delivery settings",
+            "pages": [
+              "api-reference/delivery-settings/list",
+              "api-reference/delivery-settings/create",
+              "api-reference/delivery-settings/get",
+              "api-reference/delivery-settings/update",
+              "api-reference/delivery-settings/delete"
+            ]
+          },
+          {
+            "group": "Mutators",
+            "pages": [
+              "api-reference/mutators/list",
+              "api-reference/mutators/create",
+              "api-reference/mutators/get",
+              "api-reference/mutators/update",
+              "api-reference/mutators/delete"
+            ]
+          },
+          {
+            "group": "Rulesets",
+            "pages": [
+              "api-reference/rulesets/list",
+              "api-reference/rulesets/create",
+              "api-reference/rulesets/get",
+              "api-reference/rulesets/update",
+              "api-reference/rulesets/delete"
+            ]
+          },
+          {
+            "group": "Kafka topics",
+            "pages": [
+              "api-reference/kafka-topics/list",
+              "api-reference/kafka-topics/create",
+              "api-reference/kafka-topics/get",
+              "api-reference/kafka-topics/update",
+              "api-reference/kafka-topics/delete"
+            ]
+          },
+          {
+            "group": "Event mocks",
+            "pages": [
+              "api-reference/event-mocks/list",
+              "api-reference/event-mocks/create",
+              "api-reference/event-mocks/get",
+              "api-reference/event-mocks/update",
+              "api-reference/event-mocks/delete"
             ]
           },
           {
