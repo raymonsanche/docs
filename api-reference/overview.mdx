@@ -161,7 +161,7 @@ http://localhost:8000
 
 ## Authentication
 
-The Simple API does not require authentication. All endpoints are publicly accessible.
+Internal endpoints do not require authentication. Issuer API endpoints under `/external` require a JWT bearer token — see the [Issuer API overview](/api-reference/issuer/overview) for details.
 
 ## Response format
 
@@ -183,10 +183,11 @@ All responses use JSON format. Successful responses contain the requested data, 
 | 400 | Bad Request - Missing or invalid parameters |
 | 404 | Not Found - Resource or endpoint doesn't exist |
 | 409 | Conflict - Resource already exists or is still referenced |
+| 429 | Too Many Requests - Rate limit exceeded (issuer API only) |
 
 ## Rate limiting
 
-No rate limiting is applied to the Simple API.
+Internal endpoints have no rate limits. The issuer API applies a rate limit of one request per hour on the [reprocess by notification status](/api-reference/issuer/reprocess/by-notification-status) endpoint. If you exceed the limit, the API returns a `429` error.
 
 ## Pagination
 

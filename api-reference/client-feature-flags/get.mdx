@@ -14,18 +14,32 @@ GET /client-feature-flags
 
 ## Query parameters
 
+Use at least one query parameter to identify the client whose feature flags you want to retrieve.
+
+<ParamField query="id" type="string">
+  Filter by feature flag record UUID
+</ParamField>
+
 <ParamField query="client_id" type="string">
-  The client UUID. Either `client_id` or `legacy_id` is required.
+  Filter by client UUID
 </ParamField>
 
 <ParamField query="legacy_id" type="integer">
-  The legacy client identifier. Either `client_id` or `legacy_id` is required.
+  Filter by legacy numeric client identifier
 </ParamField>
 
-## Request example
+## Request examples
+
+Look up by legacy ID:
 
 ```bash
-curl "/client-feature-flags?legacy_id=12345"
+curl "http://localhost:8000/client-feature-flags?legacy_id=12345"
+```
+
+Look up by client UUID:
+
+```bash
+curl "http://localhost:8000/client-feature-flags?client_id=c9d8e7f6-5432-1098-abcd-fedcba987654"
 ```
 
 ## Response
