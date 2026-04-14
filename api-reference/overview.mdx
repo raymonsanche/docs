@@ -185,5 +185,5 @@ No rate limiting is applied to the Simple API.
 The Simple API does not support pagination. List endpoints return all available resources.
 
 <Tip>
-All endpoints follow the same pattern. Once you understand one resource type, you can apply the same operations to all others.
+Most resource types support standard CRUD operations (list, create, get, update, delete). Notification-pipeline resources (events, webhooks, delivery settings, mutators, rulesets, Kafka topics, and event mocks) return confirmation messages on update, while other resources return the full updated object.
 </Tip>
