@@ -26,7 +26,7 @@ Returned when you try to access a resource that doesn't exist.
 **Example:**
 
 ```bash
-curl http://localhost:8000/clients/999
+curl http://localhost:8000/clients/00000000-0000-0000-0000-000000000999
 ```
 
 Response:
@@ -87,7 +87,10 @@ curl -X POST http://localhost:8000/clients \
 | --- | --- | --- |
 | 200 | OK | GET or PUT request succeeded |
 | 201 | Created | POST request succeeded and resource was created |
+| 204 | No Content | DELETE request succeeded (clients) |
+| 400 | Bad Request | Missing or invalid parameters |
 | 404 | Not Found | Resource doesn't exist or endpoint is invalid |
+| 409 | Conflict | Resource already exists or is still referenced |
 
 ## Common issues and solutions
 
