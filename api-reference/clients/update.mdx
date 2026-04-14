@@ -4,7 +4,7 @@ api: "PUT /clients/:id"
 description: "Update an existing client"
 ---
 
-Update an existing client's information.
+Replace a client's configuration. This endpoint updates the full client record including feature flags and encryption key settings.
 
 ## Endpoint
 
@@ -14,72 +14,62 @@ PUT /clients/:id
 
 ## Path parameters
 
-<ParamField path="id" type="integer" required>
-  The unique identifier of the client to update
+<ParamField path="id" type="string" required>
+  The UUID of the client to update
 </ParamField>
 
 ## Request body
 
-<ParamField body="name" type="string" required>
+<ParamField body="name" type="string">
   Updated client name
 </ParamField>
 
-<ParamField body="email" type="string" required>
-  Updated email address
+<ParamField body="client_id" type="string">
+  Updated external client identifier
 </ParamField>
 
-<ParamField body="phone" type="string">
-  Updated phone number (optional)
+<ParamField body="legacy_id" type="integer">
+  Updated legacy numeric client identifier
 </ParamField>
 
-<ParamField body="address" type="string">
-  Updated address (optional)
+<ParamField body="secret_name" type="string">
+  Updated secret name reference
+</ParamField>
+
+<ParamField body="aes_key" type="string">
+  Updated AES encryption key (base64-encoded). If omitted, the existing key is preserved.
+</ParamField>
+
+<ParamField body="payload_signature_enabled" type="boolean">
+  Whether payload signature verification is enabled for this client
+</ParamField>
+
+<ParamField body="reprocess_by_status_enabled" type="boolean">
+  Whether event reprocessing by notification status is enabled for this client
 </ParamField>
 
 ## Request example
 
 ```bash
-curl -X PUT http://localhost:8000/clients/1 \
+curl -X PUT /clients/c9d8e7f6-5432-1098-abcd-fedcba987654 \
   -H "Content-Type: application/json" \
   -d '{
-    "name": "Jane Doe",
-    "email": "jane@example.com",
-    "phone": "+1-555-9876",
-    "address": "456 Oak Ave"
+    "name": "Updated Client",
+    "client_id": "client-abc-123",
+    "legacy_id": 12345,
+    "secret_name": "updated-secret",
+    "payload_signature_enabled": true,
+    "reprocess_by_status_enabled": false
   }'
 ```
 
 ## Response
 
-<ResponseField name="id" type="integer">
-  Client's identifier (unchanged)
-</ResponseField>
-
-<ResponseField name="name" type="string">
-  Updated client name
-</ResponseField>
-
-<ResponseField name="email" type="string">
-  Updated email address
-</ResponseField>
-
-<ResponseField name="phone" type="string">
-  Updated phone number
-</ResponseField>
-
-<ResponseField name="address" type="string">
-  Updated address
-</ResponseField>
-
 ### Success response (200)
 
 ```json
 {
-  "id": 1,
-  "name": "Jane Doe",
-  "email": "jane@example.com",
-  "phone": "+1-555-9876",
-  "address": "456 Oak Ave"
+  "message": "client has been updated."
 }
 ```
 
@@ -95,16 +85,16 @@ If the client doesn't exist:
 
 ## Rules
 
-- The client ID cannot be changed
-- All fields must be provided in the request body
-- The entire client record is replaced with the new data
+- The `id` must be a valid UUID
+- If `aes_key` is omitted, the existing encryption key is preserved
+- Feature flag fields (`payload_signature_enabled`, `reprocess_by_status_enabled`) are updated alongside the client record
 
 ## Use cases
 
-- Update client contact information
-- Correct client details
-- Change email or phone number
+- Update client identifiers or name
+- Enable or disable feature flags as part of a full client update
+- Rotate a client's encryption key
 
-<Warning>
-When updating, you must provide all fields. Missing fields will not be preserved from the previous record.
-</Warning>
+<Tip>
+For lightweight updates to just `name` or `secret_name`, use [patch client](/api-reference/clients/patch) instead.
+</Tip>

@@ -4,7 +4,7 @@ api: "POST /clients"
 description: "Create a new client"
 ---
 
-Create a new client in the system.
+Create a new client in the system. At least one of `client_id` or `legacy_id` is required.
 
 ## Endpoint
 
@@ -14,81 +14,107 @@ POST /clients
 
 ## Request body
 
-<ParamField body="name" type="string" required>
-  Client's full name
+<ParamField body="name" type="string">
+  Client name
 </ParamField>
 
-<ParamField body="email" type="string" required>
-  Client's email address
+<ParamField body="client_id" type="string">
+  External client identifier. Either `client_id` or `legacy_id` (or both) must be provided.
 </ParamField>
 
-<ParamField body="phone" type="string">
-  Client's phone number (optional)
+<ParamField body="legacy_id" type="integer">
+  Legacy numeric client identifier. Either `client_id` or `legacy_id` (or both) must be provided.
 </ParamField>
 
-<ParamField body="address" type="string">
-  Client's address (optional)
+<ParamField body="secret_name" type="string">
+  Secret name reference for the client
+</ParamField>
+
+<ParamField body="aes_key" type="string">
+  AES encryption key for the client (base64-encoded)
 </ParamField>
 
 ## Request example
 
 ```bash
-curl -X POST http://localhost:8000/clients \
+curl -X POST /clients \
   -H "Content-Type: application/json" \
   -d '{
-    "name": "John Doe",
-    "email": "john@example.com",
-    "phone": "+1-555-0123",
-    "address": "123 Main St"
+    "name": "My Client",
+    "client_id": "client-abc-123",
+    "legacy_id": 12345,
+    "secret_name": "my-client-secret"
   }'
 ```
 
 ## Response
 
-<ResponseField name="id" type="integer">
-  Unique identifier for the newly created client (auto-generated)
+<ResponseField name="id" type="string">
+  Unique identifier for the client (UUID, auto-generated)
 </ResponseField>
 
 <ResponseField name="name" type="string">
-  Client's full name
+  Client name
 </ResponseField>
 
-<ResponseField name="email" type="string">
-  Client's email address
+<ResponseField name="client_id" type="string">
+  External client identifier
 </ResponseField>
 
-<ResponseField name="phone" type="string">
-  Client's phone number
+<ResponseField name="legacy_id" type="integer">
+  Legacy numeric client identifier
 </ResponseField>
 
-<ResponseField name="address" type="string">
-  Client's address
+<ResponseField name="has_aes_key" type="boolean">
+  Whether the client has an AES encryption key configured
+</ResponseField>
+
+<ResponseField name="secret_name" type="string">
+  Secret name reference for the client
+</ResponseField>
+
+<ResponseField name="created_at" type="string">
+  Timestamp when the client was created
+</ResponseField>
+
+<ResponseField name="updated_at" type="string">
+  Timestamp when the client was last updated
 </ResponseField>
 
 ### Success response (201)
 
 ```json
 {
-  "id": 1,
-  "name": "John Doe",
-  "email": "john@example.com",
-  "phone": "+1-555-0123",
-  "address": "123 Main St"
+  "id": "c9d8e7f6-5432-1098-abcd-fedcba987654",
+  "name": "My Client",
+  "client_id": "client-abc-123",
+  "legacy_id": 12345,
+  "has_aes_key": false,
+  "secret_name": "my-client-secret",
+  "created_at": "2026-01-15T10:30:00Z",
+  "updated_at": "2026-01-15T10:30:00Z"
+}
+```
+
+### Error response (400)
+
+If neither `client_id` nor `legacy_id` is provided:
+
+```json
+{
+  "error": "bad request"
 }
 ```
 
 ## Rules
 
-- Client ID is auto-generated starting from 1
-- Name and email fields are required
-- All provided fields are stored and returned
+- At least one of `client_id` or `legacy_id` is required
+- The `client_id` must be unique across all clients
+- The `legacy_id` must be a positive integer and unique across all clients
+- The `id` field is a UUID automatically assigned by the server
 
 ## Use cases
 
-- Register a new customer
-- Onboard a new client
-- Add client contact information
-
-<Note>
-The ID field is automatically assigned by the server. Do not include it in your request.
-</Note>
+- Register a new client for webhook event delivery
+- Onboard a client with a specific external identifier or legacy ID
+- Set up a client with an encryption key for secure payload delivery
