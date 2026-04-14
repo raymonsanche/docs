@@ -1,0 +1,74 @@
+---
+title: "Get client feature flags"
+api: "GET /client-feature-flags"
+description: "Retrieve feature flag configuration for a client"
+---
+
+Retrieve the feature flag configuration for a specific client by `client_id` or `legacy_id`.
+
+## Endpoint
+
+```
+GET /client-feature-flags
+```
+
+## Query parameters
+
+<ParamField query="client_id" type="string">
+  The client UUID. Either `client_id` or `legacy_id` is required.
+</ParamField>
+
+<ParamField query="legacy_id" type="integer">
+  The legacy client identifier. Either `client_id` or `legacy_id` is required.
+</ParamField>
+
+## Request example
+
+```bash
+curl "/client-feature-flags?legacy_id=12345"
+```
+
+## Response
+
+<ResponseField name="id" type="string">
+  Unique identifier for the feature flag record (UUID)
+</ResponseField>
+
+<ResponseField name="client" type="string">
+  The internal client ID this feature flag is associated with
+</ResponseField>
+
+<ResponseField name="reprocess_by_status_enabled" type="boolean">
+  Whether event reprocessing by notification status is enabled
+</ResponseField>
+
+<ResponseField name="payload_signature_enabled" type="boolean">
+  Whether payload signature verification is enabled
+</ResponseField>
+
+### Success response (200)
+
+```json
+{
+  "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "client": "c9d8e7f6-5432-1098-abcd-fedcba987654",
+  "reprocess_by_status_enabled": true,
+  "payload_signature_enabled": false
+}
+```
+
+### Error response (400)
+
+If neither `client_id` nor `legacy_id` is provided:
+
+```json
+{
+  "error": "bad request"
+}
+```
+
+## Use cases
+
+- Check which features are enabled for a specific client
+- Verify feature flag state before toggling
+- Audit client configurations

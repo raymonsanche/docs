@@ -1,0 +1,90 @@
+---
+title: "Create client feature flag"
+api: "POST /client-feature-flags"
+description: "Create a feature flag configuration for a client"
+---
+
+Create a new feature flag configuration for a specific client. Feature flags let you toggle capabilities such as event reprocessing by status and payload signature verification on a per-client basis.
+
+## Endpoint
+
+```
+POST /client-feature-flags
+```
+
+## Request body
+
+<ParamField body="legacy_id" type="integer" required>
+  The legacy identifier of the client to associate the feature flags with
+</ParamField>
+
+<ParamField body="reprocess_by_status_enabled" type="boolean">
+  Enable or disable event reprocessing by notification status for this client. At least one of `reprocess_by_status_enabled` or `payload_signature_enabled` must be provided.
+</ParamField>
+
+<ParamField body="payload_signature_enabled" type="boolean">
+  Enable or disable payload signature verification for this client. At least one of `reprocess_by_status_enabled` or `payload_signature_enabled` must be provided.
+</ParamField>
+
+## Request example
+
+```bash
+curl -X POST /client-feature-flags \
+  -H "Content-Type: application/json" \
+  -d '{
+    "legacy_id": 12345,
+    "reprocess_by_status_enabled": true,
+    "payload_signature_enabled": false
+  }'
+```
+
+## Response
+
+<ResponseField name="id" type="string">
+  Unique identifier for the feature flag record (UUID)
+</ResponseField>
+
+<ResponseField name="client" type="string">
+  The internal client ID this feature flag is associated with
+</ResponseField>
+
+<ResponseField name="reprocess_by_status_enabled" type="boolean">
+  Whether event reprocessing by notification status is enabled
+</ResponseField>
+
+<ResponseField name="payload_signature_enabled" type="boolean">
+  Whether payload signature verification is enabled
+</ResponseField>
+
+### Success response (201)
+
+```json
+{
+  "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "client": "c9d8e7f6-5432-1098-abcd-fedcba987654",
+  "reprocess_by_status_enabled": true,
+  "payload_signature_enabled": false
+}
+```
+
+### Error response (400)
+
+If `legacy_id` is missing or both flags are null:
+
+```json
+{
+  "error": "bad request"
+}
+```
+
+## Rules
+
+- The `legacy_id` must correspond to an existing client
+- A client can only have one feature flag configuration. If one already exists, the request is rejected
+- At least one flag (`reprocess_by_status_enabled` or `payload_signature_enabled`) must be provided
+
+## Use cases
+
+- Enable event reprocessing by notification status for a client
+- Turn on payload signature verification for enhanced security
+- Configure per-client feature toggles during onboarding

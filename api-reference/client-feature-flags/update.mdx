@@ -1,0 +1,72 @@
+---
+title: "Update client feature flags"
+api: "PUT /client-feature-flags/:id"
+description: "Update feature flag configuration for a client"
+---
+
+Update an existing feature flag configuration. You can toggle individual flags without affecting the others.
+
+## Endpoint
+
+```
+PUT /client-feature-flags/:id
+```
+
+## Path parameters
+
+<ParamField path="id" type="string" required>
+  The UUID of the feature flag record to update
+</ParamField>
+
+## Request body
+
+<ParamField body="reprocess_by_status_enabled" type="boolean">
+  Enable or disable event reprocessing by notification status. At least one of `reprocess_by_status_enabled` or `payload_signature_enabled` must be provided.
+</ParamField>
+
+<ParamField body="payload_signature_enabled" type="boolean">
+  Enable or disable payload signature verification. At least one of `reprocess_by_status_enabled` or `payload_signature_enabled` must be provided.
+</ParamField>
+
+## Request example
+
+```bash
+curl -X PUT /client-feature-flags/a1b2c3d4-e5f6-7890-abcd-ef1234567890 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "reprocess_by_status_enabled": false,
+    "payload_signature_enabled": true
+  }'
+```
+
+## Response
+
+### Success response (200)
+
+```json
+{
+  "message": "client feature has been updated."
+}
+```
+
+### Error response (404)
+
+If the feature flag record does not exist:
+
+```json
+{
+  "error": "not found"
+}
+```
+
+## Rules
+
+- The `id` must be a valid UUID
+- At least one flag must be provided in the request body
+- Only provided fields are updated; omitted fields remain unchanged
+
+## Use cases
+
+- Toggle event reprocessing for a client
+- Enable or disable payload signature verification
+- Adjust feature availability during rollout
