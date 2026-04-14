@@ -1,10 +1,8 @@
 ---
-title: "Update Product"
+title: "Update product"
 api: "PUT /products/:id"
 description: "Update an existing product"
 ---
-
-# Update Product
 
 Update an existing product's information.
 
@@ -53,6 +51,26 @@ curl -X PUT http://localhost:8000/products/1 \
 
 ## Response
 
+<ResponseField name="id" type="integer">
+  Product's identifier (unchanged)
+</ResponseField>
+
+<ResponseField name="name" type="string">
+  Updated product name
+</ResponseField>
+
+<ResponseField name="price" type="number">
+  Updated price
+</ResponseField>
+
+<ResponseField name="stock" type="integer">
+  Updated stock quantity
+</ResponseField>
+
+<ResponseField name="description" type="string">
+  Updated description
+</ResponseField>
+
 ### Success response (200)
 
 ```json
@@ -67,11 +85,19 @@ curl -X PUT http://localhost:8000/products/1 \
 
 ### Error response (404)
 
+If the product doesn't exist:
+
 ```json
 {
   "error": "not found"
 }
 ```
+
+## Rules
+
+- The product ID cannot be changed
+- All fields must be provided in the request body
+- The entire product record is replaced with the new data
 
 <Warning>
 When updating, you must provide all fields. Missing fields will not be preserved from the previous record.

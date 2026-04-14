@@ -1,10 +1,8 @@
 ---
-title: "Get Product"
+title: "Get product"
 api: "GET /products/:id"
 description: "Retrieve a specific product by ID"
 ---
-
-# Get Product
 
 Retrieve a specific product by its ID.
 
@@ -28,6 +26,26 @@ curl http://localhost:8000/products/1
 
 ## Response
 
+<ResponseField name="id" type="integer">
+  Unique identifier for the product
+</ResponseField>
+
+<ResponseField name="name" type="string">
+  Product name
+</ResponseField>
+
+<ResponseField name="price" type="number">
+  Product price
+</ResponseField>
+
+<ResponseField name="stock" type="integer">
+  Quantity in stock
+</ResponseField>
+
+<ResponseField name="description" type="string">
+  Product description
+</ResponseField>
+
 ### Success response (200)
 
 ```json
@@ -42,6 +60,8 @@ curl http://localhost:8000/products/1
 
 ### Error response (404)
 
+If the product doesn't exist:
+
 ```json
 {
   "error": "not found"
@@ -50,6 +70,10 @@ curl http://localhost:8000/products/1
 
 ## Use cases
 
-- Get product details
+- Get product details for display
 - Check stock availability
-- Retrieve product information for display
+- Retrieve product information before updating
+
+<Tip>
+Check the HTTP status code. A 404 response means the product ID doesn't exist.
+</Tip>

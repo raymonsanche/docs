@@ -1,10 +1,8 @@
 ---
-title: "List Products"
+title: "List products"
 api: "GET /products"
 description: "Retrieve all products"
 ---
-
-# List Products
 
 Retrieve all products from inventory.
 
@@ -38,6 +36,14 @@ Returns an array of all products.
 
 <ResponseField name="price" type="number">
   Product price
+</ResponseField>
+
+<ResponseField name="stock" type="integer">
+  Quantity in stock
+</ResponseField>
+
+<ResponseField name="description" type="string">
+  Product description
 </ResponseField>
 
 ### Success response (200)

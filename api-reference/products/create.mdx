@@ -1,10 +1,8 @@
 ---
-title: "Create Product"
+title: "Create product"
 api: "POST /products"
 description: "Create a new product"
 ---
-
-# Create Product
 
 Create a new product in the inventory.
 
@@ -47,6 +45,26 @@ curl -X POST http://localhost:8000/products \
 
 ## Response
 
+<ResponseField name="id" type="integer">
+  Unique identifier for the newly created product (auto-generated)
+</ResponseField>
+
+<ResponseField name="name" type="string">
+  Product name
+</ResponseField>
+
+<ResponseField name="price" type="number">
+  Product price
+</ResponseField>
+
+<ResponseField name="stock" type="integer">
+  Quantity in stock
+</ResponseField>
+
+<ResponseField name="description" type="string">
+  Product description
+</ResponseField>
+
 ### Success response (201)
 
 ```json
@@ -64,6 +82,12 @@ curl -X POST http://localhost:8000/products \
 - Product ID is auto-generated
 - Name is required
 - All provided fields are stored
+
+## Use cases
+
+- Add a new item to your product catalog
+- Register inventory for a new product line
+- Create products to associate with categories
 
 <Note>
 The ID field is automatically assigned by the server. Do not include it in your request.

@@ -1,10 +1,8 @@
 ---
-title: "Delete Category"
+title: "Delete category"
 api: "DELETE /categories/:id"
 description: "Delete a category"
 ---
-
-# Delete Category
 
 Delete a category from the system.
 
@@ -28,6 +26,10 @@ curl -X DELETE http://localhost:8000/categories/1
 
 ## Response
 
+<ResponseField name="deleted" type="boolean">
+  Confirmation that the deletion was successful
+</ResponseField>
+
 ### Success response (200)
 
 ```json
@@ -38,11 +40,19 @@ curl -X DELETE http://localhost:8000/categories/1
 
 ### Error response (404)
 
+If the category doesn't exist:
+
 ```json
 {
   "error": "not found"
 }
 ```
+
+## Use cases
+
+- Remove unused categories
+- Clean up test category data
+- Delete duplicate category entries
 
 <Warning>
 Deleting a category is permanent and cannot be undone.

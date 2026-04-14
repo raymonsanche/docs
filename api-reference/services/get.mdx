@@ -1,10 +1,8 @@
 ---
-title: "Get Service"
+title: "Get service"
 api: "GET /services/:id"
 description: "Retrieve a specific service"
 ---
-
-# Get Service
 
 Retrieve a specific service by ID.
 
@@ -17,7 +15,7 @@ GET /services/:id
 ## Path parameters
 
 <ParamField path="id" type="integer" required>
-  The service identifier
+  The unique identifier of the service
 </ParamField>
 
 ## Request example
@@ -27,6 +25,22 @@ curl http://localhost:8000/services/1
 ```
 
 ## Response
+
+<ResponseField name="id" type="integer">
+  Unique identifier for the service
+</ResponseField>
+
+<ResponseField name="name" type="string">
+  Service name
+</ResponseField>
+
+<ResponseField name="price" type="number">
+  Service price
+</ResponseField>
+
+<ResponseField name="description" type="string">
+  Service description
+</ResponseField>
 
 ### Success response (200)
 
@@ -41,8 +55,20 @@ curl http://localhost:8000/services/1
 
 ### Error response (404)
 
+If the service doesn't exist:
+
 ```json
 {
   "error": "not found"
 }
 ```
+
+## Use cases
+
+- Retrieve service details for display
+- Check service pricing
+- Get service information before updating
+
+<Tip>
+Check the HTTP status code. A 404 response means the service ID doesn't exist.
+</Tip>

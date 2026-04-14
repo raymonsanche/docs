@@ -1,10 +1,8 @@
 ---
-title: "Update Client"
+title: "Update client"
 api: "PUT /clients/:id"
 description: "Update an existing client"
 ---
-
-# Update Client
 
 Update an existing client's information.
 
@@ -63,6 +61,14 @@ curl -X PUT http://localhost:8000/clients/1 \
 
 <ResponseField name="email" type="string">
   Updated email address
+</ResponseField>
+
+<ResponseField name="phone" type="string">
+  Updated phone number
+</ResponseField>
+
+<ResponseField name="address" type="string">
+  Updated address
 </ResponseField>
 
 ### Success response (200)
