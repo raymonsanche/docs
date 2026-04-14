@@ -1,10 +1,8 @@
 ---
-title: "List Clients"
+title: "List clients"
 api: "GET /clients"
 description: "Retrieve all clients"
 ---
-
-# List Clients
 
 Retrieve all clients from the system.
 
@@ -38,6 +36,14 @@ Returns an array of all clients in the system.
 
 <ResponseField name="email" type="string">
   Client's email address
+</ResponseField>
+
+<ResponseField name="phone" type="string">
+  Client's phone number
+</ResponseField>
+
+<ResponseField name="address" type="string">
+  Client's address
 </ResponseField>
 
 ### Success response (200)

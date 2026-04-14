@@ -1,10 +1,8 @@
 ---
-title: "Get Category"
+title: "Get category"
 api: "GET /categories/:id"
 description: "Retrieve a specific category"
 ---
-
-# Get Category
 
 Retrieve a specific category by ID.
 
@@ -17,7 +15,7 @@ GET /categories/:id
 ## Path parameters
 
 <ParamField path="id" type="integer" required>
-  The category identifier
+  The unique identifier of the category
 </ParamField>
 
 ## Request example
@@ -27,6 +25,18 @@ curl http://localhost:8000/categories/1
 ```
 
 ## Response
+
+<ResponseField name="id" type="integer">
+  Unique identifier for the category
+</ResponseField>
+
+<ResponseField name="name" type="string">
+  Category name
+</ResponseField>
+
+<ResponseField name="description" type="string">
+  Category description
+</ResponseField>
 
 ### Success response (200)
 
@@ -40,8 +50,20 @@ curl http://localhost:8000/categories/1
 
 ### Error response (404)
 
+If the category doesn't exist:
+
 ```json
 {
   "error": "not found"
 }
 ```
+
+## Use cases
+
+- Retrieve category details for display
+- Verify a category exists before assigning products
+- Get category information for reports
+
+<Tip>
+Check the HTTP status code. A 404 response means the category ID doesn't exist.
+</Tip>

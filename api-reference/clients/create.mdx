@@ -1,10 +1,8 @@
 ---
-title: "Create Client"
+title: "Create client"
 api: "POST /clients"
 description: "Create a new client"
 ---
-
-# Create Client
 
 Create a new client in the system.
 
@@ -57,6 +55,14 @@ curl -X POST http://localhost:8000/clients \
 
 <ResponseField name="email" type="string">
   Client's email address
+</ResponseField>
+
+<ResponseField name="phone" type="string">
+  Client's phone number
+</ResponseField>
+
+<ResponseField name="address" type="string">
+  Client's address
 </ResponseField>
 
 ### Success response (201)

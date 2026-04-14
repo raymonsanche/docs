@@ -1,10 +1,8 @@
 ---
-title: "Get Client"
+title: "Get client"
 api: "GET /clients/:id"
 description: "Retrieve a specific client by ID"
 ---
-
-# Get Client
 
 Retrieve a specific client by its ID.
 
@@ -38,6 +36,14 @@ curl http://localhost:8000/clients/1
 
 <ResponseField name="email" type="string">
   Client's email address
+</ResponseField>
+
+<ResponseField name="phone" type="string">
+  Client's phone number
+</ResponseField>
+
+<ResponseField name="address" type="string">
+  Client's address
 </ResponseField>
 
 ### Success response (200)

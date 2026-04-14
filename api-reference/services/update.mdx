@@ -1,10 +1,8 @@
 ---
-title: "Update Service"
+title: "Update service"
 api: "PUT /services/:id"
 description: "Update an existing service"
 ---
-
-# Update Service
 
 Update a service's information.
 
@@ -48,6 +46,22 @@ curl -X PUT http://localhost:8000/services/1 \
 
 ## Response
 
+<ResponseField name="id" type="integer">
+  Service's identifier (unchanged)
+</ResponseField>
+
+<ResponseField name="name" type="string">
+  Updated service name
+</ResponseField>
+
+<ResponseField name="price" type="number">
+  Updated price
+</ResponseField>
+
+<ResponseField name="description" type="string">
+  Updated description
+</ResponseField>
+
 ### Success response (200)
 
 ```json
@@ -61,11 +75,19 @@ curl -X PUT http://localhost:8000/services/1 \
 
 ### Error response (404)
 
+If the service doesn't exist:
+
 ```json
 {
   "error": "not found"
 }
 ```
+
+## Rules
+
+- The service ID cannot be changed
+- All fields must be provided in the request body
+- The entire service record is replaced with the new data
 
 <Warning>
 When updating, you must provide all fields. Missing fields will not be preserved from the previous record.
