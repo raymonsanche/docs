@@ -14,29 +14,31 @@ DELETE /clients/:id
 
 ## Path parameters
 
-<ParamField path="id" type="integer" required>
-  The unique identifier of the client to delete
+<ParamField path="id" type="string" required>
+  The UUID of the client to delete
+</ParamField>
+
+## Query parameters
+
+<ParamField query="client_id" type="string">
+  External client identifier (optional, for additional validation)
+</ParamField>
+
+<ParamField query="legacy_id" type="integer">
+  Legacy numeric client identifier (optional, for additional validation)
 </ParamField>
 
 ## Request example
 
 ```bash
-curl -X DELETE http://localhost:8000/clients/1
+curl -X DELETE /clients/c9d8e7f6-5432-1098-abcd-fedcba987654
 ```
 
 ## Response
 
-<ResponseField name="deleted" type="boolean">
-  Confirmation that the deletion was successful
-</ResponseField>
+### Success response (204)
 
-### Success response (200)
-
-```json
-{
-  "deleted": true
-}
-```
+No content is returned.
 
 ### Error response (404)
 
@@ -48,23 +50,23 @@ If the client doesn't exist:
 }
 ```
 
-## Behavior
+## Rules
 
-- Permanently removes the client from the system
-- This operation cannot be undone
-- If the client doesn't exist, a 404 error is returned
+- The `id` must be a valid UUID
+- Permanently removes the client and its associated data
+- If the client has foreign key dependencies (such as feature flags or webhooks), the deletion fails with an error
+
+<Warning>
+Deleting a client is permanent and cannot be undone. All associated feature flags and configurations are also removed.
+</Warning>
 
 ## Use cases
 
-- Remove inactive clients
+- Remove inactive or decommissioned clients
 - Clean up duplicate client records
 - Delete test or temporary client data
 
-<Warning>
-Deleting a client is permanent and cannot be undone. Consider archiving instead if you need to preserve historical data.
-</Warning>
-
 ## Related operations
 
-- [List clients](/api-reference/clients/list) - View all clients
+- [List clients](/api-reference/clients/list) - View all clients before deleting
 - [Get client](/api-reference/clients/get) - Verify client exists before deleting
