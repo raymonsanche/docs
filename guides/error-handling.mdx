@@ -63,7 +63,7 @@ Response:
 }
 ```
 
-**Solution:** Use only the supported endpoints: `/clients`, `/products`, `/categories`, `/services`, `/accounts`.
+**Solution:** Use only the supported endpoints. Common endpoints include `/clients`, `/products`, `/categories`, `/services`, and `/accounts`. See the [API overview](/api-reference/overview) for the full list.
 
 ### Invalid JSON
 
@@ -76,7 +76,7 @@ Returned when the request body contains malformed JSON.
 ```bash
 curl -X POST http://localhost:8000/clients \
   -H "Content-Type: application/json" \
-  -d '{"name": "John"'
+  -d '{"name": "Acme Corp"'
 ```
 
 **Solution:** Validate your JSON syntax before sending the request.
@@ -103,7 +103,7 @@ curl -X POST http://localhost:8000/clients \
 ```bash
 curl -X POST http://localhost:8000/clients \
   -H "Content-Type: application/json" \
-  -d '{"name": "John"}'
+  -d '{"name": "Acme Corp", "client_id": "acme-123"}'
 ```
 
 ### Port not accessible
