@@ -31,7 +31,7 @@ PUT /client-feature-flags/:id
 ## Request example
 
 ```bash
-curl -X PUT /client-feature-flags/a1b2c3d4-e5f6-7890-abcd-ef1234567890 \
+curl -X PUT http://localhost:8000/client-feature-flags/a1b2c3d4-e5f6-7890-abcd-ef1234567890 \
   -H "Content-Type: application/json" \
   -d '{
     "reprocess_by_status_enabled": false,
