@@ -26,24 +26,50 @@ curl http://localhost:8000/clients
 
 Returns an array of all clients in the system.
 
-<ResponseField name="id" type="integer">
-  Unique identifier for the client (auto-generated)
+<ResponseField name="id" type="string">
+  Unique identifier for the client (UUID)
 </ResponseField>
 
 <ResponseField name="name" type="string">
-  Client's full name
+  Client name
 </ResponseField>
 
-<ResponseField name="email" type="string">
-  Client's email address
+<ResponseField name="client_id" type="string">
+  External client identifier
 </ResponseField>
 
-<ResponseField name="phone" type="string">
-  Client's phone number
+<ResponseField name="legacy_id" type="integer">
+  Legacy numeric client identifier
 </ResponseField>
 
-<ResponseField name="address" type="string">
-  Client's address
+<ResponseField name="has_aes_key" type="boolean">
+  Whether the client has an AES encryption key configured
+</ResponseField>
+
+<ResponseField name="secret_name" type="string">
+  Secret name reference for the client
+</ResponseField>
+
+<ResponseField name="feature_flags" type="object">
+  Feature flag configuration for the client
+
+  <Expandable title="Feature flags object">
+    <ResponseField name="payload_signature_enabled" type="boolean">
+      Whether payload signature verification is enabled
+    </ResponseField>
+
+    <ResponseField name="reprocess_by_status_enabled" type="boolean">
+      Whether event reprocessing by notification status is enabled
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="created_at" type="string">
+  Timestamp when the client was created
+</ResponseField>
+
+<ResponseField name="updated_at" type="string">
+  Timestamp when the client was last updated
 </ResponseField>
 
 ### Success response (200)
@@ -51,14 +77,18 @@ Returns an array of all clients in the system.
 ```json
 [
   {
-    "id": 1,
-    "name": "John Doe",
-    "email": "john@example.com"
-  },
-  {
-    "id": 2,
-    "name": "Jane Smith",
-    "email": "jane@example.com"
+    "id": "c9d8e7f6-5432-1098-abcd-fedcba987654",
+    "name": "My Client",
+    "client_id": "client-abc-123",
+    "legacy_id": 12345,
+    "has_aes_key": true,
+    "secret_name": "my-client-secret",
+    "feature_flags": {
+      "payload_signature_enabled": false,
+      "reprocess_by_status_enabled": true
+    },
+    "created_at": "2026-01-15T10:30:00Z",
+    "updated_at": "2026-03-20T14:00:00Z"
   }
 ]
 ```
@@ -74,9 +104,5 @@ If no clients exist, returns an empty array:
 ## Use cases
 
 - Display a list of all clients in your application
-- Export all client data
-- Generate reports
-
-<Tip>
-If you have many clients and want to filter them, retrieve all clients and filter on the client side.
-</Tip>
+- Check which feature flags are enabled per client
+- Audit client configurations and encryption key status
