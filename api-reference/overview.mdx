@@ -149,7 +149,7 @@ Manage user and business accounts.
 
 ### Issuer API
 
-A self-service API for issuers to manage their own webhooks, browse events, test notifications, and reprocess rejected deliveries. All endpoints are scoped to the authenticated issuer.
+A self-service API for issuers to manage their own webhooks, browse events, test notifications, and reprocess rejected deliveries. Unlike the admin API, the issuer API requires JWT authentication and automatically scopes all operations to the authenticated issuer's account.
 
 - [Issuer API overview](/api-reference/issuer/overview)
 

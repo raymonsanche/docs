@@ -7,9 +7,37 @@ The issuer API provides a self-service interface for issuers (clients) to manage
 
 ## Authentication
 
-All issuer API endpoints require a valid authentication token. The token identifies the issuer and automatically scopes all operations to that issuer's data.
+All issuer API endpoints require a valid JWT (JSON Web Token) in the `Authorization` header using the `Bearer` scheme:
 
-Include your token in the request headers as required by your authentication provider.
+```bash
+Authorization: Bearer <your-jwt-token>
+```
+
+The platform extracts your identity from the token claims. Your token must include a `tenant_id` claim (mapped to your client ID) and either an `issuer_id` or `id_emissor` claim (mapped to your legacy ID). These values automatically scope all API operations to your account — you never need to pass a client or legacy identifier in the request body.
+
+If the token is missing, expired, or does not contain the required claims, the API returns a `401 Unauthorized` response.
+
+## Getting started
+
+Follow these steps to set up your notification pipeline:
+
+<Steps>
+  <Step title="Configure encryption">
+    [Retrieve the public key](/api-reference/issuer/get-public-key), encrypt your AES key with it, then [save your encrypted AES key](/api-reference/issuer/save-aes-key). This enables encrypted payload delivery.
+  </Step>
+  <Step title="Browse available events">
+    [List events](/api-reference/issuer/list-events) to see which event types you can subscribe to.
+  </Step>
+  <Step title="Create webhooks">
+    [Create a webhook](/api-reference/issuer/webhooks/create) for each event you want to receive. Specify a destination URL, event name, and optional filters.
+  </Step>
+  <Step title="Test your integration">
+    [Send a test notification](/api-reference/issuer/send-test-notification) or [send a mock event](/api-reference/issuer/send-mock-notification) to verify your webhook is receiving events correctly. These endpoints are only available in development and staging environments.
+  </Step>
+  <Step title="Monitor and recover">
+    [List rejected events](/api-reference/issuer/list-rejected-events) to check for delivery failures. Use the reprocess endpoints to retry failed deliveries [by time interval](/api-reference/issuer/reprocess/by-interval) or [by notification status](/api-reference/issuer/reprocess/by-notification-status).
+  </Step>
+</Steps>
 
 ## Available resources
 
