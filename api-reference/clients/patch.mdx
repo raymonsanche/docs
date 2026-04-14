@@ -1,0 +1,75 @@
+---
+title: "Patch client"
+api: "PATCH /clients/:id"
+description: "Partially update client management fields"
+---
+
+Partially update a client's management fields without replacing the entire record. Use this to update specific fields like `name` or `secret_name` while leaving other fields unchanged.
+
+## Endpoint
+
+```
+PATCH /clients/:id
+```
+
+## Path parameters
+
+<ParamField path="id" type="string" required>
+  The UUID of the client to update
+</ParamField>
+
+## Request body
+
+<ParamField body="name" type="string">
+  Updated client name
+</ParamField>
+
+<ParamField body="secret_name" type="string">
+  Updated secret name reference for the client
+</ParamField>
+
+## Request example
+
+```bash
+curl -X PATCH /clients/c9d8e7f6-5432-1098-abcd-fedcba987654 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Updated Client Name"
+  }'
+```
+
+## Response
+
+### Success response (200)
+
+```json
+{
+  "message": "client has been updated."
+}
+```
+
+### Error response (404)
+
+If the client does not exist:
+
+```json
+{
+  "error": "not found"
+}
+```
+
+## Rules
+
+- The `id` must be a valid UUID
+- At least one field must be provided
+- Only provided fields are updated; omitted fields remain unchanged
+
+## Use cases
+
+- Rename a client without affecting other settings
+- Update a client's secret reference
+- Make lightweight updates without providing the full client payload
+
+<Tip>
+Use `PATCH` for partial updates and `PUT` for full replacements. See [update client](/api-reference/clients/update) for full updates.
+</Tip>

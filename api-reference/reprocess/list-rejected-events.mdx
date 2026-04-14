@@ -1,0 +1,87 @@
+---
+title: "List rejected events"
+api: "GET /reprocess/rejected-events"
+description: "Retrieve rejected events available for reprocessing"
+---
+
+Retrieve a list of rejected notification events that are available for reprocessing. Results are grouped by event name and include per-webhook notification status counts.
+
+## Endpoint
+
+```
+GET /reprocess/rejected-events
+```
+
+## Query parameters
+
+<ParamField query="legacy_id" type="integer" required>
+  The legacy identifier of the client whose rejected events you want to list
+</ParamField>
+
+## Request example
+
+```bash
+curl "/reprocess/rejected-events?legacy_id=12345"
+```
+
+## Response
+
+Returns an array of rejected event groups.
+
+<ResponseField name="event_name" type="string">
+  The name of the event type
+</ResponseField>
+
+<ResponseField name="notifications" type="array">
+  List of notification entries for this event type
+
+  <Expandable title="Notification object">
+    <ResponseField name="webhook_id" type="string">
+      UUID of the webhook that received the notification
+    </ResponseField>
+
+    <ResponseField name="url" type="string">
+      The webhook URL
+    </ResponseField>
+
+    <ResponseField name="status" type="string">
+      The notification delivery status (e.g., `rejected`, `failed`)
+    </ResponseField>
+
+    <ResponseField name="count" type="integer">
+      Number of events with this status for this webhook
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+### Success response (200)
+
+```json
+[
+  {
+    "event_name": "payment.created",
+    "notifications": [
+      {
+        "webhook_id": "d4e5f6a7-b8c9-0123-4567-890abcdef012",
+        "url": "https://example.com/webhook",
+        "status": "rejected",
+        "count": 15
+      }
+    ]
+  }
+]
+```
+
+### Empty response (200)
+
+If no rejected events exist for the client:
+
+```json
+[]
+```
+
+## Use cases
+
+- Review which events failed to deliver before triggering a reprocess
+- Identify problematic webhooks with high rejection counts
+- Audit notification delivery health for a client

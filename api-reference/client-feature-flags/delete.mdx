@@ -1,0 +1,67 @@
+---
+title: "Delete client feature flags"
+api: "DELETE /client-feature-flags/:id"
+description: "Remove feature flag configuration for a client"
+---
+
+Delete a feature flag configuration, removing all feature toggles for the associated client.
+
+## Endpoint
+
+```
+DELETE /client-feature-flags/:id
+```
+
+## Path parameters
+
+<ParamField path="id" type="string" required>
+  The UUID of the feature flag record to delete
+</ParamField>
+
+## Query parameters
+
+<ParamField query="client_id" type="string">
+  The client UUID (optional, for additional validation)
+</ParamField>
+
+<ParamField query="legacy_id" type="integer">
+  The legacy client identifier (optional, for additional validation)
+</ParamField>
+
+## Request example
+
+```bash
+curl -X DELETE /client-feature-flags/a1b2c3d4-e5f6-7890-abcd-ef1234567890
+```
+
+## Response
+
+### Success response (204)
+
+No content is returned.
+
+### Error response (404)
+
+If the feature flag record does not exist:
+
+```json
+{
+  "error": "not found"
+}
+```
+
+## Rules
+
+- The `id` must be a valid UUID
+- Deletion is permanent and cannot be undone
+- If the record has foreign key dependencies, the deletion fails with an error
+
+<Warning>
+Deleting a feature flag configuration resets all feature toggles for the client. The client reverts to default behavior.
+</Warning>
+
+## Use cases
+
+- Remove feature flag overrides for a client
+- Reset a client to default feature behavior
+- Clean up feature configurations during decommissioning

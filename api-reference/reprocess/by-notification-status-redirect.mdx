@@ -1,0 +1,91 @@
+---
+title: "Reprocess and redirect to new webhook"
+api: "POST /reprocess/by-notification-status/redirect"
+description: "Reprocess rejected events and redirect them to a different webhook"
+---
+
+Trigger reprocessing of rejected notification events and redirect them to a different webhook. Use this when the original webhook is no longer valid and you want to redeliver events to an updated endpoint.
+
+## Endpoint
+
+```
+POST /reprocess/by-notification-status/redirect
+```
+
+## Request body
+
+<ParamField body="legacy_id" type="integer" required>
+  The legacy identifier of the client
+</ParamField>
+
+<ParamField body="webhook_id_old" type="string" required>
+  UUID of the original webhook whose rejected events you want to reprocess
+</ParamField>
+
+<ParamField body="webhook_id_new" type="string" required>
+  UUID of the new webhook to redirect events to
+</ParamField>
+
+<ParamField body="status" type="string" required>
+  The notification status to filter by (e.g., `rejected`, `failed`)
+</ParamField>
+
+## Request example
+
+```bash
+curl -X POST /reprocess/by-notification-status/redirect \
+  -H "Content-Type: application/json" \
+  -d '{
+    "legacy_id": 12345,
+    "webhook_id_old": "d4e5f6a7-b8c9-0123-4567-890abcdef012",
+    "webhook_id_new": "f1e2d3c4-b5a6-7890-1234-567890abcdef",
+    "status": "rejected"
+  }'
+```
+
+## Response
+
+### Success response (200)
+
+```json
+{
+  "message": "retry created successfully"
+}
+```
+
+### No matching events (200)
+
+If no events match the criteria:
+
+```json
+{
+  "message": "No events were found to resend."
+}
+```
+
+### Error response (400)
+
+If required fields are missing or invalid:
+
+```json
+{
+  "error": "bad request"
+}
+```
+
+## Rules
+
+- All four fields (`legacy_id`, `webhook_id_old`, `webhook_id_new`, `status`) are required
+- Both webhook IDs must be valid UUIDs
+- The new webhook must exist and belong to the specified client
+- The `status` must be a non-empty string
+
+## Use cases
+
+- Migrate rejected events from a decommissioned webhook to a new one
+- Redirect failed deliveries after updating a webhook endpoint URL
+- Recover events when a webhook was misconfigured
+
+<Warning>
+The redirect updates the webhook association for all matching rejected events. This operation cannot be reversed.
+</Warning>

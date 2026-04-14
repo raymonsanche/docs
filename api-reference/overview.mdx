@@ -15,7 +15,25 @@ Manage customer and client information.
 - [Create client](/api-reference/clients/create)
 - [Get client](/api-reference/clients/get)
 - [Update client](/api-reference/clients/update)
+- [Patch client](/api-reference/clients/patch)
 - [Delete client](/api-reference/clients/delete)
+
+### Client feature flags
+
+Toggle per-client capabilities such as event reprocessing by status and payload signature verification.
+
+- [Create client feature flag](/api-reference/client-feature-flags/create)
+- [Get client feature flags](/api-reference/client-feature-flags/get)
+- [Update client feature flags](/api-reference/client-feature-flags/update)
+- [Delete client feature flags](/api-reference/client-feature-flags/delete)
+
+### Reprocess
+
+List and retry rejected notification events, with optional webhook redirection.
+
+- [List rejected events](/api-reference/reprocess/list-rejected-events)
+- [Reprocess by notification status](/api-reference/reprocess/by-notification-status)
+- [Reprocess and redirect to new webhook](/api-reference/reprocess/by-notification-status-redirect)
 
 ### Products
 

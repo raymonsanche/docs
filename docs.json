@@ -61,7 +61,25 @@
               "api-reference/clients/create",
               "api-reference/clients/get",
               "api-reference/clients/update",
+              "api-reference/clients/patch",
               "api-reference/clients/delete"
+            ]
+          },
+          {
+            "group": "Client feature flags",
+            "pages": [
+              "api-reference/client-feature-flags/create",
+              "api-reference/client-feature-flags/get",
+              "api-reference/client-feature-flags/update",
+              "api-reference/client-feature-flags/delete"
+            ]
+          },
+          {
+            "group": "Reprocess",
+            "pages": [
+              "api-reference/reprocess/list-rejected-events",
+              "api-reference/reprocess/by-notification-status",
+              "api-reference/reprocess/by-notification-status-redirect"
             ]
           },
           {
