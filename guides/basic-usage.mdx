@@ -13,8 +13,8 @@ The Simple API follows standard REST conventions:
 | --- | --- | --- |
 | GET | Retrieve data | `GET /clients` |
 | POST | Create new resource | `POST /clients` |
-| PUT | Update existing resource | `PUT /clients/1` |
-| DELETE | Delete resource | `DELETE /clients/1` |
+| PUT | Update existing resource | `PUT /clients/:id` |
+| DELETE | Delete resource | `DELETE /clients/:id` |
 
 ## Request format
 
@@ -23,7 +23,7 @@ All requests should include the `Content-Type` header for POST and PUT operation
 ```bash
 curl -X POST http://localhost:8000/clients \
   -H "Content-Type: application/json" \
-  -d '{"name": "John", "email": "john@example.com"}'
+  -d '{"name": "Acme Corp", "client_id": "acme-123"}'
 ```
 
 ## Response format
@@ -34,17 +34,34 @@ All responses are JSON objects or arrays:
   <Tab title="Success response">
     ```json
     {
-      "id": 1,
-      "name": "John Doe",
-      "email": "john@example.com"
+      "id": "c9d8e7f6-5432-1098-abcd-fedcba987654",
+      "name": "Acme Corp",
+      "client_id": "acme-123",
+      "legacy_id": 1001,
+      "has_aes_key": false,
+      "secret_name": null,
+      "created_at": "2026-01-15T10:30:00Z",
+      "updated_at": "2026-01-15T10:30:00Z"
     }
     ```
   </Tab>
   <Tab title="List response">
     ```json
     [
-      {"id": 1, "name": "John Doe", "email": "john@example.com"},
-      {"id": 2, "name": "Jane Smith", "email": "jane@example.com"}
+      {
+        "id": "c9d8e7f6-5432-1098-abcd-fedcba987654",
+        "name": "Acme Corp",
+        "client_id": "acme-123",
+        "legacy_id": 1001,
+        "has_aes_key": false,
+        "secret_name": null,
+        "feature_flags": {
+          "payload_signature_enabled": false,
+          "reprocess_by_status_enabled": false
+        },
+        "created_at": "2026-01-15T10:30:00Z",
+        "updated_at": "2026-01-15T10:30:00Z"
+      }
     ]
     ```
   </Tab>
@@ -65,6 +82,7 @@ The API uses standard HTTP status codes:
 | --- | --- | --- |
 | 200 | Success (GET, PUT) | Retrieved or updated successfully |
 | 201 | Created (POST) | Resource created successfully |
+| 204 | No Content (DELETE) | Resource deleted successfully (clients) |
 | 404 | Not Found | Resource doesn't exist |
 
 ## Common operations
@@ -124,7 +142,7 @@ The API manages five types of resources. Each follows the same CRUD pattern:
 - `/accounts` - User and business accounts
 
 <Note>
-Resource IDs are auto-generated as numeric integers starting from 1.
+Resource IDs are auto-generated. Clients use UUIDs, while other resources use numeric integers starting from 1.
 </Note>
 
 ## Data persistence

@@ -29,7 +29,7 @@ Configure HTTP endpoints to receive event notifications. Each webhook subscribes
 
 ### Clients
 
-Manage customer and client information.
+Manage client registrations for webhook event delivery, including encryption keys and feature flags.
 
 - [List clients](/api-reference/clients/list)
 - [Create client](/api-reference/clients/create)
@@ -193,5 +193,5 @@ No rate limiting is applied to the Simple API.
 The Simple API does not support pagination. List endpoints return all available resources.
 
 <Tip>
-Most resource types support standard CRUD operations (list, create, get, update, delete). Notification-pipeline resources (events, webhooks, delivery settings, mutators, rulesets, Kafka topics, and event mocks) return confirmation messages on update, while other resources return the full updated object.
+Most resource types support standard CRUD operations (list, create, get, update, delete). Notification-pipeline resources (events, webhooks, delivery settings, mutators, rulesets, Kafka topics, and event mocks) and clients return confirmation messages on update, while other resources return the full updated object.
 </Tip>

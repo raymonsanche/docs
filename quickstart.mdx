@@ -34,8 +34,9 @@ Send a POST request to create a new client:
 curl -X POST http://localhost:8000/clients \
   -H "Content-Type: application/json" \
   -d '{
-    "name": "John Doe",
-    "email": "john@example.com"
+    "name": "Acme Corp",
+    "client_id": "acme-123",
+    "legacy_id": 1001
   }'
 ```
 
@@ -43,9 +44,14 @@ Expected response:
 
 ```json
 {
-  "id": 1,
-  "name": "John Doe",
-  "email": "john@example.com"
+  "id": "c9d8e7f6-5432-1098-abcd-fedcba987654",
+  "name": "Acme Corp",
+  "client_id": "acme-123",
+  "legacy_id": 1001,
+  "has_aes_key": false,
+  "secret_name": null,
+  "created_at": "2026-01-15T10:30:00Z",
+  "updated_at": "2026-01-15T10:30:00Z"
 }
 ```
 
@@ -62,9 +68,18 @@ Response:
 ```json
 [
   {
-    "id": 1,
-    "name": "John Doe",
-    "email": "john@example.com"
+    "id": "c9d8e7f6-5432-1098-abcd-fedcba987654",
+    "name": "Acme Corp",
+    "client_id": "acme-123",
+    "legacy_id": 1001,
+    "has_aes_key": false,
+    "secret_name": null,
+    "feature_flags": {
+      "payload_signature_enabled": false,
+      "reprocess_by_status_enabled": false
+    },
+    "created_at": "2026-01-15T10:30:00Z",
+    "updated_at": "2026-01-15T10:30:00Z"
   }
 ]
 ```
@@ -74,7 +89,7 @@ Response:
 Retrieve a client by ID:
 
 ```bash
-curl http://localhost:8000/clients/1
+curl http://localhost:8000/clients/c9d8e7f6-5432-1098-abcd-fedcba987654
 ```
 
 ## 5. Update a client
@@ -82,11 +97,13 @@ curl http://localhost:8000/clients/1
 Update an existing client:
 
 ```bash
-curl -X PUT http://localhost:8000/clients/1 \
+curl -X PUT http://localhost:8000/clients/c9d8e7f6-5432-1098-abcd-fedcba987654 \
   -H "Content-Type: application/json" \
   -d '{
-    "name": "Jane Doe",
-    "email": "jane@example.com"
+    "name": "Acme Corp Updated",
+    "client_id": "acme-123",
+    "legacy_id": 1001,
+    "payload_signature_enabled": true
   }'
 ```
 
@@ -95,7 +112,7 @@ curl -X PUT http://localhost:8000/clients/1 \
 Delete a client by ID:
 
 ```bash
-curl -X DELETE http://localhost:8000/clients/1
+curl -X DELETE http://localhost:8000/clients/c9d8e7f6-5432-1098-abcd-fedcba987654
 ```
 
 ## Next steps
