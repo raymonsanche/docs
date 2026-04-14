@@ -4,7 +4,7 @@ api: "POST /reprocess/by-notification-status/redirect"
 description: "Reprocess rejected events and redirect them to a different webhook"
 ---
 
-Trigger reprocessing of rejected notification events and redirect them to a different webhook. Use this when the original webhook is no longer valid and you want to redeliver events to an updated endpoint.
+Trigger reprocessing of rejected notification events and redirect them to a different webhook. Use this when the original webhook is no longer valid and you want to redeliver events to an updated endpoint. The new webhook must already exist and belong to the specified client.
 
 ## Endpoint
 

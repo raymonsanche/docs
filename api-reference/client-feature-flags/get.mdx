@@ -14,12 +14,16 @@ GET /client-feature-flags
 
 ## Query parameters
 
+<ParamField query="id" type="string">
+  The UUID of the feature flag record. You can query by `id`, `client_id`, or `legacy_id`.
+</ParamField>
+
 <ParamField query="client_id" type="string">
-  The client UUID. Either `client_id` or `legacy_id` is required.
+  The client UUID. Either `id`, `client_id`, or `legacy_id` is required.
 </ParamField>
 
 <ParamField query="legacy_id" type="integer">
-  The legacy client identifier. Either `client_id` or `legacy_id` is required.
+  The legacy client identifier. Either `id`, `client_id`, or `legacy_id` is required.
 </ParamField>
 
 ## Request example
@@ -57,9 +61,17 @@ curl "/client-feature-flags?legacy_id=12345"
 }
 ```
 
+### No feature flags configured
+
+If the client exists but has no feature flag configuration:
+
+```json
+[]
+```
+
 ### Error response (400)
 
-If neither `client_id` nor `legacy_id` is provided:
+If none of `id`, `client_id`, or `legacy_id` is provided:
 
 ```json
 {

@@ -77,6 +77,16 @@ If `legacy_id` is missing or both flags are null:
 }
 ```
 
+### Conflict error
+
+If the client already has a feature flag configuration:
+
+```json
+{
+  "error": "client feature already registered"
+}
+```
+
 ## Rules
 
 - The `legacy_id` must correspond to an existing client

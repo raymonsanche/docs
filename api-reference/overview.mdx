@@ -3,7 +3,7 @@ title: "API reference overview"
 description: "Complete reference for all Simple API endpoints"
 ---
 
-The Simple API provides five resource types, each with full CRUD (Create, Read, Update, Delete) operations.
+The Simple API provides multiple resource types for managing clients, products, categories, services, and accounts. It also includes endpoints for client feature flags and event reprocessing.
 
 ## Available resources
 
@@ -29,7 +29,7 @@ Toggle per-client capabilities such as event reprocessing by status and payload 
 
 ### Reprocess
 
-List and retry rejected notification events, with optional webhook redirection.
+List and retry rejected notification events, with optional webhook redirection. Reprocessing is asynchronous — events are queued and delivered in the background.
 
 - [List rejected events](/api-reference/reprocess/list-rejected-events)
 - [Reprocess by notification status](/api-reference/reprocess/by-notification-status)
@@ -101,6 +101,8 @@ All responses use JSON format. Successful responses contain the requested data, 
 | --- | --- |
 | 200 | OK - Request succeeded |
 | 201 | Created - Resource was created successfully |
+| 204 | No Content - Resource was deleted successfully |
+| 400 | Bad Request - Missing or invalid parameters |
 | 404 | Not Found - Resource or endpoint doesn't exist |
 
 ## Rate limiting
