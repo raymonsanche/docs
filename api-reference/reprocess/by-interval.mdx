@@ -1,0 +1,82 @@
+---
+title: "Reprocess by time interval"
+api: "POST /reprocess/by-interval"
+description: "Reprocess events within a specific time range"
+---
+
+Trigger reprocessing of events that occurred within a specified time interval. You can scope the reprocessing by client and event type.
+
+## Endpoint
+
+```
+POST /reprocess/by-interval
+```
+
+## Request body
+
+<ParamField body="legacy_id_list" type="array" required>
+  Array of legacy client identifiers (integers) to scope the reprocessing
+</ParamField>
+
+<ParamField body="event_name_list" type="array" required>
+  Array of event names to reprocess (for example, `["payment.created", "account.updated"]`)
+</ParamField>
+
+<ParamField body="start_date" type="string" required>
+  Start of the time range in ISO 8601 format (for example, `2026-01-15T00:00:00Z`)
+</ParamField>
+
+<ParamField body="end_date" type="string" required>
+  End of the time range in ISO 8601 format (for example, `2026-01-16T00:00:00Z`)
+</ParamField>
+
+## Request example
+
+```bash
+curl -X POST /reprocess/by-interval \
+  -H "Content-Type: application/json" \
+  -d '{
+    "legacy_id_list": [12345, 67890],
+    "event_name_list": ["payment.created"],
+    "start_date": "2026-01-15T00:00:00Z",
+    "end_date": "2026-01-16T00:00:00Z"
+  }'
+```
+
+## Response
+
+### Success response (201)
+
+```json
+{
+  "message": "Retry successfully requested"
+}
+```
+
+### Error response (400)
+
+If required fields are missing or invalid:
+
+```json
+{
+  "error": "bad request"
+}
+```
+
+## Rules
+
+- All four fields (`legacy_id_list`, `event_name_list`, `start_date`, `end_date`) are required
+- `start_date` and `end_date` must be valid date-time strings
+- `legacy_id_list` must contain at least one client identifier
+- `event_name_list` must contain at least one event name
+- `end_date` must be after `start_date`
+
+## Use cases
+
+- Bulk reprocess events after a service outage
+- Retry delivery for all events of a specific type within a time window
+- Recover from incidents that affected multiple clients simultaneously
+
+<Warning>
+Reprocessing large time intervals with many clients can generate significant load. Use narrow time ranges and specific event names when possible.
+</Warning>

@@ -1,0 +1,56 @@
+---
+title: "Save AES key"
+api: "POST /external/cryptography"
+description: "Save an encrypted AES key for secure payload delivery"
+---
+
+Save a new AES encryption key for your issuer account. The key must be encrypted with the platform's public key before submission. Once configured, event payloads delivered to your webhooks are encrypted with this key.
+
+## Endpoint
+
+```
+POST /external/cryptography
+```
+
+## Request body
+
+<ParamField body="encrypted_aes_key" type="string" required>
+  Your AES key, encrypted with the platform's RSA public key. Retrieve the public key using the [get public key](/api-reference/issuer/get-public-key) endpoint.
+</ParamField>
+
+## Request example
+
+```bash
+curl -X POST /external/cryptography \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <your-token>" \
+  -d '{
+    "encrypted_aes_key": "base64-encoded-encrypted-key..."
+  }'
+```
+
+## Response
+
+### Success response (200)
+
+```json
+{
+  "message": "success saving new AES key"
+}
+```
+
+### Error response (400)
+
+If the `encrypted_aes_key` field is missing:
+
+```json
+{
+  "error": "bad request"
+}
+```
+
+## Use cases
+
+- Enable encrypted payload delivery for your webhooks
+- Rotate your AES encryption key periodically
+- Set up secure communication before creating webhooks

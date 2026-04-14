@@ -1,0 +1,92 @@
+---
+title: "Update webhook"
+api: "PUT /external/webhooks/{id}"
+description: "Update an existing webhook configuration"
+---
+
+Update the configuration for an existing webhook. The webhook must belong to your issuer account.
+
+## Endpoint
+
+```
+PUT /external/webhooks/{id}
+```
+
+## Path parameters
+
+<ParamField path="id" type="string" required>
+  UUID of the webhook to update
+</ParamField>
+
+## Request body
+
+<ParamField body="url" type="string" required>
+  Updated destination URL
+</ParamField>
+
+<ParamField body="event_name" type="string" required>
+  Updated event name
+</ParamField>
+
+<ParamField body="headers" type="object">
+  Updated custom HTTP headers
+</ParamField>
+
+<ParamField body="auth_type" type="string">
+  Updated authentication type
+</ParamField>
+
+<ParamField body="filter" type="object">
+  Updated filter configuration
+
+  <Expandable title="Filter properties">
+    <ParamField body="filter.field" type="string" required>
+      JSONPath expression for the field to filter on
+    </ParamField>
+
+    <ParamField body="filter.type" type="string" required>
+      Filter comparison type
+    </ParamField>
+
+    <ParamField body="filter.value" type="string" required>
+      Value to match
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+## Request example
+
+```bash
+curl -X PUT /external/webhooks/d4e5f6a7-b8c9-0123-4567-890abcdef012 \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <your-token>" \
+  -d '{
+    "url": "https://example.com/new-webhook",
+    "event_name": "payment.created",
+    "auth_type": "bearer"
+  }'
+```
+
+## Response
+
+### Success response (200)
+
+```json
+{
+  "message": "webhook has been updated."
+}
+```
+
+### Error response (400)
+
+If the request body is invalid:
+
+```json
+{
+  "error": "bad request"
+}
+```
+
+<Note>
+You must set up an encryption key before updating a webhook. Use the [save AES key](/api-reference/issuer/save-aes-key) endpoint to configure encryption first.
+</Note>

@@ -1,0 +1,62 @@
+---
+title: "Issuer API overview"
+description: "External API for issuers to manage their own webhooks, events, and reprocessing"
+---
+
+The issuer API provides a self-service interface for issuers (clients) to manage their own notification configuration. All endpoints are scoped to the authenticated issuer — you can only access and modify your own resources.
+
+## Authentication
+
+All issuer API endpoints require a valid authentication token. The token identifies the issuer and automatically scopes all operations to that issuer's data.
+
+Include your token in the request headers as required by your authentication provider.
+
+## Available resources
+
+### Cryptography
+
+Manage encryption keys for secure payload delivery.
+
+- [Save AES key](/api-reference/issuer/save-aes-key)
+- [Get public key](/api-reference/issuer/get-public-key)
+
+### Events
+
+Browse available event types.
+
+- [List events](/api-reference/issuer/list-events)
+- [Get event](/api-reference/issuer/get-event)
+
+### Webhooks
+
+Create and manage your webhook subscriptions.
+
+- [List webhooks](/api-reference/issuer/webhooks/list)
+- [Create webhook](/api-reference/issuer/webhooks/create)
+- [Get webhook](/api-reference/issuer/webhooks/get)
+- [Update webhook](/api-reference/issuer/webhooks/update)
+- [Delete webhook](/api-reference/issuer/webhooks/delete)
+
+### Testing
+
+Send test notifications to verify your webhook configuration.
+
+- [Send test notification](/api-reference/issuer/send-test-notification)
+- [Send mock event notification](/api-reference/issuer/send-mock-notification)
+
+### Rejected events
+
+Review and retry failed notification deliveries.
+
+- [List rejected events](/api-reference/issuer/list-rejected-events)
+- [Reprocess by time interval](/api-reference/issuer/reprocess/by-interval)
+- [Reprocess by notification status](/api-reference/issuer/reprocess/by-notification-status)
+
+## Key differences from the admin API
+
+| Feature | Admin API | Issuer API |
+| --- | --- | --- |
+| Authentication | None | Required |
+| Scope | All clients | Your data only |
+| Client ID | Specified in request | Inferred from token |
+| Test notifications | Not available | Available in dev/staging |

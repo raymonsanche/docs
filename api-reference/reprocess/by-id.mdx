@@ -1,0 +1,67 @@
+---
+title: "Reprocess by trace IDs"
+api: "POST /reprocess/by-id"
+description: "Reprocess events by providing specific trace IDs"
+---
+
+Trigger reprocessing of events by providing a list of trace IDs. Use this when you know exactly which events need to be redelivered.
+
+## Endpoint
+
+```
+POST /reprocess/by-id
+```
+
+## Request body
+
+<ParamField body="trace_id_list" type="array" required>
+  Array of trace ID strings identifying the events to reprocess
+</ParamField>
+
+## Request example
+
+```bash
+curl -X POST /reprocess/by-id \
+  -H "Content-Type: application/json" \
+  -d '{
+    "trace_id_list": [
+      "abc123-trace-id-001",
+      "def456-trace-id-002"
+    ]
+  }'
+```
+
+## Response
+
+### Success response (201)
+
+```json
+{
+  "message": "Retry successfully requested"
+}
+```
+
+### Error response (400)
+
+If required fields are missing or invalid:
+
+```json
+{
+  "error": "bad request"
+}
+```
+
+## Rules
+
+- The `trace_id_list` field is required and must contain at least one trace ID
+- Each trace ID must be a non-empty string
+
+## Use cases
+
+- Reprocess specific events identified during debugging or incident response
+- Retry delivery for a known set of failed notifications
+- Selectively reprocess events without affecting unrelated deliveries
+
+<Note>
+Reprocessing is asynchronous. Events are queued and delivered in the background.
+</Note>

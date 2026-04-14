@@ -1,0 +1,82 @@
+---
+title: "Reprocess by notification status"
+api: "POST /external/reprocess/by-notification-status"
+description: "Retry rejected events filtered by webhook and status"
+---
+
+Trigger reprocessing of rejected notification events for a specific webhook and delivery status. The operation is automatically scoped to your issuer account.
+
+## Endpoint
+
+```
+POST /external/reprocess/by-notification-status
+```
+
+## Request body
+
+<ParamField body="webhook_id" type="string" required>
+  UUID of the webhook whose rejected events you want to reprocess
+</ParamField>
+
+<ParamField body="status" type="string" required>
+  The notification status to filter by (for example, `rejected`, `failed`)
+</ParamField>
+
+## Request example
+
+```bash
+curl -X POST /external/reprocess/by-notification-status \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <your-token>" \
+  -d '{
+    "webhook_id": "d4e5f6a7-b8c9-0123-4567-890abcdef012",
+    "status": "rejected"
+  }'
+```
+
+## Response
+
+### Success response (200)
+
+```json
+{
+  "message": "retry created successfully"
+}
+```
+
+### No matching events (200)
+
+If no events match the criteria:
+
+```json
+{
+  "message": "No events were found to resend."
+}
+```
+
+### Error response (400)
+
+If required fields are missing or invalid:
+
+```json
+{
+  "error": "bad request"
+}
+```
+
+## Rules
+
+- Both `webhook_id` and `status` are required
+- The `webhook_id` must be a valid UUID belonging to your account
+- The `status` must be a non-empty string
+- You do not need to specify a `legacy_id` — it is inferred from your authentication token
+
+## Use cases
+
+- Retry delivery of rejected webhook notifications
+- Recover from temporary webhook endpoint failures
+- Reprocess events after fixing a webhook URL or configuration
+
+<Note>
+Reprocessing is asynchronous. Events are queued and delivered in the background. Use the [list rejected events](/api-reference/issuer/list-rejected-events) endpoint to monitor progress.
+</Note>

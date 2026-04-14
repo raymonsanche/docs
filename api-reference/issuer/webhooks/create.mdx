@@ -1,0 +1,96 @@
+---
+title: "Create webhook"
+api: "POST /external/webhooks"
+description: "Create a new webhook subscription for your account"
+---
+
+Create a new webhook to receive event notifications at a specified URL. The webhook is automatically scoped to your issuer account.
+
+## Endpoint
+
+```
+POST /external/webhooks
+```
+
+## Request body
+
+<ParamField body="url" type="string" required>
+  Destination URL where notifications are delivered. Must be a valid URL.
+</ParamField>
+
+<ParamField body="event_name" type="string" required>
+  Name of the event to subscribe to. Must reference an existing event.
+</ParamField>
+
+<ParamField body="headers" type="object">
+  Custom HTTP headers to include with each notification request
+</ParamField>
+
+<ParamField body="auth_type" type="string">
+  Authentication type for the webhook endpoint (for example, `bearer`, `basic`)
+</ParamField>
+
+<ParamField body="filter" type="object">
+  Optional filter to limit which events trigger this webhook.
+
+  <Expandable title="Filter properties">
+    <ParamField body="filter.field" type="string" required>
+      JSONPath expression for the field to filter on
+    </ParamField>
+
+    <ParamField body="filter.type" type="string" required>
+      Filter comparison type (for example, `equals`)
+    </ParamField>
+
+    <ParamField body="filter.value" type="string" required>
+      Value to match
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+## Request example
+
+```bash
+curl -X POST /external/webhooks \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <your-token>" \
+  -d '{
+    "url": "https://example.com/webhook",
+    "event_name": "payment.created",
+    "headers": {
+      "X-Custom-Header": "my-value"
+    },
+    "auth_type": "bearer"
+  }'
+```
+
+## Response
+
+### Success response (201)
+
+```json
+{
+  "id": "d4e5f6a7-b8c9-0123-4567-890abcdef012",
+  "event_name": "payment.created",
+  "url": "https://example.com/webhook",
+  "client_id": "abc123",
+  "legacy_id": 12345,
+  "headers": {
+    "X-Custom-Header": "(length: 8)"
+  },
+  "auth_type": "bearer",
+  "filter": null,
+  "created_at": "2026-01-15T10:30:00Z",
+  "updated_at": "2026-01-15T10:30:00Z"
+}
+```
+
+## Rules
+
+- The `url` must be a valid URL
+- The `event_name` must reference an existing event
+- You do not need to specify `client_id` or `legacy_id` — these are inferred from your authentication token
+
+<Tip>
+Use the [list events](/api-reference/issuer/list-events) endpoint to see which events are available before creating a webhook.
+</Tip>

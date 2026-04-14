@@ -1,0 +1,41 @@
+---
+title: "Get public key"
+api: "GET /external/public-key"
+description: "Retrieve the RSA public key for encrypting your AES key"
+---
+
+Retrieve the platform's RSA public key. Use this key to encrypt your AES key before saving it with the [save AES key](/api-reference/issuer/save-aes-key) endpoint.
+
+## Endpoint
+
+```
+GET /external/public-key
+```
+
+## Request example
+
+```bash
+curl /external/public-key \
+  -H "Authorization: Bearer <your-token>"
+```
+
+## Response
+
+### Success response (200)
+
+The response body contains the RSA public key in plain text format.
+
+```
+-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA...
+-----END PUBLIC KEY-----
+```
+
+<Note>
+The response content type is `text/plain`, not JSON.
+</Note>
+
+## Use cases
+
+- Retrieve the public key to encrypt your AES key for secure payload delivery
+- Verify the current public key before rotating your AES key

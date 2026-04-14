@@ -1,0 +1,46 @@
+---
+title: "Delete webhook"
+api: "DELETE /external/webhooks/{id}"
+description: "Delete one of your webhook subscriptions"
+---
+
+Delete a webhook subscription by ID. The webhook must belong to your issuer account.
+
+## Endpoint
+
+```
+DELETE /external/webhooks/{id}
+```
+
+## Path parameters
+
+<ParamField path="id" type="string" required>
+  UUID of the webhook to delete
+</ParamField>
+
+## Request example
+
+```bash
+curl -X DELETE /external/webhooks/d4e5f6a7-b8c9-0123-4567-890abcdef012 \
+  -H "Authorization: Bearer <your-token>"
+```
+
+## Response
+
+### Success response (204)
+
+No content is returned.
+
+### Error response (404)
+
+If the webhook does not exist or does not belong to your account:
+
+```json
+{
+  "error": "not found"
+}
+```
+
+<Warning>
+Deleting a webhook stops all future notification deliveries to that endpoint. This cannot be undone.
+</Warning>
