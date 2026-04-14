@@ -70,6 +70,19 @@ If required fields are missing or invalid:
 - The `webhook_id` must be a valid UUID belonging to your account
 - The `status` must be a non-empty string
 - You do not need to specify a `legacy_id` — it is inferred from your authentication token
+- This endpoint is rate-limited to **one request per hour** per issuer. If you make a second request within the cooldown period, the API returns an error
+
+### Rate limit error (429)
+
+If you exceed the rate limit:
+
+```json
+{
+  "error": "event reprocessing limit reached"
+}
+```
+
+Wait for the cooldown period to expire before retrying.
 
 ## Use cases
 
@@ -80,3 +93,7 @@ If required fields are missing or invalid:
 <Note>
 Reprocessing is asynchronous. Events are queued and delivered in the background. Use the [list rejected events](/api-reference/issuer/list-rejected-events) endpoint to monitor progress.
 </Note>
+
+<Warning>
+You can only trigger one reprocess request per hour. Plan your reprocessing carefully and use the [list rejected events](/api-reference/issuer/list-rejected-events) endpoint to review events before submitting.
+</Warning>
