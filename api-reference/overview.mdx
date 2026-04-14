@@ -3,7 +3,7 @@ title: "API reference overview"
 description: "Complete reference for all Simple API endpoints"
 ---
 
-The Simple API provides five resource types, each with full CRUD (Create, Read, Update, Delete) operations.
+The Simple API provides resources for managing clients, products, categories, services, and accounts, along with client feature flags and event reprocessing.
 
 ## Available resources
 
@@ -101,6 +101,8 @@ All responses use JSON format. Successful responses contain the requested data, 
 | --- | --- |
 | 200 | OK - Request succeeded |
 | 201 | Created - Resource was created successfully |
+| 204 | No Content - Resource was deleted successfully |
+| 400 | Bad Request - Missing or invalid parameters |
 | 404 | Not Found - Resource or endpoint doesn't exist |
 
 ## Rate limiting
