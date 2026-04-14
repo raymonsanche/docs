@@ -1,0 +1,43 @@
+---
+title: "Delete delivery settings"
+api: "DELETE /delivery-settings/{id}"
+description: "Delete a delivery settings configuration"
+---
+
+Delete a delivery settings configuration by its unique identifier. Events will no longer be routed to the associated queue.
+
+## Endpoint
+
+```
+DELETE /delivery-settings/{id}
+```
+
+## Path parameters
+
+<ParamField path="id" type="string" required>
+  The UUID of the delivery settings to delete
+</ParamField>
+
+## Request example
+
+```bash
+curl -X DELETE /delivery-settings/f1a2b3c4-d5e6-7890-abcd-ef1234567890
+```
+
+## Response
+
+### Success response (204)
+
+No content is returned on successful deletion.
+
+### Error response (404)
+
+```json
+{
+  "error": "not found"
+}
+```
+
+<Warning>
+Deleting delivery settings stops event routing to the associated queue immediately.
+</Warning>

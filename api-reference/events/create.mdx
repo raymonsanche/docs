@@ -1,0 +1,91 @@
+---
+title: "Create event"
+api: "POST /events"
+description: "Register a new event definition"
+---
+
+Register a new event type in the system. Events define the types of notifications that can be delivered to clients through webhooks.
+
+## Endpoint
+
+```
+POST /events
+```
+
+## Request body
+
+<ParamField body="name" type="string" required>
+  A unique name for the event (for example, `payment.created` or `account.updated`)
+</ParamField>
+
+<ParamField body="unique_fields" type="array">
+  Array of objects specifying fields used for event deduplication. Each object contains a `field_path` with a valid JSONPath expression.
+</ParamField>
+
+## Request example
+
+```bash
+curl -X POST /events \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "payment.created",
+    "unique_fields": [
+      {
+        "field_path": "$.payload.transaction_id"
+      }
+    ]
+  }'
+```
+
+## Response
+
+<ResponseField name="id" type="string">
+  Unique identifier (UUID) for the newly created event
+</ResponseField>
+
+<ResponseField name="name" type="string">
+  Event name
+</ResponseField>
+
+<ResponseField name="unique_fields" type="array">
+  Array of unique field definitions
+</ResponseField>
+
+<ResponseField name="created_at" type="string">
+  Timestamp when the event was created
+</ResponseField>
+
+<ResponseField name="updated_at" type="string">
+  Timestamp when the event was last updated
+</ResponseField>
+
+### Success response (201)
+
+```json
+{
+  "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "name": "payment.created",
+  "unique_fields": [
+    {
+      "field_path": "$.payload.transaction_id"
+    }
+  ],
+  "created_at": "2026-01-15T10:30:00Z",
+  "updated_at": "2026-01-15T10:30:00Z"
+}
+```
+
+## Rules
+
+- The `name` field is required and must be unique across all events
+- Each `field_path` in `unique_fields` must be a valid JSONPath expression
+- Event names cannot be empty
+
+## Use cases
+
+- Register a new event type before configuring webhooks for it
+- Define deduplication rules to prevent duplicate notifications
+
+<Note>
+You must create an event before you can create webhooks, delivery settings, or rulesets that reference it.
+</Note>

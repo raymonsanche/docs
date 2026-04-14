@@ -1,0 +1,86 @@
+---
+title: "Create mutator"
+api: "POST /mutators"
+description: "Create a new event payload mutator"
+---
+
+Create a new mutator that transforms event payloads before delivery. Mutators can mask sensitive data, enrich payloads, or restructure fields.
+
+## Endpoint
+
+```
+POST /mutators
+```
+
+## Request body
+
+<ParamField body="event_name" type="string" required>
+  Name of the event this mutator applies to. Must reference an existing event.
+</ParamField>
+
+<ParamField body="mutator_type" type="string" required>
+  Type of transformation to apply (for example, `msk` for masking)
+</ParamField>
+
+<ParamField body="parameters" type="object" required>
+  Mutator configuration. Structure depends on the mutator type. Typically includes a `template` object defining field mappings and transformation options.
+</ParamField>
+
+<ParamField body="ordering_key" type="integer" required>
+  Execution priority. Mutators with lower values run first when multiple mutators apply to the same event.
+</ParamField>
+
+## Request example
+
+```bash
+curl -X POST /mutators \
+  -H "Content-Type: application/json" \
+  -d '{
+    "event_name": "payment.created",
+    "mutator_type": "msk",
+    "parameters": {
+      "template": {
+        "card_number": "$.payload.card_number"
+      },
+      "fill_missing_keys": "deep"
+    },
+    "ordering_key": 10
+  }'
+```
+
+## Response
+
+### Success response (201)
+
+```json
+{
+  "id": "b2c3d4e5-f6a7-8901-bcde-f12345678901",
+  "event_name": "payment.created",
+  "mutator_type": "msk",
+  "parameters": {
+    "template": {
+      "card_number": "$.payload.card_number"
+    },
+    "fill_missing_keys": "deep"
+  },
+  "ordering_key": 10,
+  "created_at": "2026-01-15T10:30:00Z",
+  "updated_at": "2026-01-15T10:30:00Z"
+}
+```
+
+## Rules
+
+- The `event_name` must reference an existing event
+- The `parameters` object is validated based on the `mutator_type`
+- Multiple mutators can apply to the same event — use `ordering_key` to control execution order
+
+## Use cases
+
+- Mask sensitive fields like card numbers before delivering to webhooks
+- Enrich event payloads with additional computed fields
+- Restructure payloads to match a client's expected format
+
+<Tip>
+Use the `ordering_key` to chain multiple mutators. For example, run an enrichment mutator (ordering key `10`) before a masking mutator (ordering key `20`).
+</Tip>

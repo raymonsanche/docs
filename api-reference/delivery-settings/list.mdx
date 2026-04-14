@@ -1,0 +1,110 @@
+---
+title: "List delivery settings"
+api: "GET /delivery-settings"
+description: "Retrieve all delivery settings"
+---
+
+Retrieve all delivery settings, optionally filtered by client, event, or queue name.
+
+## Endpoint
+
+```
+GET /delivery-settings
+```
+
+## Query parameters
+
+<ParamField query="id" type="string">
+  Filter by delivery settings ID (UUID)
+</ParamField>
+
+<ParamField query="client_id" type="string">
+  Filter by client ID
+</ParamField>
+
+<ParamField query="legacy_id" type="integer">
+  Filter by legacy client ID
+</ParamField>
+
+<ParamField query="event_name" type="string">
+  Filter by event name
+</ParamField>
+
+<ParamField query="queue_name" type="string">
+  Filter by queue name
+</ParamField>
+
+## Request example
+
+```bash
+curl "/delivery-settings?client_id=abc123&event_name=payment.created"
+```
+
+## Response
+
+Returns an array of delivery settings objects.
+
+<ResponseField name="id" type="string">
+  Unique identifier (UUID)
+</ResponseField>
+
+<ResponseField name="client_id" type="string">
+  Client identifier
+</ResponseField>
+
+<ResponseField name="legacy_id" type="integer">
+  Legacy client identifier
+</ResponseField>
+
+<ResponseField name="event_name" type="string">
+  Name of the associated event
+</ResponseField>
+
+<ResponseField name="queue_name" type="string">
+  Message queue name
+</ResponseField>
+
+<ResponseField name="queue_exchange" type="string">
+  Message queue exchange
+</ResponseField>
+
+<ResponseField name="queue_key" type="string">
+  Message queue routing key
+</ResponseField>
+
+<ResponseField name="app_name" type="string">
+  Application name
+</ResponseField>
+
+<ResponseField name="created_at" type="string">
+  Creation timestamp
+</ResponseField>
+
+<ResponseField name="updated_at" type="string">
+  Last update timestamp
+</ResponseField>
+
+### Success response (200)
+
+```json
+[
+  {
+    "id": "f1a2b3c4-d5e6-7890-abcd-ef1234567890",
+    "client_id": "abc123",
+    "legacy_id": 12345,
+    "event_name": "payment.created",
+    "queue_name": "payment-notifications",
+    "queue_exchange": "events-exchange",
+    "queue_key": "payment.created.abc123",
+    "app_name": "payment-service",
+    "created_at": "2026-01-15T10:30:00Z",
+    "updated_at": "2026-01-15T10:30:00Z"
+  }
+]
+```
+
+## Use cases
+
+- List all delivery configurations for a client
+- Find which queue handles a specific event type
+- Audit message routing across your system

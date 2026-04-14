@@ -1,0 +1,83 @@
+---
+title: "Update delivery settings"
+api: "PUT /delivery-settings/{id}"
+description: "Update an existing delivery settings configuration"
+---
+
+Update an existing delivery settings configuration.
+
+## Endpoint
+
+```
+PUT /delivery-settings/{id}
+```
+
+## Path parameters
+
+<ParamField path="id" type="string" required>
+  The UUID of the delivery settings to update
+</ParamField>
+
+## Request body
+
+<ParamField body="client_id" type="string" required>
+  Client identifier
+</ParamField>
+
+<ParamField body="legacy_id" type="integer" required>
+  Legacy client identifier
+</ParamField>
+
+<ParamField body="event_name" type="string" required>
+  Event name
+</ParamField>
+
+<ParamField body="queue_name" type="string" required>
+  Updated queue name
+</ParamField>
+
+<ParamField body="queue_exchange" type="string" required>
+  Updated queue exchange
+</ParamField>
+
+<ParamField body="queue_key" type="string" required>
+  Updated routing key
+</ParamField>
+
+<ParamField body="app_name" type="string" required>
+  Application name
+</ParamField>
+
+## Request example
+
+```bash
+curl -X PUT /delivery-settings/f1a2b3c4-d5e6-7890-abcd-ef1234567890 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "client_id": "abc123",
+    "legacy_id": 12345,
+    "event_name": "payment.created",
+    "queue_name": "payment-notifications-v2",
+    "queue_exchange": "events-exchange",
+    "queue_key": "payment.created.abc123",
+    "app_name": "payment-service"
+  }'
+```
+
+## Response
+
+### Success response (200)
+
+```json
+{
+  "message": "delivery settings has been updated."
+}
+```
+
+### Error response (404)
+
+```json
+{
+  "error": "not found"
+}
+```

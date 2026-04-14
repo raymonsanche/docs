@@ -1,0 +1,43 @@
+---
+title: "Delete ruleset"
+api: "DELETE /rulesets/{id}"
+description: "Delete a ruleset configuration"
+---
+
+Delete a ruleset configuration by its unique identifier. Incoming events from the associated source will no longer be routed using this ruleset.
+
+## Endpoint
+
+```
+DELETE /rulesets/{id}
+```
+
+## Path parameters
+
+<ParamField path="id" type="string" required>
+  The UUID of the ruleset to delete
+</ParamField>
+
+## Request example
+
+```bash
+curl -X DELETE /rulesets/c3d4e5f6-a7b8-9012-cdef-123456789012
+```
+
+## Response
+
+### Success response (204)
+
+No content is returned on successful deletion.
+
+### Error response (404)
+
+```json
+{
+  "error": "not found"
+}
+```
+
+<Warning>
+Deleting a ruleset stops routing events from the associated source and event type immediately.
+</Warning>

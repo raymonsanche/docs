@@ -1,0 +1,52 @@
+---
+title: "Get delivery settings"
+api: "GET /delivery-settings/{id}"
+description: "Retrieve a single delivery settings configuration"
+---
+
+Retrieve a single delivery settings configuration by its unique identifier.
+
+## Endpoint
+
+```
+GET /delivery-settings/{id}
+```
+
+## Path parameters
+
+<ParamField path="id" type="string" required>
+  The UUID of the delivery settings to retrieve
+</ParamField>
+
+## Request example
+
+```bash
+curl "/delivery-settings/f1a2b3c4-d5e6-7890-abcd-ef1234567890"
+```
+
+## Response
+
+### Success response (200)
+
+```json
+{
+  "id": "f1a2b3c4-d5e6-7890-abcd-ef1234567890",
+  "client_id": "abc123",
+  "legacy_id": 12345,
+  "event_name": "payment.created",
+  "queue_name": "payment-notifications",
+  "queue_exchange": "events-exchange",
+  "queue_key": "payment.created.abc123",
+  "app_name": "payment-service",
+  "created_at": "2026-01-15T10:30:00Z",
+  "updated_at": "2026-01-15T10:30:00Z"
+}
+```
+
+### Error response (404)
+
+```json
+{
+  "error": "not found"
+}
+```

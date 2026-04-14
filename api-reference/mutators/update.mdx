@@ -1,0 +1,79 @@
+---
+title: "Update mutator"
+api: "PUT /mutators/{id}"
+description: "Update an existing mutator"
+---
+
+Update an existing mutator configuration. You can change the parameters and ordering, but not the event name.
+
+## Endpoint
+
+```
+PUT /mutators/{id}
+```
+
+## Path parameters
+
+<ParamField path="id" type="string" required>
+  The UUID of the mutator to update
+</ParamField>
+
+## Request body
+
+<ParamField body="event_name" type="string" required>
+  Event name (cannot be changed from the original value)
+</ParamField>
+
+<ParamField body="mutator_type" type="string" required>
+  Mutator type
+</ParamField>
+
+<ParamField body="parameters" type="object" required>
+  Updated transformation configuration
+</ParamField>
+
+<ParamField body="ordering_key" type="integer" required>
+  Updated execution priority
+</ParamField>
+
+## Request example
+
+```bash
+curl -X PUT /mutators/b2c3d4e5-f6a7-8901-bcde-f12345678901 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "event_name": "payment.created",
+    "mutator_type": "msk",
+    "parameters": {
+      "template": {
+        "card_number": "$.payload.card_number",
+        "cvv": "$.payload.cvv"
+      },
+      "fill_missing_keys": "deep"
+    },
+    "ordering_key": 10
+  }'
+```
+
+## Response
+
+### Success response (200)
+
+```json
+{
+  "message": "Mutator has been updated."
+}
+```
+
+### Error response (404)
+
+```json
+{
+  "error": "not found"
+}
+```
+
+## Rules
+
+- The `event_name` cannot be changed after creation
+- The `parameters` object is re-validated on update

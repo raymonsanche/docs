@@ -1,0 +1,80 @@
+---
+title: "Update event"
+api: "PUT /events/{id}"
+description: "Update an existing event definition"
+---
+
+Update an existing event definition. You can change the event name and unique field configuration.
+
+## Endpoint
+
+```
+PUT /events/{id}
+```
+
+## Path parameters
+
+<ParamField path="id" type="string" required>
+  The UUID of the event to update
+</ParamField>
+
+## Request body
+
+<ParamField body="name" type="string" required>
+  Updated event name (must remain unique)
+</ParamField>
+
+<ParamField body="unique_fields" type="array">
+  Updated array of unique field definitions
+</ParamField>
+
+## Request example
+
+```bash
+curl -X PUT /events/a1b2c3d4-e5f6-7890-abcd-ef1234567890 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "payment.created",
+    "unique_fields": [
+      {
+        "field_path": "$.payload.transaction_id"
+      },
+      {
+        "field_path": "$.payload.idempotency_key"
+      }
+    ]
+  }'
+```
+
+## Response
+
+### Success response (200)
+
+```json
+{
+  "message": "event has been updated."
+}
+```
+
+### Error response (404)
+
+```json
+{
+  "error": "not found"
+}
+```
+
+### Error response (409)
+
+If the new name conflicts with an existing event:
+
+```json
+{
+  "error": "conflict"
+}
+```
+
+## Rules
+
+- The event name must remain unique
+- Each `field_path` must be a valid JSONPath expression

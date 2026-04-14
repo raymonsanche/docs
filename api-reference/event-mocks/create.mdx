@@ -1,0 +1,73 @@
+---
+title: "Create event mock"
+api: "POST /event-mocks"
+description: "Create a new event mock definition"
+---
+
+Create a new event mock with a sample payload. Use event mocks to test notification delivery to your webhooks without generating real events.
+
+## Endpoint
+
+```
+POST /event-mocks
+```
+
+## Request body
+
+<ParamField body="event_name" type="string" required>
+  Name of the event to create a mock for. Must reference an existing event and must be unique across event mocks.
+</ParamField>
+
+<ParamField body="payload" type="object" required>
+  Sample event payload. Must be a non-empty JSON object.
+</ParamField>
+
+## Request example
+
+```bash
+curl -X POST /event-mocks \
+  -H "Content-Type: application/json" \
+  -d '{
+    "event_name": "payment.created",
+    "payload": {
+      "transaction_id": "txn_123456",
+      "amount": 1500,
+      "currency": "BRL",
+      "status": "completed"
+    }
+  }'
+```
+
+## Response
+
+### Success response (201)
+
+```json
+{
+  "id": "a7b8c9d0-e1f2-3456-7890-abcdef123456",
+  "event_name": "payment.created",
+  "payload": {
+    "transaction_id": "txn_123456",
+    "amount": 1500,
+    "currency": "BRL",
+    "status": "completed"
+  },
+  "created_at": "2026-01-15T10:30:00Z",
+  "updated_at": "2026-01-15T10:30:00Z"
+}
+```
+
+## Rules
+
+- The `event_name` must reference an existing event
+- Each event can only have one mock definition
+- The `payload` must be a non-empty JSON object (not `{}`)
+
+## Use cases
+
+- Define a realistic test payload for webhook integration testing
+- Set up mock data for development and staging environments
+
+<Tip>
+After creating an event mock, use the trigger endpoint to send the mock payload to your webhooks for testing.
+</Tip>

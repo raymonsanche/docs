@@ -1,0 +1,62 @@
+---
+title: "Update Kafka topic"
+api: "PUT /kafka-topics/{id}"
+description: "Update a Kafka topic configuration"
+---
+
+Update an existing Kafka topic configuration.
+
+## Endpoint
+
+```
+PUT /kafka-topics/{id}
+```
+
+## Path parameters
+
+<ParamField path="id" type="string" required>
+  The UUID of the Kafka topic to update
+</ParamField>
+
+## Request body
+
+<ParamField body="topic_name" type="string" required>
+  Updated Kafka topic name (must remain unique)
+</ParamField>
+
+<ParamField body="app_name" type="string" required>
+  Updated application name
+</ParamField>
+
+## Request example
+
+```bash
+curl -X PUT /kafka-topics/e5f6a7b8-c9d0-1234-5678-90abcdef1234 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "topic_name": "payment-events-v2",
+    "app_name": "payment-service"
+  }'
+```
+
+## Response
+
+### Success response (200)
+
+```json
+{
+  "message": "kafka topic has been updated."
+}
+```
+
+### Error response (404)
+
+```json
+{
+  "error": "not found"
+}
+```
+
+## Rules
+
+- The `topic_name` must remain unique across all Kafka topic configurations
