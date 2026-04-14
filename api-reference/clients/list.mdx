@@ -12,14 +12,40 @@ Retrieve all clients from the system.
 GET /clients
 ```
 
-## Parameters
+## Query parameters
 
-This endpoint does not accept any parameters.
+Use query parameters to filter results. If no parameters are provided, all clients are returned.
 
-## Request example
+<ParamField query="id" type="string">
+  Filter by client UUID
+</ParamField>
+
+<ParamField query="client_id" type="string">
+  Filter by external client identifier
+</ParamField>
+
+<ParamField query="legacy_id" type="integer">
+  Filter by legacy numeric client identifier
+</ParamField>
+
+## Request examples
+
+List all clients:
 
 ```bash
 curl http://localhost:8000/clients
+```
+
+Filter by external client identifier:
+
+```bash
+curl "http://localhost:8000/clients?client_id=acme-123"
+```
+
+Filter by legacy ID:
+
+```bash
+curl "http://localhost:8000/clients?legacy_id=12345"
 ```
 
 ## Response
