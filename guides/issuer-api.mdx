@@ -1,0 +1,156 @@
+---
+title: "Issuer API"
+description: "Self-service API for issuers to manage webhooks, browse events, and reprocess rejected deliveries"
+---
+
+The issuer API gives issuers (clients) direct access to manage their own notification configuration. All endpoints are scoped to the authenticated issuer — you can only view and modify your own resources.
+
+## How it differs from the admin API
+
+The admin API operates across all clients and requires no authentication. The issuer API is authenticated and automatically scoped to your data:
+
+| Feature | Admin API | Issuer API |
+| --- | --- | --- |
+| Authentication | None | Required |
+| Scope | All clients | Your data only |
+| Client ID | Specified in request | Inferred from token |
+| Test notifications | Not available | Available |
+
+You don't need to pass a `legacy_id` or `client_id` in issuer API requests — the API infers your identity from the authentication token.
+
+## Authentication
+
+Include your authentication token in the request headers:
+
+```bash
+curl -H "Authorization: Bearer <your-token>" \
+  /external/events
+```
+
+All issuer API endpoints require a valid token. Requests without authentication return an error.
+
+## What you can do
+
+### Browse events
+
+List available event types and view their details:
+
+```bash
+# List all events
+curl -H "Authorization: Bearer <your-token>" \
+  /external/events
+
+# Get a specific event
+curl -H "Authorization: Bearer <your-token>" \
+  /external/events/{id}
+```
+
+### Manage webhooks
+
+Create, update, and delete webhook subscriptions for your account:
+
+```bash
+# Create a webhook
+curl -X POST /external/webhooks/ \
+  -H "Authorization: Bearer <your-token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "url": "https://your-app.com/webhook",
+    "event_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+  }'
+
+# List your webhooks
+curl -H "Authorization: Bearer <your-token>" \
+  /external/webhooks/
+```
+
+See the full webhook API reference: [list](/api-reference/issuer/webhooks/list), [create](/api-reference/issuer/webhooks/create), [get](/api-reference/issuer/webhooks/get), [update](/api-reference/issuer/webhooks/update), [delete](/api-reference/issuer/webhooks/delete).
+
+### Test notifications
+
+Verify your webhook configuration by sending test notifications:
+
+```bash
+# Send a test notification
+curl -X POST /external/trigger \
+  -H "Authorization: Bearer <your-token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "webhook_id": "d4e5f6a7-b8c9-0123-4567-890abcdef012"
+  }'
+
+# Send a mock event notification
+curl -X POST /external/trigger/mock \
+  -H "Authorization: Bearer <your-token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "webhook_id": "d4e5f6a7-b8c9-0123-4567-890abcdef012",
+    "event_mock_id": "f1e2d3c4-b5a6-7890-1234-567890abcdef"
+  }'
+```
+
+### Manage encryption keys
+
+Configure AES keys for secure payload delivery and retrieve the public key for signature verification:
+
+```bash
+# Save an AES key
+curl -X POST /external/cryptography \
+  -H "Authorization: Bearer <your-token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "aes_key": "your-base64-encoded-aes-key"
+  }'
+
+# Get the public key
+curl -H "Authorization: Bearer <your-token>" \
+  /external/public-key
+```
+
+### Reprocess rejected events
+
+Review and retry failed deliveries without contacting support:
+
+```bash
+# List rejected events
+curl -H "Authorization: Bearer <your-token>" \
+  /external/rejected-events
+
+# Reprocess by time interval
+curl -X POST /external/reprocess/by-interval \
+  -H "Authorization: Bearer <your-token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "event_name_list": ["payment.created"],
+    "start_date": "2026-01-15T00:00:00Z",
+    "end_date": "2026-01-16T00:00:00Z"
+  }'
+
+# Reprocess by notification status
+curl -X POST /external/reprocess/by-notification-status \
+  -H "Authorization: Bearer <your-token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "webhook_id": "d4e5f6a7-b8c9-0123-4567-890abcdef012",
+    "status": "rejected"
+  }'
+```
+
+For more detail on reprocessing strategies, see the [event reprocessing guide](/guides/reprocessing).
+
+## Typical workflow
+
+<Steps>
+  <Step title="Browse available events">
+    List events to find the types you want to subscribe to.
+  </Step>
+  <Step title="Create webhooks">
+    Register webhook endpoints for the events you need.
+  </Step>
+  <Step title="Test your integration">
+    Send test notifications to verify your webhooks receive data correctly.
+  </Step>
+  <Step title="Monitor and reprocess">
+    Periodically check for rejected events and reprocess any failures.
+  </Step>
+</Steps>
