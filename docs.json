@@ -39,6 +39,7 @@
             "group": "Guides",
             "pages": [
               "guides/basic-usage",
+              "guides/notification-pipeline",
               "guides/feature-flags",
               "guides/error-handling",
               "guides/examples"
