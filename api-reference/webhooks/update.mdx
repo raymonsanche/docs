@@ -56,8 +56,8 @@ PUT /webhooks/{id}
       Filter comparison type (for example, `equals`)
     </ParamField>
 
-    <ParamField body="filter.value" type="string" required>
-      Value to match. Must be a single value, not a list.
+    <ParamField body="filter.value" type="string | number | boolean" required>
+      Value to match. Must be a single value, not a list. The type must match the corresponding field type in the event's mutator template.
     </ParamField>
   </Expandable>
 </ParamField>

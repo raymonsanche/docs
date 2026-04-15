@@ -50,8 +50,8 @@ POST /webhooks
       Filter comparison type (for example, `equals`)
     </ParamField>
 
-    <ParamField body="filter.value" type="string" required>
-      Value to match. Must be a single value, not a list.
+    <ParamField body="filter.value" type="string | number | boolean" required>
+      Value to match. Must be a single value, not a list. The type must match the corresponding field type in the event's mutator template.
     </ParamField>
   </Expandable>
 </ParamField>
@@ -109,6 +109,8 @@ curl -X POST /webhooks \
 - The `event_name` must reference an existing event
 - Either `client_id` or `legacy_id` must reference an existing client
 - Filter `field` values are lowercased and must be valid JSONPath expressions
+- Filter `field` must reference a field that exists in the event's [mutator](/api-reference/mutators/create) template, unless the field is `$.event_type`
+- Filter `value` type must match the mutator template field type (string, number, or boolean)
 - Header values are masked in responses for security
 
 ## Use cases
