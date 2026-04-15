@@ -39,6 +39,7 @@
             "group": "Guides",
             "pages": [
               "guides/basic-usage",
+              "guides/feature-flags",
               "guides/error-handling",
               "guides/examples"
             ]
