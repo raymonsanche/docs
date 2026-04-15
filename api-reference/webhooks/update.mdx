@@ -46,6 +46,20 @@ PUT /webhooks/{id}
 
 <ParamField body="filter" type="object">
   Updated filter configuration (set to `null` to remove the filter)
+
+  <Expandable title="Filter properties">
+    <ParamField body="filter.field" type="string" required>
+      JSONPath expression for the field to filter on (for example, `$.payload.status`)
+    </ParamField>
+
+    <ParamField body="filter.type" type="string" required>
+      Filter comparison type (for example, `equals`)
+    </ParamField>
+
+    <ParamField body="filter.value" type="string" required>
+      Value to match. Must be a single value, not a list.
+    </ParamField>
+  </Expandable>
 </ParamField>
 
 ## Request example
@@ -61,7 +75,12 @@ curl -X PUT /webhooks/d4e5f6a7-b8c9-0123-4567-890abcdef012 \
     "headers": {
       "Authorization": "Bearer new-token"
     },
-    "auth_type": "bearer"
+    "auth_type": "bearer",
+    "filter": {
+      "field": "$.payload.status",
+      "type": "equals",
+      "value": "completed"
+    }
   }'
 ```
 

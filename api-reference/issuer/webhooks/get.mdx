@@ -56,7 +56,21 @@ curl /external/webhooks/d4e5f6a7-b8c9-0123-4567-890abcdef012 \
 </ResponseField>
 
 <ResponseField name="filter" type="object">
-  Optional event filter configuration
+  Optional event filter configuration (or `null` if no filter)
+
+  <Expandable title="Filter object">
+    <ResponseField name="field" type="string">
+      JSONPath expression identifying the field to filter on (for example, `$.payload.status`)
+    </ResponseField>
+
+    <ResponseField name="type" type="string">
+      Filter comparison type (for example, `equals`)
+    </ResponseField>
+
+    <ResponseField name="value" type="string">
+      Value to match against
+    </ResponseField>
+  </Expandable>
 </ResponseField>
 
 <ResponseField name="created_at" type="string">

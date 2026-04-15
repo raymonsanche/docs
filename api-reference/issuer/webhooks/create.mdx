@@ -60,7 +60,12 @@ curl -X POST /external/webhooks \
     "headers": {
       "X-Custom-Header": "my-value"
     },
-    "auth_type": "bearer"
+    "auth_type": "bearer",
+    "filter": {
+      "field": "$.payload.status",
+      "type": "equals",
+      "value": "approved"
+    }
   }'
 ```
 
@@ -77,7 +82,11 @@ curl -X POST /external/webhooks \
     "X-Custom-Header": "my-value"
   },
   "auth_type": "bearer",
-  "filter": null,
+  "filter": {
+    "field": "$.payload.status",
+    "type": "equals",
+    "value": "approved"
+  },
   "created_at": "2026-01-15T10:30:00Z",
   "updated_at": "2026-01-15T10:30:00Z"
 }
