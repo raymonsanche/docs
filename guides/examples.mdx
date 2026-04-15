@@ -437,7 +437,49 @@ Response:
 ]
 ```
 
-### Step 3: Update a filter
+### Step 3: Filter by numeric or boolean values
+
+Filter values are not limited to strings. You can match numbers or booleans when the corresponding mutator template field uses that type.
+
+Filter by a numeric amount:
+
+```bash
+curl -X POST http://localhost:8000/webhooks \
+  -H "Content-Type: application/json" \
+  -d '{
+    "client_id": "abc-corp-001",
+    "event_name": "payment.created",
+    "url": "https://example.com/exact-amount",
+    "filter": {
+      "field": "$.payload.amount",
+      "type": "equals",
+      "value": 1000
+    }
+  }'
+```
+
+Filter by a boolean flag:
+
+```bash
+curl -X POST http://localhost:8000/webhooks \
+  -H "Content-Type: application/json" \
+  -d '{
+    "client_id": "abc-corp-001",
+    "event_name": "payment.created",
+    "url": "https://example.com/recurring-only",
+    "filter": {
+      "field": "$.payload.is_recurring",
+      "type": "equals",
+      "value": true
+    }
+  }'
+```
+
+<Note>
+The filter value type must match the field type defined in the event's [mutator](/api-reference/mutators/create) template. For example, if the mutator defines `amount` as a number, pass a number — not a string like `"1000"`.
+</Note>
+
+### Step 4: Update a filter
 
 To change a filter, update the webhook with a new `filter` object. The existing filter is replaced:
 
