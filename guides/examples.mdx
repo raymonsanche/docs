@@ -252,6 +252,104 @@ async function deleteProduct(productId) {
 })();
 ```
 
+## Feature flags workflow
+
+This example shows how to enable per-client feature flags and use the reprocessing capabilities they unlock.
+
+### Step 1: Create feature flags for a client
+
+Enable event reprocessing by status for a client identified by `legacy_id`:
+
+```bash
+curl -X POST http://localhost:8000/client-feature-flags \
+  -H "Content-Type: application/json" \
+  -d '{
+    "legacy_id": 5001,
+    "reprocess_by_status_enabled": true,
+    "payload_signature_enabled": false
+  }'
+```
+
+Response:
+
+```json
+{
+  "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "client": "c9d8e7f6-5432-1098-abcd-fedcba987654",
+  "reprocess_by_status_enabled": true,
+  "payload_signature_enabled": false
+}
+```
+
+### Step 2: Check current feature flags
+
+```bash
+curl "http://localhost:8000/client-feature-flags?legacy_id=5001"
+```
+
+### Step 3: List rejected events for the client
+
+```bash
+curl "http://localhost:8000/reprocess/rejected-events?legacy_id=5001"
+```
+
+Response:
+
+```json
+[
+  {
+    "event_name": "payment.created",
+    "notifications": [
+      {
+        "webhook_id": "d4e5f6a7-b8c9-0123-4567-890abcdef012",
+        "url": "https://example.com/webhook",
+        "status": "rejected",
+        "count": 15
+      }
+    ]
+  }
+]
+```
+
+### Step 4: Reprocess rejected events by status
+
+```bash
+curl -X POST http://localhost:8000/reprocess/by-notification-status \
+  -H "Content-Type: application/json" \
+  -d '{
+    "legacy_id": 5001,
+    "webhook_id": "d4e5f6a7-b8c9-0123-4567-890abcdef012",
+    "status": "rejected"
+  }'
+```
+
+### Step 5: Redirect rejected events to a new webhook
+
+If the original webhook is no longer valid, redirect events to a different one:
+
+```bash
+curl -X POST http://localhost:8000/reprocess/by-notification-status/redirect \
+  -H "Content-Type: application/json" \
+  -d '{
+    "legacy_id": 5001,
+    "webhook_id_old": "d4e5f6a7-b8c9-0123-4567-890abcdef012",
+    "webhook_id_new": "f1e2d3c4-b5a6-7890-1234-567890abcdef",
+    "status": "rejected"
+  }'
+```
+
+## Partial client updates
+
+Use `PATCH` to update specific client fields without replacing the full record:
+
+```bash
+curl -X PATCH http://localhost:8000/clients/c9d8e7f6-5432-1098-abcd-fedcba987654 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "ABC Corporation (Renamed)"
+  }'
+```
+
 <Tip>
-These examples can be adapted for any of the five resources: clients, products, categories, services, and accounts.
+These examples can be adapted for any resource. See the [API reference overview](/api-reference/overview) for a full list of available endpoints.
 </Tip>
