@@ -5,14 +5,15 @@ description: "Welcome to the Simple API documentation"
 
 ## Overview
 
-Simple API is a lightweight RESTful API for managing clients, products, categories, services, and accounts. It provides standard CRUD operations over HTTP with JSON request and response bodies.
+Simple API is a RESTful API for managing event-driven notification delivery. You can register clients, configure webhooks, define events, and control how notifications are routed and delivered. The API also includes general-purpose resources for products, categories, services, and accounts.
 
 ## Key features
 
-- **Simple REST endpoints** - Standard HTTP methods for all operations
-- **JSON-based** - All request and response bodies use JSON format
-- **In-memory storage** - Fast, immediate operations with data that persists during server runtime
-- **No dependencies** - Built with Python's standard library for lightweight deployment
+- **Notification pipeline** - Configure events, webhooks, delivery settings, mutators, and rulesets to build a flexible notification workflow
+- **Client feature flags** - Toggle per-client capabilities like payload signing and event reprocessing
+- **Event reprocessing** - List and retry rejected notifications by status, time interval, or trace ID
+- **Issuer API** - Self-service endpoints for issuers to manage webhooks, test notifications, and reprocess events
+- **Standard REST** - JSON request and response bodies with conventional HTTP methods
 
 ## Get started
 
@@ -33,14 +34,30 @@ Simple API is a lightweight RESTful API for managing clients, products, categori
 
 ## Resources
 
-The API manages five resource types, each with full CRUD support:
+### Notification pipeline
 
-- **Clients** - Manage customer information
-- **Products** - Create and manage product inventory
-- **Categories** - Organize products by category
-- **Services** - Define and track services offered
-- **Accounts** - Manage user and business accounts
+- **[Clients](/api-reference/clients/list)** - Client registrations for webhook event delivery
+- **[Client feature flags](/api-reference/client-feature-flags/create)** - Per-client feature toggles for payload signing and event reprocessing
+- **[Events](/api-reference/events/list)** - Event type definitions
+- **[Webhooks](/api-reference/webhooks/list)** - HTTP endpoints that receive event notifications
+- **[Delivery settings](/api-reference/delivery-settings/list)** - Event-to-queue routing configuration
+- **[Mutators](/api-reference/mutators/list)** - Payload transformations applied before delivery
+- **[Rulesets](/api-reference/rulesets/list)** - Routing rules for classifying incoming events
+- **[Kafka topics](/api-reference/kafka-topics/list)** - Kafka topic configurations
+- **[Event mocks](/api-reference/event-mocks/list)** - Sample payloads for testing delivery
+
+### Reprocessing and issuer access
+
+- **[Reprocess](/api-reference/reprocess/list-rejected-events)** - List and retry rejected notification events
+- **[Issuer API](/api-reference/issuer/overview)** - Self-service endpoints for issuers to manage their own webhooks and reprocess events
+
+### General-purpose
+
+- **[Products](/api-reference/products/list)** - Product inventory
+- **[Categories](/api-reference/categories/list)** - Product categories
+- **[Services](/api-reference/services/list)** - Service offerings
+- **[Accounts](/api-reference/accounts/list)** - User and business accounts
 
 <Tip>
-New to REST APIs? Check out the [basic usage guide](/guides/basic-usage) to learn the fundamentals.
+New to the API? Start with the [basic usage guide](/guides/basic-usage) to learn REST fundamentals, then read the [feature flags guide](/guides/feature-flags) to understand per-client configuration.
 </Tip>

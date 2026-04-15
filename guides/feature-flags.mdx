@@ -1,0 +1,201 @@
+---
+title: "Feature flags"
+description: "Control per-client capabilities like payload signing and event reprocessing"
+---
+
+Feature flags let you toggle specific capabilities for individual clients. You can enable or disable features without changing the client's core configuration, giving you fine-grained control over which clients have access to advanced functionality.
+
+## Available flags
+
+Each client can have a feature flag configuration with two toggles:
+
+| Flag | Description |
+| --- | --- |
+| `reprocess_by_status_enabled` | Allows reprocessing rejected notification events by their delivery status |
+| `payload_signature_enabled` | Enables cryptographic signature verification on webhook payloads |
+
+Both flags default to disabled when no feature flag configuration exists for a client.
+
+## When to use feature flags
+
+**Enable `reprocess_by_status_enabled`** when a client needs to:
+- Retry rejected webhook deliveries filtered by status
+- Recover from temporary endpoint outages without reprocessing all events
+- Redirect rejected events to a different webhook
+
+**Enable `payload_signature_enabled`** when a client needs to:
+- Verify that webhook payloads haven't been tampered with in transit
+- Meet security requirements for payload integrity
+
+## How feature flags work
+
+Feature flags are a separate resource linked to a client by their `legacy_id`. The lifecycle is:
+
+<Steps>
+  <Step title="Create the client">
+    Register a client using the [create client](/api-reference/clients/create) endpoint. At this point, no feature flags exist and all advanced features are disabled.
+  </Step>
+  <Step title="Create feature flags">
+    Call `POST /client-feature-flags` with the client's `legacy_id` and the flags you want to enable:
+
+    ```bash
+    curl -X POST http://localhost:8000/client-feature-flags \
+      -H "Content-Type: application/json" \
+      -d '{
+        "legacy_id": 5001,
+        "reprocess_by_status_enabled": true,
+        "payload_signature_enabled": false
+      }'
+    ```
+
+    The response includes the feature flag record ID and the internal client reference:
+
+    ```json
+    {
+      "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+      "client": "c9d8e7f6-5432-1098-abcd-fedcba987654",
+      "reprocess_by_status_enabled": true,
+      "payload_signature_enabled": false
+    }
+    ```
+  </Step>
+  <Step title="Use the unlocked capabilities">
+    Once `reprocess_by_status_enabled` is `true`, you can use the reprocess endpoints to list and retry rejected events for that client. See [reprocessing rejected events](#reprocessing-rejected-events) below.
+  </Step>
+</Steps>
+
+## Managing feature flags
+
+### Check current flags
+
+Retrieve a client's feature flag configuration by `legacy_id` or `client_id`:
+
+```bash
+curl "http://localhost:8000/client-feature-flags?legacy_id=5001"
+```
+
+### Update flags
+
+Toggle individual flags without affecting the others. Use the feature flag record's UUID:
+
+```bash
+curl -X PUT http://localhost:8000/client-feature-flags/a1b2c3d4-e5f6-7890-abcd-ef1234567890 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "payload_signature_enabled": true
+  }'
+```
+
+Only the fields you include are updated. Omitted fields remain unchanged.
+
+### Remove flags
+
+Delete a feature flag configuration to reset the client to default behavior:
+
+```bash
+curl -X DELETE http://localhost:8000/client-feature-flags/a1b2c3d4-e5f6-7890-abcd-ef1234567890
+```
+
+<Warning>
+Deleting a feature flag configuration disables all feature toggles for the client immediately. The client reverts to default behavior.
+</Warning>
+
+## Feature flags in client responses
+
+When you list or retrieve clients, the response includes a `feature_flags` object showing the current state:
+
+```json
+{
+  "id": "c9d8e7f6-5432-1098-abcd-fedcba987654",
+  "name": "Acme Corp",
+  "client_id": "acme-123",
+  "legacy_id": 5001,
+  "has_aes_key": false,
+  "secret_name": null,
+  "feature_flags": {
+    "payload_signature_enabled": false,
+    "reprocess_by_status_enabled": true
+  },
+  "created_at": "2026-01-15T10:30:00Z",
+  "updated_at": "2026-01-15T10:30:00Z"
+}
+```
+
+If no feature flags have been configured for a client, both values are `false`.
+
+## Reprocessing rejected events
+
+When `reprocess_by_status_enabled` is active for a client, you can use the reprocess endpoints to recover from delivery failures.
+
+### List rejected events
+
+See which events failed and how many notifications were rejected per webhook:
+
+```bash
+curl "http://localhost:8000/reprocess/rejected-events?legacy_id=5001"
+```
+
+The response groups results by event name:
+
+```json
+[
+  {
+    "event_name": "payment.created",
+    "notifications": [
+      {
+        "webhook_id": "d4e5f6a7-b8c9-0123-4567-890abcdef012",
+        "url": "https://example.com/webhook",
+        "status": "rejected",
+        "count": 15
+      }
+    ]
+  }
+]
+```
+
+### Retry by status
+
+Reprocess all rejected events for a specific webhook:
+
+```bash
+curl -X POST http://localhost:8000/reprocess/by-notification-status \
+  -H "Content-Type: application/json" \
+  -d '{
+    "legacy_id": 5001,
+    "webhook_id": "d4e5f6a7-b8c9-0123-4567-890abcdef012",
+    "status": "rejected"
+  }'
+```
+
+### Redirect to a new webhook
+
+If the original webhook is no longer valid, redirect rejected events to a different endpoint:
+
+```bash
+curl -X POST http://localhost:8000/reprocess/by-notification-status/redirect \
+  -H "Content-Type: application/json" \
+  -d '{
+    "legacy_id": 5001,
+    "webhook_id_old": "d4e5f6a7-b8c9-0123-4567-890abcdef012",
+    "webhook_id_new": "f1e2d3c4-b5a6-7890-1234-567890abcdef",
+    "status": "rejected"
+  }'
+```
+
+<Note>
+Reprocessing is asynchronous. Events are queued and delivered in the background. Use the [list rejected events](/api-reference/reprocess/list-rejected-events) endpoint to monitor progress.
+</Note>
+
+## Issuer access
+
+Issuers can list and reprocess their own rejected events through the [Issuer API](/api-reference/issuer/overview) without specifying a `legacy_id` — it is inferred from the authentication token. The issuer reprocess endpoint is rate-limited to one request per hour.
+
+## Related endpoints
+
+- [Create client feature flag](/api-reference/client-feature-flags/create)
+- [Get client feature flags](/api-reference/client-feature-flags/get)
+- [Update client feature flags](/api-reference/client-feature-flags/update)
+- [Delete client feature flags](/api-reference/client-feature-flags/delete)
+- [List rejected events](/api-reference/reprocess/list-rejected-events)
+- [Reprocess by notification status](/api-reference/reprocess/by-notification-status)
+- [Reprocess and redirect](/api-reference/reprocess/by-notification-status-redirect)
