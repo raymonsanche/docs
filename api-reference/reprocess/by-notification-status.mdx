@@ -68,6 +68,10 @@ If required fields are missing or invalid:
 }
 ```
 
+## Prerequisites
+
+The client must have the `reprocess_by_status_enabled` [feature flag](/api-reference/client-feature-flags/get) enabled before you can use this endpoint. If the flag is not set, enable it through the [feature flags API](/api-reference/client-feature-flags/update).
+
 ## Rules
 
 - All three fields (`legacy_id`, `webhook_id`, `status`) are required

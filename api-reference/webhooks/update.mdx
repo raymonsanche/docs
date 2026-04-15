@@ -45,10 +45,26 @@ PUT /webhooks/{id}
 </ParamField>
 
 <ParamField body="filter" type="object">
-  Updated filter configuration (set to `null` to remove the filter)
+  Updated filter configuration (set to `null` to remove the filter).
+
+  <Expandable title="Filter properties">
+    <ParamField body="filter.field" type="string" required>
+      JSONPath expression for the field to filter on (for example, `$.payload.status`)
+    </ParamField>
+
+    <ParamField body="filter.type" type="string" required>
+      Filter comparison type (for example, `equals`)
+    </ParamField>
+
+    <ParamField body="filter.value" type="string" required>
+      Value to match. Must be a single value, not a list.
+    </ParamField>
+  </Expandable>
 </ParamField>
 
 ## Request example
+
+Update a webhook URL and add a filter:
 
 ```bash
 curl -X PUT /webhooks/d4e5f6a7-b8c9-0123-4567-890abcdef012 \
@@ -61,7 +77,30 @@ curl -X PUT /webhooks/d4e5f6a7-b8c9-0123-4567-890abcdef012 \
     "headers": {
       "Authorization": "Bearer new-token"
     },
-    "auth_type": "bearer"
+    "auth_type": "bearer",
+    "filter": {
+      "field": "$.payload.status",
+      "type": "equals",
+      "value": "approved"
+    }
+  }'
+```
+
+Remove an existing filter by setting it to `null`:
+
+```bash
+curl -X PUT /webhooks/d4e5f6a7-b8c9-0123-4567-890abcdef012 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "url": "https://example.com/webhook-v2",
+    "event_name": "payment.created",
+    "client_id": "abc123",
+    "legacy_id": 12345,
+    "headers": {
+      "Authorization": "Bearer new-token"
+    },
+    "auth_type": "bearer",
+    "filter": null
   }'
 ```
 
@@ -82,3 +121,16 @@ curl -X PUT /webhooks/d4e5f6a7-b8c9-0123-4567-890abcdef012 \
   "error": "not found"
 }
 ```
+
+## Rules
+
+- The webhook `id` must be a valid UUID
+- The `url` must be a valid URL
+- The `event_name` must reference an existing event
+- Filter `field` values are lowercased and must be valid JSONPath expressions
+- The filter `field` path must reference a field that exists in the event's [mutator](/api-reference/mutators/create) template, except for `$.event_type` which works without a mutator
+- Setting `filter` to `null` removes the existing filter — omitting it leaves the current filter unchanged
+
+<Tip>
+You can update a filter by providing a new `filter` object. The existing filter is fully replaced with the new one. See the [webhook filtering example](/guides/examples#webhook-filtering) for a step-by-step walkthrough.
+</Tip>
