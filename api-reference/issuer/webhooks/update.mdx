@@ -48,8 +48,8 @@ PUT /external/webhooks/{id}
       Filter comparison type
     </ParamField>
 
-    <ParamField body="filter.value" type="string" required>
-      Value to match
+    <ParamField body="filter.value" type="string | number | boolean" required>
+      Value to match. The type must match the corresponding field type in the event's mutator template.
     </ParamField>
   </Expandable>
 </ParamField>

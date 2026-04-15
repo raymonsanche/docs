@@ -41,6 +41,10 @@ If the webhook does not exist or does not belong to your account:
 }
 ```
 
+<Note>
+You must set up an encryption key before deleting a webhook. Use the [save AES key](/api-reference/issuer/save-aes-key) endpoint to configure encryption first.
+</Note>
+
 <Warning>
 Deleting a webhook stops all future notification deliveries to that endpoint. This cannot be undone.
 </Warning>

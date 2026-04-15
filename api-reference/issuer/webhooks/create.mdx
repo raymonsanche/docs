@@ -42,8 +42,8 @@ POST /external/webhooks
       Filter comparison type (for example, `equals`)
     </ParamField>
 
-    <ParamField body="filter.value" type="string" required>
-      Value to match
+    <ParamField body="filter.value" type="string | number | boolean" required>
+      Value to match. The type must match the corresponding field type in the event's mutator template.
     </ParamField>
   </Expandable>
 </ParamField>
@@ -94,9 +94,12 @@ curl -X POST /external/webhooks \
 
 ## Rules
 
+- You must set up an encryption key before creating a webhook. Use the [save AES key](/api-reference/issuer/save-aes-key) endpoint to configure encryption first.
 - The `url` must be a valid URL
 - The `event_name` must reference an existing event
 - You do not need to specify `client_id` or `legacy_id` — these are inferred from your authentication token
+- Filter `field` must reference a field in the event's [mutator](/api-reference/mutators/create) template, unless the field is `$.event_type`
+- Filter `value` type must match the mutator template field type (string, number, or boolean)
 
 <Tip>
 Use the [list events](/api-reference/issuer/list-events) endpoint to see which events are available before creating a webhook.

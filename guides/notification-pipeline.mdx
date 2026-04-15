@@ -117,7 +117,7 @@ curl -X POST http://localhost:8000/webhooks \
 | --- | --- |
 | `field` | JSONPath expression targeting a payload field (for example, `$.payload.status`) |
 | `type` | Comparison type (for example, `equals`) |
-| `value` | The value to match against |
+| `value` | The value to match against. Accepts a string, number, or boolean — the type must match the field type in the event's mutator template. |
 
 The `field` path must reference a field that exists in the event's mutator template. If the field doesn't exist or the path is invalid, the API returns an error. Use `$.event_type` to filter by event type without requiring a mutator.
 

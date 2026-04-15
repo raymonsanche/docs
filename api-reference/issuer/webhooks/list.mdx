@@ -69,8 +69,8 @@ Returns an array of webhook objects scoped to your issuer account.
       Filter comparison type (for example, `equals`)
     </ResponseField>
 
-    <ResponseField name="value" type="string">
-      Value to match against
+    <ResponseField name="value" type="string | number | boolean">
+      Value to match against. The type matches the corresponding mutator template field type.
     </ResponseField>
   </Expandable>
 </ResponseField>
