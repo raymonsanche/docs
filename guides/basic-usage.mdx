@@ -13,7 +13,8 @@ The Simple API follows standard REST conventions:
 | --- | --- | --- |
 | GET | Retrieve data | `GET /clients` |
 | POST | Create new resource | `POST /clients` |
-| PUT | Update existing resource | `PUT /clients/:id` |
+| PUT | Full update of a resource | `PUT /clients/:id` |
+| PATCH | Partial update of a resource | `PATCH /clients/:id` |
 | DELETE | Delete resource | `DELETE /clients/:id` |
 
 ## Request format
@@ -133,13 +134,26 @@ curl -X DELETE http://localhost:8000/products/1
 
 ## Working with multiple resources
 
-The API manages five types of resources. Each follows the same CRUD pattern:
+The API manages several resource types. Core notification pipeline resources follow CRUD patterns:
 
 - `/clients` - Client registrations for webhook event delivery
+- `/client-feature-flags` - Per-client feature toggles (payload signing, event reprocessing)
+- `/events` - Event type definitions
+- `/webhooks` - HTTP endpoints that receive event notifications
+- `/delivery-settings` - Event-to-queue routing configuration
+- `/mutators` - Payload transformations applied before delivery
+- `/rulesets` - Routing rules for classifying incoming events
+- `/kafka-topics` - Kafka topic configurations
+- `/event-mocks` - Sample payloads for testing
+
+General-purpose resources:
+
 - `/products` - Product inventory
 - `/categories` - Product categories
 - `/services` - Service offerings
 - `/accounts` - User and business accounts
+
+The `/reprocess` endpoints let you list and retry rejected notification events. Issuers can access a scoped subset of the API through `/external` endpoints.
 
 <Note>
 Resource IDs are auto-generated. Clients use UUIDs, while other resources use numeric integers starting from 1.
