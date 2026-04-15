@@ -49,9 +49,21 @@ curl -X PUT http://localhost:8000/client-feature-flags/a1b2c3d4-e5f6-7890-abcd-e
 }
 ```
 
-### Error response (404)
+### Error responses
 
-If the feature flag record does not exist:
+**400 — Bad request**
+
+Returned when the `id` is not a valid UUID, or both flags are null:
+
+```json
+{
+  "error": "bad request"
+}
+```
+
+**404 — Feature flags not found**
+
+Returned when the feature flag record does not exist:
 
 ```json
 {
