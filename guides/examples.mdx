@@ -338,6 +338,131 @@ curl -X POST http://localhost:8000/reprocess/by-notification-status/redirect \
   }'
 ```
 
+## Webhook filtering
+
+This example shows how to use webhook filters to route different event subtypes to separate endpoints.
+
+### Step 1: Create webhooks with filters
+
+Create one webhook that receives only approved payments:
+
+```bash
+curl -X POST http://localhost:8000/webhooks \
+  -H "Content-Type: application/json" \
+  -d '{
+    "client_id": "abc-corp-001",
+    "event_name": "payment.created",
+    "url": "https://example.com/approved-payments",
+    "auth_type": "bearer",
+    "headers": {
+      "Authorization": "Bearer token-approved"
+    },
+    "filter": {
+      "field": "$.payload.status",
+      "type": "equals",
+      "value": "approved"
+    }
+  }'
+```
+
+Create another webhook that receives only rejected payments:
+
+```bash
+curl -X POST http://localhost:8000/webhooks \
+  -H "Content-Type: application/json" \
+  -d '{
+    "client_id": "abc-corp-001",
+    "event_name": "payment.created",
+    "url": "https://example.com/rejected-payments",
+    "auth_type": "bearer",
+    "headers": {
+      "Authorization": "Bearer token-rejected"
+    },
+    "filter": {
+      "field": "$.payload.status",
+      "type": "equals",
+      "value": "rejected"
+    }
+  }'
+```
+
+### Step 2: Verify the filter configuration
+
+List webhooks for the client to confirm filters are applied:
+
+```bash
+curl "http://localhost:8000/webhooks?client_id=abc-corp-001"
+```
+
+Response:
+
+```json
+[
+  {
+    "id": "aaa11111-2222-3333-4444-555566667777",
+    "event_name": "payment.created",
+    "url": "https://example.com/approved-payments",
+    "client_id": "abc-corp-001",
+    "legacy_id": 5001,
+    "headers": {
+      "Authorization": "(length: 20)"
+    },
+    "auth_type": "bearer",
+    "filter": {
+      "field": "$.payload.status",
+      "type": "equals",
+      "value": "approved"
+    },
+    "created_at": "2026-01-15T10:30:00Z",
+    "updated_at": "2026-01-15T10:30:00Z"
+  },
+  {
+    "id": "bbb11111-2222-3333-4444-555566667777",
+    "event_name": "payment.created",
+    "url": "https://example.com/rejected-payments",
+    "client_id": "abc-corp-001",
+    "legacy_id": 5001,
+    "headers": {
+      "Authorization": "(length: 20)"
+    },
+    "auth_type": "bearer",
+    "filter": {
+      "field": "$.payload.status",
+      "type": "equals",
+      "value": "rejected"
+    },
+    "created_at": "2026-01-15T10:31:00Z",
+    "updated_at": "2026-01-15T10:31:00Z"
+  }
+]
+```
+
+### Step 3: Update a filter
+
+To change a filter, update the webhook with a new `filter` object. The existing filter is replaced:
+
+```bash
+curl -X PUT http://localhost:8000/webhooks/aaa11111-2222-3333-4444-555566667777 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "event_name": "payment.created",
+    "url": "https://example.com/approved-payments",
+    "auth_type": "bearer",
+    "headers": {
+      "Authorization": "Bearer token-approved"
+    },
+    "filter": {
+      "field": "$.payload.status",
+      "type": "equals",
+      "value": "completed"
+    }
+  }'
+```
+
+<Note>
+Filter field paths must reference fields that exist in the event's [mutator](/api-reference/mutators/create) template. The exception is `$.event_type`, which you can filter on without a mutator.
+</Note>
+
 ## Partial client updates
 
 Use `PATCH` to update specific client fields without replacing the full record:

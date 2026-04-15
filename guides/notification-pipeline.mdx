@@ -90,6 +90,41 @@ curl -X POST http://localhost:8000/webhooks \
 
 The webhook defines where to deliver notifications and how to authenticate. Custom headers are masked in read responses for security.
 
+### Add a webhook filter (optional)
+
+You can narrow which events trigger a webhook by adding a `filter` object. Filters use JSONPath expressions to match a field in the event payload against a specific value. Only events where the field matches are delivered.
+
+```bash
+curl -X POST http://localhost:8000/webhooks \
+  -H "Content-Type: application/json" \
+  -d '{
+    "client_id": "c9d8e7f6-5432-1098-abcd-fedcba987654",
+    "event_name": "payment.created",
+    "url": "https://acme.example.com/high-value",
+    "auth_type": "bearer",
+    "headers": {
+      "Authorization": "Bearer acme-token-456"
+    },
+    "filter": {
+      "field": "$.payload.status",
+      "type": "equals",
+      "value": "approved"
+    }
+  }'
+```
+
+| Filter property | Description |
+| --- | --- |
+| `field` | JSONPath expression targeting a payload field (for example, `$.payload.status`) |
+| `type` | Comparison type (for example, `equals`) |
+| `value` | The value to match against |
+
+The `field` path must reference a field that exists in the event's mutator template. If the field doesn't exist or the path is invalid, the API returns an error. Use `$.event_type` to filter by event type without requiring a mutator.
+
+<Tip>
+Filters reduce noise by ensuring a webhook only fires for events matching specific criteria. Create multiple webhooks with different filters to route event subtypes to separate endpoints.
+</Tip>
+
 ## Step 4: Configure delivery settings
 
 Map the event to a message queue for the client:
