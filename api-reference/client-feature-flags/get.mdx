@@ -4,7 +4,7 @@ api: "GET /client-feature-flags"
 description: "Retrieve feature flag configuration for a client"
 ---
 
-Retrieve the feature flag configuration for a specific client by `client_id` or `legacy_id`.
+Retrieve the feature flag configuration for a specific client by `id`, `client_id`, or `legacy_id`.
 
 ## Endpoint
 
@@ -29,6 +29,12 @@ Use at least one query parameter to identify the client whose feature flags you 
 </ParamField>
 
 ## Request examples
+
+Look up by feature flag record ID:
+
+```bash
+curl "http://localhost:8000/client-feature-flags?id=a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+```
 
 Look up by legacy ID:
 
