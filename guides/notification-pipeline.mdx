@@ -1,0 +1,226 @@
+---
+title: "Notification pipeline"
+description: "Set up end-to-end event-driven notification delivery with webhooks, delivery settings, and reprocessing"
+---
+
+This guide walks you through setting up a complete notification pipeline — from registering a client to delivering events via webhooks and recovering from failures.
+
+## Prerequisites
+
+- A running API server (see [quickstart](/quickstart))
+- curl or any HTTP client
+
+## Pipeline overview
+
+A notification pipeline routes events from your system to client webhook endpoints. The core resources work together:
+
+1. **Client** — the recipient of notifications
+2. **Event** — defines what happened (e.g., `payment.created`)
+3. **Webhook** — the HTTP endpoint that receives the notification
+4. **Delivery settings** — routes events to message queues for a client
+
+Optional resources extend the pipeline:
+
+- **Feature flags** — enable per-client capabilities like reprocessing and payload signing
+- **Mutators** — transform payloads before delivery
+- **Rulesets** — classify and route incoming events from external sources
+- **Kafka topics** — configure Kafka-based event consumption
+
+## Step 1: Register a client
+
+Create a client to represent the notification recipient:
+
+```bash
+curl -X POST http://localhost:8000/clients \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Acme Corp",
+    "client_id": "acme-123",
+    "legacy_id": 5001
+  }'
+```
+
+```json
+{
+  "id": "c9d8e7f6-5432-1098-abcd-fedcba987654",
+  "name": "Acme Corp",
+  "client_id": "acme-123",
+  "legacy_id": 5001,
+  "has_aes_key": false,
+  "secret_name": null,
+  "created_at": "2026-01-15T10:30:00Z",
+  "updated_at": "2026-01-15T10:30:00Z"
+}
+```
+
+Save the `id` and `legacy_id` — you need them when configuring other resources.
+
+## Step 2: Define an event
+
+Register the event type your system will produce:
+
+```bash
+curl -X POST http://localhost:8000/events \
+  -H "Content-Type: application/json" \
+  -d '{
+    "event_name": "payment.created",
+    "unique_fields": ["$.payment_id"]
+  }'
+```
+
+The `unique_fields` array uses JSONPath expressions to identify which payload fields should be used for deduplication. If a second notification arrives with the same `payment_id`, the system recognizes it as a duplicate.
+
+## Step 3: Create a webhook
+
+Subscribe the client to the event by creating a webhook:
+
+```bash
+curl -X POST http://localhost:8000/webhooks \
+  -H "Content-Type: application/json" \
+  -d '{
+    "client_id": "c9d8e7f6-5432-1098-abcd-fedcba987654",
+    "event_id": 1,
+    "url": "https://acme.example.com/notifications",
+    "auth_type": "bearer",
+    "headers": {
+      "Authorization": "Bearer acme-token-123"
+    }
+  }'
+```
+
+The webhook defines where to deliver notifications and how to authenticate. Custom headers are masked in read responses for security.
+
+## Step 4: Configure delivery settings
+
+Map the event to a message queue for the client:
+
+```bash
+curl -X POST http://localhost:8000/delivery-settings \
+  -H "Content-Type: application/json" \
+  -d '{
+    "client_id": "c9d8e7f6-5432-1098-abcd-fedcba987654",
+    "event_id": 1,
+    "queue_name": "acme-payment-notifications",
+    "exchange": "notifications",
+    "routing_key": "acme.payment.created",
+    "app_name": "echo-notification-service"
+  }'
+```
+
+Delivery settings control the routing between event ingestion and webhook delivery.
+
+## Step 5: Enable feature flags (optional)
+
+Enable advanced capabilities for the client. Feature flags are linked by `legacy_id`:
+
+```bash
+curl -X POST http://localhost:8000/client-feature-flags \
+  -H "Content-Type: application/json" \
+  -d '{
+    "legacy_id": 5001,
+    "reprocess_by_status_enabled": true,
+    "payload_signature_enabled": false
+  }'
+```
+
+| Flag | What it enables |
+| --- | --- |
+| `reprocess_by_status_enabled` | Retry rejected events filtered by delivery status |
+| `payload_signature_enabled` | Cryptographic signature verification on webhook payloads |
+
+See the [feature flags guide](/guides/feature-flags) for details on managing these toggles.
+
+## Step 6: Test the pipeline
+
+Use event mocks to test notification delivery without producing real events:
+
+```bash
+curl -X POST http://localhost:8000/event-mocks \
+  -H "Content-Type: application/json" \
+  -d '{
+    "event_name": "payment.created",
+    "payload": {
+      "payment_id": "pay-001",
+      "amount": 150.00,
+      "currency": "USD"
+    }
+  }'
+```
+
+If your environment supports test notifications, you can trigger a delivery directly. See the [Issuer API overview](/api-reference/issuer/overview) for details on sending test and mock notifications.
+
+## Step 7: Monitor and recover
+
+### List rejected events
+
+Check for delivery failures:
+
+```bash
+curl "http://localhost:8000/reprocess/rejected-events?legacy_id=5001"
+```
+
+```json
+[
+  {
+    "event_name": "payment.created",
+    "notifications": [
+      {
+        "webhook_id": "d4e5f6a7-b8c9-0123-4567-890abcdef012",
+        "url": "https://acme.example.com/notifications",
+        "status": "rejected",
+        "count": 3
+      }
+    ]
+  }
+]
+```
+
+### Retry rejected events
+
+Reprocess all rejected events for a specific webhook:
+
+```bash
+curl -X POST http://localhost:8000/reprocess/by-notification-status \
+  -H "Content-Type: application/json" \
+  -d '{
+    "legacy_id": 5001,
+    "webhook_id": "d4e5f6a7-b8c9-0123-4567-890abcdef012",
+    "status": "rejected"
+  }'
+```
+
+### Redirect to a new webhook
+
+If the original endpoint is no longer valid, redirect rejected events:
+
+```bash
+curl -X POST http://localhost:8000/reprocess/by-notification-status/redirect \
+  -H "Content-Type: application/json" \
+  -d '{
+    "legacy_id": 5001,
+    "webhook_id_old": "d4e5f6a7-b8c9-0123-4567-890abcdef012",
+    "webhook_id_new": "f1e2d3c4-b5a6-7890-1234-567890abcdef",
+    "status": "rejected"
+  }'
+```
+
+<Note>
+Reprocessing requires `reprocess_by_status_enabled` to be `true` for the client. See [step 5](#step-5-enable-feature-flags-optional) above.
+</Note>
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Feature flags" icon="flag" href="/guides/feature-flags">
+    Manage per-client capabilities in detail.
+  </Card>
+  <Card title="API reference" icon="terminal" href="/api-reference/overview">
+    Browse all available endpoints.
+  </Card>
+  <Card title="Issuer API" icon="key" href="/api-reference/issuer/overview">
+    Self-service endpoints for issuers.
+  </Card>
+  <Card title="Examples" icon="code" href="/guides/examples">
+    See more real-world usage patterns.
+  </Card>
+</CardGroup>
