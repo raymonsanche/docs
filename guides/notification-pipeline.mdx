@@ -121,6 +121,23 @@ curl -X POST http://localhost:8000/webhooks \
 
 The `field` path must reference a field that exists in the event's mutator template. If the field doesn't exist or the path is invalid, the API returns an error. Use `$.event_type` to filter by event type without requiring a mutator.
 
+You can also filter on numeric or boolean fields. The value type must match the field type in the mutator template:
+
+```bash
+curl -X POST http://localhost:8000/webhooks \
+  -H "Content-Type: application/json" \
+  -d '{
+    "client_id": "c9d8e7f6-5432-1098-abcd-fedcba987654",
+    "event_name": "payment.created",
+    "url": "https://acme.example.com/recurring",
+    "filter": {
+      "field": "$.payload.is_recurring",
+      "type": "equals",
+      "value": true
+    }
+  }'
+```
+
 <Tip>
 Filters reduce noise by ensuring a webhook only fires for events matching specific criteria. Create multiple webhooks with different filters to route event subtypes to separate endpoints.
 </Tip>
