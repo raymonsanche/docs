@@ -49,16 +49,8 @@ Returns an array of webhook objects scoped to your issuer account.
   Destination URL where notifications are sent
 </ResponseField>
 
-<ResponseField name="client_id" type="string">
-  Your client identifier
-</ResponseField>
-
-<ResponseField name="legacy_id" type="integer">
-  Your legacy client identifier
-</ResponseField>
-
 <ResponseField name="headers" type="object">
-  Custom HTTP headers (values are masked for security)
+  Custom HTTP headers included with each notification request
 </ResponseField>
 
 <ResponseField name="auth_type" type="string">
@@ -85,10 +77,8 @@ Returns an array of webhook objects scoped to your issuer account.
     "id": "d4e5f6a7-b8c9-0123-4567-890abcdef012",
     "event_name": "payment.created",
     "url": "https://example.com/webhook",
-    "client_id": "abc123",
-    "legacy_id": 12345,
     "headers": {
-      "Authorization": "(length: 42)"
+      "Authorization": "Bearer my-secret-token"
     },
     "auth_type": "bearer",
     "filter": null,
@@ -107,5 +97,5 @@ If you have no webhooks configured:
 ```
 
 <Note>
-Header values are masked in responses for security. Only the length of each value is shown.
+Header values are returned unmasked in issuer API responses, so you can verify your webhook configuration. In contrast, the admin [webhooks API](/api-reference/webhooks/list) masks header values for security.
 </Note>
