@@ -67,9 +67,11 @@ curl -X POST http://localhost:8000/client-feature-flags \
 }
 ```
 
-### Error response (400)
+### Error responses
 
-If `legacy_id` is missing or both flags are null:
+**400 — Bad request**
+
+Returned when `legacy_id` is missing or both flags are null:
 
 ```json
 {
@@ -77,10 +79,30 @@ If `legacy_id` is missing or both flags are null:
 }
 ```
 
+**404 — Client not found**
+
+Returned when the `legacy_id` does not match any existing client:
+
+```json
+{
+  "error": "not found"
+}
+```
+
+**409 — Feature flags already exist**
+
+Returned when the client already has a feature flag configuration. Each client can only have one:
+
+```json
+{
+  "error": "conflict"
+}
+```
+
 ## Rules
 
 - The `legacy_id` must correspond to an existing client
-- A client can only have one feature flag configuration. If one already exists, the request is rejected
+- A client can only have one feature flag configuration — use the [update endpoint](/api-reference/client-feature-flags/update) to modify existing flags
 - At least one flag (`reprocess_by_status_enabled` or `payload_signature_enabled`) must be provided
 
 ## Use cases
