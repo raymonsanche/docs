@@ -91,9 +91,21 @@ curl /clients/c9d8e7f6-5432-1098-abcd-fedcba987654
 }
 ```
 
-### Error response (404)
+### Error responses
 
-If the client doesn't exist:
+**400 — Bad request**
+
+Returned when the `id` is not a valid UUID:
+
+```json
+{
+  "error": "bad request"
+}
+```
+
+**404 — Client not found**
+
+Returned when the client does not exist:
 
 ```json
 {
