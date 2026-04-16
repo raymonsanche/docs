@@ -58,6 +58,8 @@ curl "http://localhost:8000/client-feature-flags?client_id=c9d8e7f6-5432-1098-ab
 
 ### Success response (200)
 
+When feature flags exist for the client:
+
 ```json
 {
   "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
@@ -65,6 +67,14 @@ curl "http://localhost:8000/client-feature-flags?client_id=c9d8e7f6-5432-1098-ab
   "reprocess_by_status_enabled": true,
   "payload_signature_enabled": false
 }
+```
+
+### Empty response (200)
+
+Returned when the client has no feature flag configuration. The endpoint returns an empty array instead of an error. Create a configuration using the [create endpoint](/api-reference/client-feature-flags/create):
+
+```json
+[]
 ```
 
 ### Error responses
@@ -76,16 +86,6 @@ Returned when neither `client_id` nor `legacy_id` is provided:
 ```json
 {
   "error": "bad request"
-}
-```
-
-**404 — No feature flags configured**
-
-Returned when the client exists but has no feature flag configuration. Create one using the [create endpoint](/api-reference/client-feature-flags/create):
-
-```json
-{
-  "error": "not found"
 }
 ```
 

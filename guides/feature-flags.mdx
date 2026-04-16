@@ -74,6 +74,8 @@ Retrieve a client's feature flag configuration by `legacy_id` or `client_id`:
 curl "http://localhost:8000/client-feature-flags?legacy_id=5001"
 ```
 
+If the client has no feature flag configuration, the endpoint returns an empty array `[]` with a `200` status code rather than an error.
+
 ### Update flags
 
 Toggle individual flags without affecting the others. Use the feature flag record's UUID:
