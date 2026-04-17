@@ -88,14 +88,14 @@ When the matching client is not found, the endpoint returns an empty array with 
 ```
 
 <Tip>
-If you receive an empty array, verify the `client_id` or `legacy_id` you provided. You may need to [create the client](/api-reference/clients/create) first before configuring feature flags.
+If you receive an empty array, verify the `client_id`, `legacy_id`, or `id` you provided. You may need to [create the client](/api-reference/clients/create) first before configuring feature flags.
 </Tip>
 
 ### Error responses
 
 **400 — Bad request**
 
-Returned when neither `client_id` nor `legacy_id` is provided:
+Returned when none of `client_id`, `legacy_id`, or `id` is provided:
 
 ```json
 {
