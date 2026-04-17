@@ -68,10 +68,16 @@ Feature flags are a separate resource linked to a client by their `legacy_id`. T
 
 ### Check current flags
 
-Retrieve a client's feature flag configuration by `legacy_id` or `client_id`:
+Retrieve a client's feature flag configuration by `legacy_id`, `client_id`, or feature flag `id`:
 
 ```bash
 curl "http://localhost:8000/client-feature-flags?legacy_id=5001"
+```
+
+You can also look up a specific feature flag record by its UUID:
+
+```bash
+curl "http://localhost:8000/client-feature-flags?id=a1b2c3d4-e5f6-7890-abcd-ef1234567890"
 ```
 
 If the client is not found, the endpoint returns an empty array `[]` with a `200` status code instead of an error. If the client exists but has no feature flag configuration, the response indicates that no flags are configured — use the [create endpoint](/api-reference/client-feature-flags/create) to set one up.

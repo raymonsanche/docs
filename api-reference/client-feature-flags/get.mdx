@@ -42,6 +42,12 @@ Look up by client UUID:
 curl "http://localhost:8000/client-feature-flags?client_id=c9d8e7f6-5432-1098-abcd-fedcba987654"
 ```
 
+Look up by feature flag record ID:
+
+```bash
+curl "http://localhost:8000/client-feature-flags?id=a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+```
+
 ## Response
 
 <ResponseField name="id" type="string">
