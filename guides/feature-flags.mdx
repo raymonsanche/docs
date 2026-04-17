@@ -74,7 +74,7 @@ Retrieve a client's feature flag configuration by `legacy_id` or `client_id`:
 curl "http://localhost:8000/client-feature-flags?legacy_id=5001"
 ```
 
-If the client has no feature flag configuration, the endpoint returns an empty array `[]` with a `200` status code rather than an error.
+If the client is not found, the endpoint returns an empty array `[]` with a `200` status code instead of an error. If the client exists but has no feature flag configuration, the response indicates that no flags are configured — use the [create endpoint](/api-reference/client-feature-flags/create) to set one up.
 
 ### Update flags
 

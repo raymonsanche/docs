@@ -4,7 +4,7 @@ api: "GET /client-feature-flags"
 description: "Retrieve feature flag configuration for a client"
 ---
 
-Retrieve the feature flag configuration for a specific client by `client_id` or `legacy_id`.
+Retrieve the feature flag configuration for a specific client by `client_id`, `legacy_id`, or feature flag `id`.
 
 ## Endpoint
 
@@ -14,7 +14,11 @@ GET /client-feature-flags
 
 ## Query parameters
 
-Use at least one query parameter to identify the client whose feature flags you want to retrieve.
+Provide at least one of `client_id` or `legacy_id` to identify the client.
+
+<ParamField query="id" type="string">
+  Filter by feature flag record UUID
+</ParamField>
 
 <ParamField query="client_id" type="string">
   Filter by client UUID
@@ -71,11 +75,15 @@ When feature flags exist for the client:
 
 ### Empty response (200)
 
-Returned when the client has no feature flag configuration. The endpoint returns an empty array instead of an error. Create a configuration using the [create endpoint](/api-reference/client-feature-flags/create):
+When the matching client is not found, the endpoint returns an empty array with a `200` status code instead of an error:
 
 ```json
 []
 ```
+
+<Tip>
+If you receive an empty array, verify the `client_id` or `legacy_id` you provided. You may need to [create the client](/api-reference/clients/create) first before configuring feature flags.
+</Tip>
 
 ### Error responses
 
@@ -88,6 +96,10 @@ Returned when neither `client_id` nor `legacy_id` is provided:
   "error": "bad request"
 }
 ```
+
+**No feature flags configured**
+
+Returned when the client exists but has no feature flag configuration. Create one using the [create endpoint](/api-reference/client-feature-flags/create).
 
 ## Use cases
 
