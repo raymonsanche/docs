@@ -4,7 +4,11 @@ api: "POST /external/trigger/mock"
 description: "Send a notification using a predefined event mock payload"
 ---
 
-Send a test notification using a predefined event mock payload. Instead of providing your own payload, this endpoint uses an existing event mock configuration. This endpoint is available in all environments, including production.
+Send a test notification using a predefined event mock payload. Instead of providing your own payload, this endpoint uses an existing event mock configuration.
+
+<Note>
+This endpoint is available in **all environments, including production**. Use it when you need to validate webhook delivery against your production setup with safe, predefined payloads. To send a custom payload instead, use [Send test notification](/api-reference/issuer/send-test-notification) — that endpoint is restricted to development and staging.
+</Note>
 
 ## Endpoint
 
