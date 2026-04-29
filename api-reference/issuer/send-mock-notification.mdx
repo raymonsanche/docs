@@ -4,7 +4,7 @@ api: "POST /external/trigger/mock"
 description: "Send a notification using a predefined event mock payload"
 ---
 
-Send a test notification using a predefined event mock payload. Instead of providing your own payload, this endpoint uses an existing event mock configuration. This endpoint is only available in development and staging environments.
+Send a test notification using a predefined event mock payload. Instead of providing your own payload, this endpoint uses an existing event mock configuration. This endpoint is available in all environments, including production.
 
 ## Endpoint
 
@@ -40,19 +40,9 @@ curl -X POST /external/trigger/mock \
 }
 ```
 
-### Forbidden response (403)
-
-If you call this endpoint in a production environment:
-
-```json
-{
-  "message": "Forbidden"
-}
-```
-
 ## Rules
 
-- Only available in development and staging environments
+- Available in all environments, including production
 - The `event_name` must reference an existing event that has a configured event mock
 - You must have at least one webhook configured for the specified event
 
@@ -61,6 +51,11 @@ If you call this endpoint in a production environment:
 - Quickly test webhook delivery without constructing a payload
 - Use standardized mock payloads for consistent integration testing
 - Verify end-to-end notification flow with realistic sample data
+- Validate webhook delivery against your production environment using safe, predefined sample payloads
+
+<Warning>
+Calls to this endpoint trigger real webhook deliveries to your configured endpoints, including in production. Make sure your receivers can distinguish mock payloads from real events before testing in production.
+</Warning>
 
 <Tip>
 Create event mocks using the [event mocks API](/api-reference/event-mocks/create) to define reusable test payloads for each event type.
