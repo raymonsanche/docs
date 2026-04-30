@@ -44,11 +44,24 @@ curl -X POST /external/trigger/mock \
 }
 ```
 
+The `trace_id` can be used to track the notification delivery or reprocess it if needed. The `event_type` for the dispatched event is read from the mock payload's `event_type` field.
+
+### Error responses
+
+| Status | Condition |
+| --- | --- |
+| `400` | `event_name` is missing from the request body |
+| `401` | The request is unauthenticated or missing issuer context |
+| `404` | The event does not exist, has no configured mock, or no webhook is registered for it |
+| `500` | Internal error while dispatching the notification |
+
 ## Rules
 
 - Available in all environments, including production
 - The `event_name` must reference an existing event that has a configured event mock
+- The mock payload must include an `event_type` field
 - You must have at least one webhook configured for the specified event
+- Your client must have an AES key configured ([Save AES key](/api-reference/issuer/save-aes-key))
 
 ## Use cases
 
