@@ -4,11 +4,17 @@ api: "POST /external/trigger/mock"
 description: "Send a notification using a predefined event mock payload"
 ---
 
-Send a test notification using a predefined event mock payload. Instead of providing your own payload, this endpoint uses an existing event mock configuration.
+Send a test notification using a predefined event mock payload. Instead of providing your own payload, this endpoint dispatches the payload from an existing event mock configuration to all webhooks subscribed to that event.
 
 <Note>
-This endpoint is available in **all environments, including production**. Use it when you need to validate webhook delivery against your production setup with safe, predefined payloads. To send a custom payload instead, use [Send test notification](/api-reference/issuer/send-test-notification) — that endpoint is restricted to development and staging.
+This endpoint is available in **all environments, including production**. Use it to validate webhook delivery against your production setup with safe, predefined payloads. To send a custom payload instead, use [Send test notification](/api-reference/issuer/send-test-notification) — that endpoint is restricted to development and staging.
 </Note>
+
+## When to use this endpoint
+
+- You want to confirm webhook delivery in **production** without crafting an ad-hoc payload.
+- You need a **repeatable** sample payload for integration tests or smoke checks.
+- You want consumers to receive the same standardized event body each time, defined once via the [event mocks API](/api-reference/event-mocks/create).
 
 ## Endpoint
 
@@ -57,18 +63,18 @@ The `trace_id` can be used to track the notification delivery or reprocess it if
 
 ## Rules
 
-- Available in all environments, including production
-- The `event_name` must reference an existing event that has a configured event mock
-- The mock payload must include an `event_type` field
-- You must have at least one webhook configured for the specified event
-- Your client must have an AES key configured ([Save AES key](/api-reference/issuer/save-aes-key))
+- Available in all environments, including production.
+- The `event_name` must reference an existing event that has a configured event mock.
+- The mock payload must include an `event_type` field — the dispatched event uses this value as its `event_type`.
+- You must have at least one webhook configured for the specified event.
+- Your client must have an AES key configured ([Save AES key](/api-reference/issuer/save-aes-key)).
 
 ## Use cases
 
-- Quickly test webhook delivery without constructing a payload
-- Use standardized mock payloads for consistent integration testing
-- Verify end-to-end notification flow with realistic sample data
-- Validate webhook delivery against your production environment using safe, predefined sample payloads
+- Validate webhook delivery against your production environment using safe, predefined sample payloads.
+- Use standardized mock payloads for consistent integration testing across environments.
+- Verify end-to-end notification flow with realistic sample data without producing a real event.
+- Smoke-test a newly registered webhook before enabling real traffic.
 
 <Warning>
 Calls to this endpoint trigger real webhook deliveries to your configured endpoints, including in production. Make sure your receivers can distinguish mock payloads from real events before testing in production.
